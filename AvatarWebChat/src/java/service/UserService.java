@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package service;
-import dao.userDAO;
+import dao.UserDAO;
 import model.User;
 /**
  *
@@ -13,7 +13,8 @@ import model.User;
 public class UserService {
     
     public boolean registerUser(User user){
-        return userDAO.addUser(user);
+        UserDAO dao = new UserDAO();
+        return dao.addUser(user);
     }
     
 }

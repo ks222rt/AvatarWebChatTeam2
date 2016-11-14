@@ -17,7 +17,7 @@ import org.springframework.web.portlet.ModelAndView;
 
 @Controller
 @RequestMapping("/login")
-public class loginController {
+public class LoginController {
     
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView login(){

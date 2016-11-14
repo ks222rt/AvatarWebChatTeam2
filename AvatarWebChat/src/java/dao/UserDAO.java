@@ -14,14 +14,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author Kristoffer
  */
-public class userDAO {
+public class UserDAO {
     
     @Autowired
     DataSource dataSource;
     
     private JdbcTemplate jdbcTemplate;
     
-    public userDAO(){
+    public UserDAO(){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     

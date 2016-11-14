@@ -20,7 +20,7 @@ import util.HashUtil;
  */
 @Controller
 @RequestMapping("/registration")
-public class registrationController {
+public class RegisterController {
     
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView registration(){
