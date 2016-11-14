@@ -22,7 +22,7 @@ public class loginController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView mav = new ModelAndView("login");
-        
+        // testing testing
         return mav;
     }
 }
