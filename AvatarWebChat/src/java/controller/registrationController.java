@@ -6,9 +6,13 @@
 package controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.portlet.ModelAndView;
+import model.User;
+import service.UserService;
+import util.HashUtil;
 
 /**
  *
@@ -24,4 +28,22 @@ public class registrationController {
         
         return mav;
     }
+   
+   
+   @RequestMapping(value = "/registration", method = RequestMethod.POST)
+   public String registerUser (@ModelAttribute("form")User user) {
+        //This method needs validator.
+        UserService service = new UserService();
+        
+        byte[] salt = HashUtil.getNewSalt();
+        user.setSalt(salt);
+        user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
+        
+        if(service.registerUser(user)){
+            return "login";
+        }
+        else{
+            return "registration";
+        }
+   }
 }
