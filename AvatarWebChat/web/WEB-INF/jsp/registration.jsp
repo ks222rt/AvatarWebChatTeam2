@@ -1,6 +1,6 @@
 <%-- 
-    Document   : login
-    Created on : 2016-nov-14, 11:26:30
+    Document   : registration
+    Created on : 2016-nov-14, 12:55:01
     Author     : Kristoffer
 --%>
 
@@ -12,7 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Login!</h1>
-        <p><a href="registration.htm">Registrate account</a></p>
+        <h1>registrate an account!</h1>
     </body>
 </html>
