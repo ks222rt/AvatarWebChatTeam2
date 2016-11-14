@@ -11,9 +11,9 @@ import model.User;
  * @author Filip
  */
 public class UserService {
+        private UserDAO dao = new UserDAO();
     
     public boolean registerUser(User user){
-        UserDAO dao = new UserDAO();
         return dao.addUser(user);
     }
     

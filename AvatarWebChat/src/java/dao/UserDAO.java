@@ -5,9 +5,12 @@
  */
 package dao;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 import model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -15,14 +18,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author Kristoffer
  */
 public class UserDAO {
-    
-    @Autowired
-    DataSource dataSource;
-    
     private JdbcTemplate jdbcTemplate;
     
     public UserDAO(){
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        try {
+            InitialContext ic = new InitialContext();
+            DataSource myDS = (DataSource)ic.lookup("java:comp/env/jdbc/jdbc/AvatarWebChat");
+            this.jdbcTemplate = new JdbcTemplate(myDS);
+        } catch (NamingException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public boolean addUser(User user){
