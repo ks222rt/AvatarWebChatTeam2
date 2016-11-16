@@ -3,7 +3,6 @@
     Created on : 2016-nov-14, 12:55:01
     Author     : Kristoffer
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -24,25 +23,33 @@
     <center>
    
       <div class="section"></div>
-
       <h5 class="teal-text " >Avatar - WebChat Registration</h5>
       <div class="section"></div>
-
       <div class="container">
         <div class=" grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-
           <form action="#" th:action="@{/registration}" th:object="${user}" class="col s12" method="post">
             <div class='row'>
               <div class='col s12'>
               </div>
             </div>
-
             <div class='row'>
               <div class='input-field col s12'>
                  <i class="small material-icons teal999" style=" float: left">perm_identity</i>
                 <input class='validate' type='text' name='username' id='username'/>
                                 <label>Username</label>
               </div>
+            </div>
+            
+            <div class='row'>
+              <div class='input-field col s12'>
+                 <i class="small material-icons teal999" style=" float: left">perm_identity</i>
+                <input class='validate' type='text' name='firstname' id='firstname'/>
+                                <label>First name</label>
+                                <div class='row'>
+                <input class='validate' type='text' name='lastname' id='lastname'/>
+                                <label>Last name</label>
+              </div>
+                    
             </div>
             
           
@@ -54,7 +61,6 @@
                 <label>Email</label>
               </div>
             </div>
-
             <div class='row '>
               <div class='input-field col s12 '>
                  <i class="small material-icons teal999" style=" float: left">https</i>
@@ -64,7 +70,6 @@
              
              					
             </div>
-
             <br />
             <center>
               <div class='row'>

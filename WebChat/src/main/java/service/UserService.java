@@ -6,15 +6,19 @@
 package service;
 import dao.UserDAO;
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 /**
  *
  * @author Filip
  */
+@Service
 public class UserService {
-        private UserDAO dao = new UserDAO();
-    
+    @Autowired
+    private UserDAO userDAO;
+        
     public boolean registerUser(User user){
-        return dao.addUser(user);
+        return userDAO.addUser(user);
     }
     
 }

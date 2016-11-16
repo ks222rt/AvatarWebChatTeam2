@@ -30,25 +30,6 @@
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/jsp/"
-          p:suffix=".jsp" />
-
-    <!-- Declare controllers -->
-    <bean id="loginController" class="controller.LoginController" />
-    <bean id="registrationController" class="controller.RegisterController" />
-    <bean id="mainController" class="controller.MainController" />
-    <!-- Declare services -->
-    
-    <!-- Declare DAO -->
-    <bean id="userDAO" class="dao.UserDAO" /> 
-    
-    <!-- Declare datasource bean 
-     <bean id="dataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/webchat" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
-    </bean> -->
-    
+          p:suffix=".jsp" />    
    
 </beans>

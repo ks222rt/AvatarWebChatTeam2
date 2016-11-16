@@ -5,37 +5,25 @@
  */
 package dao;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Kristoffer
  */
+@Component
 public class UserDAO {
+    
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-    
-    public UserDAO(){
-        try {
-            InitialContext ic = new InitialContext();
-            DataSource myDS = (DataSource)ic.lookup("java:comp/env/jdbc/jdbc/AvatarWebChat");
-            this.jdbcTemplate = new JdbcTemplate(myDS);
-        } catch (NamingException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+        
     public boolean addUser(User user){
-        String sql = "INSERT INTO WebChat.chat_user "
+        String sql = "INSERT INTO avatar_webchat.user "
                 + "(username, firstname, lastname, email, password, salt) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
-        
-        
         
         int result;
         result = jdbcTemplate.update(sql, 

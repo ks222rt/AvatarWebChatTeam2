@@ -20,7 +20,32 @@
     <context:annotation-config />
     <context:component-scan base-package="dao" />
     
-    <bean id="propertyConfigurer"
+
+
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource1">
+        <property value="com.mysql.jdbc.Driver" name="driverClassName"/>
+        <property value="jdbc:mysql://db4free.net:3306/avatar_webchat" name="url"/>
+        <property value="avatar_admin" name="username"/>
+        <property value="avatarteam2" name="password"/>
+    </bean>
+
+    <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+        <property name="dataSource" ref="dataSource1"/>
+    </bean>
+    
+    <!-- Declare DAO -->
+    <bean id="userDAO" class="dao.UserDAO" /> 
+    
+    <!-- Declare services -->
+    <bean class="service.UserService" id="userService"/>
+    
+    <!-- Declare controllers -->
+    <bean id="loginController" class="controller.LoginController" />
+    <bean id="registrationController" class="controller.RegisterController" />
+    <bean id="mainController" class="controller.MainController" />
+    
+    
+    <!-- <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
           p:location="/WEB-INF/jdbc.properties" />
 
@@ -29,24 +54,9 @@
         p:driverClassName="${jdbc.driverClassName}"
         p:url="${jdbc.url}"
         p:username="${jdbc.username}"
-        p:password="${jdbc.password}" /> 
+        p:password="${jdbc.password}" />  -->
 
     <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
-    
-    <!-- Declare datasource bean 
-    
-     <bean id="dataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/webchat" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
-    </bean>
-    
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource">
-            <ref local="dataSource"/>
-        </property>
-    </bean> -->
+  
     
 </beans>

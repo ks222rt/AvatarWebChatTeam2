@@ -9,11 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.portlet.ModelAndView;
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import service.UserService;
 import util.HashUtil;
 
@@ -22,9 +20,13 @@ import util.HashUtil;
  * @author Kristoffer
  */
 @Controller
+@RequestMapping("/registration")
 public class RegisterController {
     
-    @GetMapping("/registration")
+    @Autowired
+    private UserService userService;
+    
+    @RequestMapping(method = RequestMethod.GET)
     public String registration(Model model){
         model.addAttribute("registration", new User());
         
@@ -32,18 +34,15 @@ public class RegisterController {
     }
    
    
-   @PostMapping("/registration")
+   @RequestMapping(method = RequestMethod.POST)
    public String registerUser (@ModelAttribute User user) {
         //This method needs validator.
-        UserService service = new UserService();
-        System.out.println(user.getUsername());
-        System.out.println(user.getEmail());
-        System.out.println(user.getPassword());
+        
         byte[] salt = HashUtil.getNewSalt();
         user.setSalt(salt);
         user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
         
-        if(user.getEmail() != null){
+         if(userService.registerUser(user)){
             return "login";
         }
         else{
