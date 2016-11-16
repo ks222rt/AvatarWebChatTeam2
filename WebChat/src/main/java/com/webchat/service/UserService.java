@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
-import dao.UserDAO;
-import model.User;
+package com.webchat.service;
+import com.webchat.dao.UserDAO;
+import com.webchat.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**

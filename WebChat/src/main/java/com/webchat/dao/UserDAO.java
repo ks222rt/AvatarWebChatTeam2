@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package com.webchat.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import model.User;
+import com.webchat.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import util.HashUtil;
+import com.webchat.util.HashUtil;
 
 /**
  *

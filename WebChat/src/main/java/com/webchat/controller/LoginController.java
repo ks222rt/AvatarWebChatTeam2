@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package com.webchat.controller;
 
-import model.User;
+import com.webchat.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
-import service.UserService;
+import com.webchat.service.UserService;
 
 /**
  *
@@ -36,7 +36,7 @@ public class LoginController {
     public String doLogin(@RequestParam String username, @RequestParam String password){        
         if (userService.loginUser(username, password)) {
             //return new ModelAndView("redirect:/main.htm");
-            redirectAttrs.addAttribute("username", username).addFlashAttribute("message", "You are nog logged in!");
+            //redirectAttrs.addAttribute("username", username).addFlashAttribute("message", "You are nog logged in!");
             return "redirect:/main.htm";
         }else{
             //return new ModelAndView("redirect:/login.htm");
