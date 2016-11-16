@@ -32,15 +32,15 @@
     </bean>
     
     <!-- Declare DAO -->
-    <bean id="userDAO" class="dao.UserDAO" /> 
+    <bean id="userDAO" class="com.webchat.dao.UserDAO" /> 
     
     <!-- Declare services -->
-    <bean class="service.UserService" id="userService"/>
+    <bean class="com.webchat.service.UserService" id="userService"/>
     
     <!-- Declare controllers -->
-    <bean id="loginController" class="controller.LoginController" />
-    <bean id="registrationController" class="controller.RegisterController" />
-    <bean id="mainController" class="controller.MainController" />
+    <bean id="loginController" class="com.webchat.controller.LoginController" />
+    <bean id="registrationController" class="com.webchat.controller.RegisterController" />
+    <bean id="mainController" class="com.webchat.controller.MainController" />
     
     
     <!-- <bean id="propertyConfigurer"

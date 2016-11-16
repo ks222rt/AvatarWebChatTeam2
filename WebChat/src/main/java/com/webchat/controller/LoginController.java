@@ -35,9 +35,7 @@ public class LoginController {
     @RequestMapping(method = RequestMethod.POST)
     public String doLogin(@RequestParam String username, @RequestParam String password){        
         if (userService.loginUser(username, password)) {
-            //return new ModelAndView("redirect:/main.htm");
-            //redirectAttrs.addAttribute("username", username).addFlashAttribute("message", "You are nog logged in!");
-            return "redirect:/main.htm";
+            return "main";
         }else{
             //return new ModelAndView("redirect:/login.htm");
             return "login";
