@@ -20,8 +20,6 @@
     <context:annotation-config />
     <context:component-scan base-package="dao" />
     
-
-
     <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource1">
         <property value="com.mysql.jdbc.Driver" name="driverClassName"/>
         <property value="jdbc:mysql://db4free.net:3306/avatar_webchat" name="url"/>

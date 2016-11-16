@@ -16,21 +16,15 @@
         <title>Avatar - WebChat</title>
     </head>
     <body>
-       
-        
-        
-        <div class="section"></div>
-  <main>
+
+    <main>
     <center>
-   
-      <div class="section"></div>
+        <div class="section"></div>
+            <h5 class="teal-text " >Avatar - WebChat</h5>
+        <div class="section"></div>
 
-      <h5 class="teal-text " >Avatar - WebChat</h5>
-      <div class="section"></div>
-
-      <div class="container">
+        <div class="container">
         <div class="z-depth-5 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-
           <form class="col s12" method="post">
             <div class='row'>
               <div class='col s12'>
@@ -40,8 +34,8 @@
             <div class='row'>
               <div class='input-field col s12'>
                  <i class="small material-icons teal999" style=" float: left">perm_identity</i>
-                <input class='validate' type='text' name='accountname' id='accountname' />
-                <label for='email'>Enter your accountname</label>
+                <input class='validate' type='text' name='username' id='username' />
+                <label for='email'>Enter your username</label>
               </div>
             </div>
 
@@ -51,9 +45,7 @@
                 <input class='validate' type='password' name='password' id='password' />
                 <label for='password'>Enter your password</label>
               </div>
-              
-		<a class='pink-text' href='#!'><b>Forgot Password?</a>
-							
+		<a class='pink-text' href='#!'><b>Forgot Password?</a>					
             </div>
 
             <br />

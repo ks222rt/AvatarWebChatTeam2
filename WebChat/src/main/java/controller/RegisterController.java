@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import service.UserService;
 import util.HashUtil;
 
@@ -27,15 +28,15 @@ public class RegisterController {
     private UserService userService;
     
     @RequestMapping(method = RequestMethod.GET)
-    public String registration(Model model){
+    public ModelAndView registration(Model model){
         model.addAttribute("registration", new User());
         
-        return "registration";
+        return new ModelAndView("registration");
     }
    
    
    @RequestMapping(method = RequestMethod.POST)
-   public String registerUser (@ModelAttribute User user) {
+   public ModelAndView registerUser (@ModelAttribute User user) {
         //This method needs validator.
         
         byte[] salt = HashUtil.getNewSalt();
@@ -43,10 +44,10 @@ public class RegisterController {
         user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
         
          if(userService.registerUser(user)){
-            return "login";
+            return new ModelAndView("redirect:/login.htm", "user", user);
         }
         else{
-            return "registration";
+            return new ModelAndView("registration");
         }
    }
 }
