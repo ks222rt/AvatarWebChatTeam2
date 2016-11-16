@@ -21,6 +21,7 @@
             <props>
                 <prop key="login.htm">loginController</prop>
                 <prop key="registration.htm">registrationController</prop>
+                <prop key="main.htm">mainController</prop>
             </props>
         </property>
     </bean>
@@ -34,7 +35,7 @@
     <!-- Declare controllers -->
     <bean id="loginController" class="controller.LoginController" />
     <bean id="registrationController" class="controller.RegisterController" />
-    
+    <bean id="mainController" class="controller.MainController" />
     <!-- Declare services -->
     
     <!-- Declare DAO -->

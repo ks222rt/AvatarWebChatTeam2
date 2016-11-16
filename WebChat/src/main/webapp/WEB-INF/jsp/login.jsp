@@ -60,7 +60,7 @@
             <center>
               <div class='row'>
                   <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect teal '>Login</button>
-                  <a class='pink-text' href='main.htm'><b>Create log</b></a> 
+                  <a class='pink-text' href='main.htm'><b>Fake Login(Redirect)</b></a> 
               </div>
             </center>
             
