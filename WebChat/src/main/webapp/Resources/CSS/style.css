@@ -8,4 +8,42 @@ and open the template in the editor.
     Author     : Smulan
 */
 
+html {
+  height: 100vh;
+}
+body {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 .material-icons.teal999 { color: #008080; }
+
+
+.nav-wrapper.col.s12.red.lighten-2{
+    margin-top: 0vh;
+}
+
+.col.s10.teal.lighten-4{
+    min-height: 90vh;
+    margin-top: 0vh;
+}
+
+.col.s10.grey.lighten-3{
+    min-height: 90vh;
+    margin-top: 0vh;
+}
+
+.iframeDiv{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.iframeDivNoob{
+    border: 1px solid #000;
+}
+
+
+
+
