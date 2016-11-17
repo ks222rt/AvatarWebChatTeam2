@@ -46,7 +46,7 @@ public class LoginController {
             model.put("user", user);
             return "redirect:/main.htm";
         } else {
-            return "login";
+            return "redirect:/login.htm";
         }
     }
 }

@@ -6,6 +6,7 @@
 package com.webchat.controller;
 
 import com.webchat.model.User;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,4 +27,12 @@ public class MainController {
     public String main(){
         return "main";
     }
+    
+    @RequestMapping(method = RequestMethod.POST)
+    public String logout(HttpSession session, ModelMap model){
+        model.remove("user");
+        session.removeAttribute("user");
+        return "redirect:/login.htm";
+    }
 }
+

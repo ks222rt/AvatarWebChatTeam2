@@ -72,4 +72,8 @@ body {
 .util{
     margin: 100px;
 }
+.util button{
+    border: none;
+    background-color:transparent;
+}
 
