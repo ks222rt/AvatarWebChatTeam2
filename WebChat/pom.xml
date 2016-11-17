@@ -15,46 +15,68 @@
     </properties>
     
     <dependencies>
+        <!-- Javax -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- Spring web mvc-->
          <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>4.3.3.RELEASE</version>
         </dependency>
+        
+        <!-- Spring context-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.3.4.RELEASE</version>
         </dependency>
+        
+        <!-- Spring jdbc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>4.3.3.RELEASE</version>
         </dependency>
+        
+        <!-- Spring webmvc portlet -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc-portlet</artifactId>
             <version>4.3.3.RELEASE</version>
         </dependency>
+        
+        <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>5.3.2.Final</version>
         </dependency>
+        
+        <!-- Javax el api -->
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
             <version>2.2.4</version>
         </dependency>
+        
+        <!-- glassfish web -->
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>javax.el</artifactId>
             <version>2.2.4</version>
+        </dependency>
+        
+        <!-- MySQL connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.30</version>
         </dependency>
     </dependencies>
 
