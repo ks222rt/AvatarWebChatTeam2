@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import com.webchat.service.UserService;
 import com.webchat.util.HashUtil;
+import com.webchat.validator.UserValidator;
 
 /**
  *
@@ -23,31 +24,35 @@ import com.webchat.util.HashUtil;
 @Controller
 @RequestMapping("/registration")
 public class RegisterController {
-    
+
     @Autowired
     private UserService userService;
-    
+    private UserValidator validator;
+
+    public RegisterController() {
+        validator = new UserValidator();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView registration(Model model){
+    public ModelAndView registration(Model model) {
         model.addAttribute("registration", new User());
-        
+
         return new ModelAndView("registration");
     }
-   
-   
-   @RequestMapping(method = RequestMethod.POST)
-   public ModelAndView registerUser (@ModelAttribute User user) {
-        //This method needs validator.
-        
-        byte[] salt = HashUtil.getNewSalt();
-        user.setSalt(salt);
-        user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
-        
-         if(userService.registerUser(user)){
-            return new ModelAndView("redirect:/login.htm", "user", user);
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView registerUser(@ModelAttribute User user) {
+        /* validate the field in the user object */
+        if (validator.validateRegisterAttempt(user)) {
+            byte[] salt = HashUtil.getNewSalt();
+            user.setSalt(salt);
+            user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
+
+            if (userService.registerUser(user)) {
+                return new ModelAndView("redirect:/login.htm", "user", user);
+            } 
         }
-        else{
-            return new ModelAndView("registration");
-        }
-   }
+        
+        return new ModelAndView("failed");
+    }
 }

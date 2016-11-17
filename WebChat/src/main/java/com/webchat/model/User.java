@@ -5,7 +5,9 @@
  */
 package com.webchat.model;
 
-import java.io.Serializable;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -13,13 +15,29 @@ import java.io.Serializable;
  * 
  * The minimal requirement for an user 14-11-2016
  */
-public class User implements Serializable {
+public class User {
     private int id;
+    
+    @NotNull
+    @Size(min = 4, max = 20)
     private String username;
+    
+    @NotNull
+    @Size(max = 45)
     private String firstname;
+    
+    @NotNull
+    @Size(max = 45)
     private String lastname;
+    
+    @NotNull
+    @Size(max = 45)
     private String email;
+    
+    @NotNull
+    @Size(min = 9)
     private String password;
+    
     private byte[] salt;
     
     public void setID(int id){
@@ -77,8 +95,5 @@ public class User implements Serializable {
     public byte[] getSalt(){
         return salt;
     }
-    
-    
-    
-    
+  
 }
