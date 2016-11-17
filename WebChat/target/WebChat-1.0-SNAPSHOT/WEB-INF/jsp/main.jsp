@@ -9,7 +9,7 @@
 <html>
     <head>
         <link href="${pageContext.request.contextPath}/Resources/CSS/style.css" rel="stylesheet" type="text/css" >
-        <script src="${pageContext.request.contextPath}/Resources/SCRIPT/myScript.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,49 +17,34 @@
         <title>Avatar - WebChat</title>
     </head>
     <body>
-         <!-- Navbar goes here -->
-         <div class="row">
+       
+        
+        
+        <!-- Navbar goes here -->
+
          
-<div class="col s3 red lighten-2">
+<nav class="pink" id="navBar">
+    Menu
+    <a href="#!" class="center brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
     
-    <div class="chip">
+    <ul id="slide-out" class="side-nav ">
+        
+    <li><div class="userView">
+      <div class="chip">
     <img src="${pageContext.request.contextPath}/Resources/AVATAR/avatar2.png" alt="Contact Person">
     ${user.getFirstname()} ${user.getLastname()}  
-    
-  </div>
-      
-    
     </div>
-    <div class="col s9 red lighten-2">
-        <center>
-        <h5 class="white-text">Avatar - WebChat</h5>
-    </center>
-  </div>
       
+    </div></li>
     
     
-    
-    
-    
-    
-  
-    <!-- Page Layout here -->
-    
-
-      
-        
-      <div class="col s3 grey lighten-3">
-     
-        
-        <ul class="collapsible" data-collapsible="accordion">
+    <ul  class="collapsible" data-collapsible="accordion" id="innerNav">
   <li>
-    <div class="collapsible-header "><span class="new badge">4</span><i class="material-icons red999">chat</i>Message</div>
+    <div class="collapsible-header "><span class="new badge">3</span><i class="material-icons red999">chat</i>Message</div>
     <div class="collapsible-body">
-        <a href="#!" class="collection-item"><span class="badge">1</span>Alan</a>
+        <a href="#!" class="collection-item">Alan<span class="badge">1</span></a>
         <br>
-        <a href="#!" class="collection-item"><span class="badge">2</span>Steven</a>
-        <br>
-        <a href="#!" class="collection-item"><span class="badge">1</span>Sasha</a>
+        <a href="#!" class="collection-item">Steven<span class="badge">2</span></a>
     </div>
   </li>
   <li>
@@ -96,9 +81,11 @@
       <p>Name: Bill Andersson<br>
          From: Canada
       </p>
-      <a href="#!"><i class="material-icons">thumb_up</i></a>
-      <a href="#!"><i class="material-icons">thumb_down</i></a>
-    
+      
+      <div class="accept">
+      <i class="left material-icons red999">thumb_up</i>
+      <i class="right material-icons red999">thumb_down</i>
+      </div>
     </li>
     <li class="collection-item avatar">
       <img src="${pageContext.request.contextPath}/Resources/AVATAR/avatar8.png" alt="" class="circle">
@@ -106,9 +93,10 @@
       <p>Name: Snoop Dogg<br>
          From: USA
       </p>
-      <a href="#!"><i class="material-icons">thumb_up</i></a>
-      <a href="#!"><i class="material-icons">thumb_down</i></a>
-    
+      <div class="accept">
+      <i class="left material-icons red999">thumb_up</i>
+      <i class="right material-icons red999">thumb_down</i>
+      </div>
     </li>
     
     </ul>
@@ -116,45 +104,85 @@
     </div>
   </li>
   
-</ul> 
-      
-      <div class="search-wrapper">
-      <div class="col s12">
+  <div class="col s10">
       <div class="row">
-        <div class="input-field col s12 ">
+        <div class="input-field col s10 ">
           <i class="material-icons prefix red999">search</i>
           <input type="text" id="autocomplete-input" class="autocomplete ">
-          <label for="autocomplete-input" >Search User</label>
+          <label for="autocomplete-input">_</label>
         </div>
       </div>
     </div>
-    </div>
+  
+  <div class="util">
+      <i class="left material-icons red999">settings</i>
+      <i class="right material-icons red999">power_settings_new</i>
+      </div>
+  
+</ul> 
+ 
+     
       
-    <div class="util">
-        <i class="material-icons red999">settings</i> <i class="material-icons red999">power_settings_new</i>
-    </div>
-      <br>
-      <center>
-          <br>
-          <br>
-          <img src="${pageContext.request.contextPath}/Resources/ADDS/adds1.gif" alt="" width="450">
-      </center>
-      </div>
-        
-      <div class="col s9 grey lighten-4">
-        <!-- Teal page content  -->
-        
-        <div class="iframeDiv">
-            <iframe name="iframeNoob" class="iframeDivNoob"></iframe>
-        </div>
-      </div>
+     
+    
+  </ul>
+  <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+              
+</nav>
+ 
 
-        
-        
+    <!-- Mainpage Layout here -->
+
+    <div class="col s14 m8 sl9 teal"> 
+        <div id="mainContent">
+        Main
+        Goes
+        Here
+        </div>
     </div>
-</div>
+    
+    <!--Footers Layout here -->
+    <div class="col s16 m8 sl9 grey lighten-2"> 
+        <br>
+        <img border="0" src="http://vht.tradedoubler.com/file/19/468x60.gif" title="TradeDoubler Affiliateprogram">
         
-       
+        <img border="0" src="http://banner.euroads.se/banner/2/90/banner_837.gif">
+    </div>
+    <div class="col s16 m8 sl9 grey"> 
+        © 2016 Copyright by Avatar Corporation
+    </div>
+
+      
+    
+    
+        
+        
+        
+        <script>
+            $( document ).ready(function(){
+              $('.button-collapse').sideNav({
+      menuWidth: 320, // Default is 240
+      edge: 'left', // Choose the horizontal origin
+      closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+      draggable: true // Choose whether you can drag to open on touch screens
+    }
+  );
+  
+  $('input.autocomplete').autocomplete({
+    data: {
+      "Sasha": null,
+      "Steven": null,
+      "Filip": null,
+      "Rikard": null,
+      "Adam": null,
+      "Kristoffer": null,
+      "Mathias": null,
+      "Google": 'http://placehold.it/250x250'
+    }
+  });
+        })
+        </script>
+        
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
     </body>

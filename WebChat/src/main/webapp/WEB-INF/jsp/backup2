@@ -1,5 +1,36 @@
 
-<div class="col s3 grey lighten-3">
+ <!-- Navbar goes here -->
+         <div class="row">
+         
+<div class="col s3 red lighten-2">
+    
+    <div class="chip">
+    <img src="${pageContext.request.contextPath}/Resources/AVATAR/avatar2.png" alt="Contact Person">
+    ${user.getFirstname()} ${user.getLastname()}  
+    
+  </div>
+      
+    
+    </div>
+    <div class="col s9 red lighten-2">
+        <center>
+        <h5 class="white-text">Avatar - WebChat</h5>
+    </center>
+  </div>
+      
+    
+    
+    
+    
+    
+    
+  
+    <!-- Page Layout here -->
+    
+
+      
+        
+      <div class="col s3 grey lighten-3">
      
         
         <ul class="collapsible" data-collapsible="accordion">
@@ -14,7 +45,7 @@
     </div>
   </li>
   <li>
-    <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">perm_identity</i>Friends Online</div>
+    <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">supervisor_account</i>Friends Online</div>
     <div class="collapsible-body">
     <div class="chip">
     <img src="${pageContext.request.contextPath}/Resources/AVATAR/avatar3.png" alt="Contact Person">
@@ -37,7 +68,7 @@
   </li>
   
    <li>
-    <div class="collapsible-header"><span class="badge">2</span><i class="material-icons red999">supervisor_account</i>Friend Request</div>
+    <div class="collapsible-header"><span class="badge">2</span><i class="material-icons red999">perm_identity</i>Friend Request</div>
     <div class="collapsible-body">
     
     <ul class="collection">
@@ -84,4 +115,23 @@
     <div class="util">
         <i class="material-icons red999">settings</i> <i class="material-icons red999">power_settings_new</i>
     </div>
+      <br>
+      <center>
+          <br>
+          <br>
+          <img src="${pageContext.request.contextPath}/Resources/ADDS/adds1.gif" alt="" width="450">
+      </center>
       </div>
+        
+      <div class="col s9 grey lighten-4">
+        <!-- Teal page content  -->
+        
+        <div class="iframeDiv">
+            <iframe name="iframeNoob" class="iframeDivNoob"></iframe>
+        </div>
+      </div>
+
+        
+        
+    </div>
+</div>
