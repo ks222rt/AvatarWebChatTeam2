@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import com.webchat.util.HashUtil;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 /**
  *
@@ -38,28 +39,34 @@ public class UserDAO {
         return result != 0;
     }
 
-    public boolean loginUser(String username, String password) {
+    public User loginUser(String username, String password) {
         String sql = "SELECT * FROM avatar_webchat.user WHERE username = ?";
-
-        User userResult = jdbcTemplate.queryForObject(sql,
-                new Object[] { username },
-                new RowMapper<User>() {
-                    @Override
-                    public User mapRow(ResultSet rs, int i) throws SQLException {
-                        User user = new User();
-                        user.setUsername(rs.getString("username"));
-                        user.setFirstname(rs.getString("firstname"));
-                        user.setLastname(rs.getString("lastname"));
-                        user.setEmail(rs.getString("email"));
-                        user.setSalt(rs.getBytes("salt"));
-                        user.setPassword(rs.getString("password"));
-                        user.setID(rs.getInt("id"));
-                        return user;                     
-                    }
-                    });  
         
-        String userPassword = HashUtil.hashPassword(password, userResult.getSalt());        
-        return (userPassword == null ? userResult.getPassword() == null 
-                    : userPassword.equals(userResult.getPassword()));
+        try{
+            User userResult = jdbcTemplate.queryForObject(sql,
+                    new Object[] { username },
+                    new RowMapper<User>() {
+                        @Override
+                        public User mapRow(ResultSet rs, int i) throws SQLException {
+                            User user = new User();
+                            user.setUsername(rs.getString("username"));
+                            user.setFirstname(rs.getString("firstname"));
+                            user.setLastname(rs.getString("lastname"));
+                            user.setEmail(rs.getString("email"));
+                            user.setSalt(rs.getBytes("salt"));
+                            user.setPassword(rs.getString("password"));
+                            user.setID(rs.getInt("id"));
+                            return user;                     
+                        }
+                        });  
+
+            String userPassword = HashUtil.hashPassword(password, userResult.getSalt());        
+            if (userPassword.equals(userResult.getPassword())) {
+                return userResult;
+            }
+            return null;
+        }catch(EmptyResultDataAccessException e){
+            return null;
+        }
     }
 }

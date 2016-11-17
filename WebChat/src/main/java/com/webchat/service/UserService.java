@@ -21,7 +21,7 @@ public class UserService {
         return userDAO.addUser(user);
     }
     
-    public boolean loginUser(String username, String password){
+    public User loginUser(String username, String password){
         return userDAO.loginUser(username, password);
     }
     
