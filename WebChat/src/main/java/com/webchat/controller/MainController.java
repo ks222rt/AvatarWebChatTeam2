@@ -5,9 +5,14 @@
  */
 package com.webchat.controller;
 
+import com.webchat.model.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.portlet.ModelAndView;
 
 /**
@@ -18,9 +23,7 @@ import org.springframework.web.portlet.ModelAndView;
 @RequestMapping("/main")
 public class MainController {
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView main(){
-        ModelAndView mav = new ModelAndView("main");
-        // testing testing
-        return mav;
+    public String main(){
+        return "main";
     }
 }

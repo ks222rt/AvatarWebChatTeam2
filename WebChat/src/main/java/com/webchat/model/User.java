@@ -5,13 +5,15 @@
  */
 package com.webchat.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Filip
  * 
  * The minimal requirement for an user 14-11-2016
  */
-public class User {
+public class User implements Serializable {
     private int id;
     private String username;
     private String firstname;

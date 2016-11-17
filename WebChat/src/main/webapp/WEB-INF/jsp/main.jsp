@@ -24,7 +24,7 @@
     
     <div class="chip">
     <img src="${pageContext.request.contextPath}/Resources/AVATAR/avatar2.png" alt="Contact Person">
-    Jane Doe
+    ${user.getFirstname()} ${user.getLastname()}  
     
   </div>
       

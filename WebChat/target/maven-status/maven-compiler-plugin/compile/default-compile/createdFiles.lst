@@ -1,8 +1,0 @@
-com\webchat\dao\UserDAO$1.class
-com\webchat\controller\MainController.class
-com\webchat\controller\LoginController.class
-com\webchat\util\HashUtil.class
-com\webchat\service\UserService.class
-com\webchat\controller\RegisterController.class
-com\webchat\dao\UserDAO.class
-com\webchat\model\User.class

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 import com.webchat.service.UserService;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  *
@@ -21,6 +23,7 @@ import com.webchat.service.UserService;
  */
 
 @Controller
+@SessionAttributes("user")
 @RequestMapping("/login")
 public class LoginController {
     
@@ -33,11 +36,16 @@ public class LoginController {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public String doLogin(@RequestParam String username, @RequestParam String password){        
-        if (userService.loginUser(username, password)) {
-            return "main";
-        }else{
-            //return new ModelAndView("redirect:/login.htm");
+    public String doLogin(@RequestParam String username,
+                          @RequestParam String password,
+                          ModelMap model){ 
+        
+        User user = userService.loginUser(username, password);
+        
+        if(user != null){
+            model.put("user", user);
+            return "redirect:/main.htm";
+        } else {
             return "login";
         }
     }
