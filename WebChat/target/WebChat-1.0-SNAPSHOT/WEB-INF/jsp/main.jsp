@@ -116,7 +116,9 @@
   
   <div class="util">
       <i class="left material-icons red999">settings</i>
-      <i class="right material-icons red999">power_settings_new</i>
+      <form method='post'>
+          <button value="logout" name="logout"><i class="material-icons red999">power_settings_new</i></button>
+      </form>
       </div>
   
 </ul> 
