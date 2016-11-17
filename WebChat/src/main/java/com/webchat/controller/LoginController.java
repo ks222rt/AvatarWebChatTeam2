@@ -16,6 +16,7 @@ import org.springframework.web.portlet.ModelAndView;
 import com.webchat.service.UserService;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import com.webchat.validator.UserValidator;
 
 /**
  *
@@ -29,6 +30,11 @@ public class LoginController {
     
     @Autowired
     private UserService userService;
+    private UserValidator validator;
+    
+    public LoginController() {
+        validator = new UserValidator();
+    }
     
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView login(){
@@ -39,6 +45,12 @@ public class LoginController {
     public String doLogin(@RequestParam String username,
                           @RequestParam String password,
                           ModelMap model){ 
+        
+        /* verify the format of the user name and password */
+        if (!validator.validateLoginAttempt(username, password))
+        {
+            return "redirect:/login.htm";
+        }
         
         User user = userService.loginUser(username, password);
         

@@ -6,9 +6,10 @@
 package com.webchat.model;
 
 import java.io.Serializable;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -19,24 +20,25 @@ import javax.validation.constraints.Size;
 public class User implements Serializable{
     private int id;
     
-    @NotNull
+    @NotBlank
     @Size(min = 4, max = 20)
     private String username;
     
-    @NotNull
+    @NotBlank
     @Size(max = 45)
     private String firstname;
     
-    @NotNull
+    @NotBlank
     @Size(max = 45)
     private String lastname;
     
     @NotNull
+    @Email
     @Size(max = 45)
     private String email;
     
-    @NotNull
-    @Size(min = 9)
+    @NotBlank
+    @Size(min = 8)
     private String password;
     
     private byte[] salt;
