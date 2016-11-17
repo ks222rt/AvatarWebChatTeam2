@@ -133,6 +133,12 @@
     <div class="util">
         <i class="material-icons red999">settings</i> <i class="material-icons red999">power_settings_new</i>
     </div>
+      <br>
+      <center>
+          <br>
+          <br>
+          <img src="${pageContext.request.contextPath}/Resources/ADDS/adds1.gif" alt="" width="450">
+      </center>
       </div>
         
       <div class="col s9 grey lighten-4">
