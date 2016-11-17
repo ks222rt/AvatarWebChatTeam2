@@ -5,6 +5,7 @@
  */
 package com.webchat.model;
 
+import java.io.Serializable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
  * 
  * The minimal requirement for an user 14-11-2016
  */
-public class User {
+public class User implements Serializable{
     private int id;
     
     @NotNull

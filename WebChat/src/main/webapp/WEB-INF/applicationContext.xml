@@ -17,8 +17,6 @@
         http://www.springframework.org/schema/context/spring-context-4.0.xsd"
        >
     
-    <context:annotation-config />
-    <context:component-scan base-package="dao" />
     
     <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource1">
         <property value="com.mysql.jdbc.Driver" name="driverClassName"/>
@@ -30,18 +28,6 @@
     <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
         <property name="dataSource" ref="dataSource1"/>
     </bean>
-    
-    <!-- Declare DAO -->
-    <bean id="userDAO" class="com.webchat.dao.UserDAO" /> 
-    
-    <!-- Declare services -->
-    <bean class="com.webchat.service.UserService" id="userService"/>
-    
-    <!-- Declare controllers -->
-    <bean id="loginController" class="com.webchat.controller.LoginController" />
-    <bean id="registrationController" class="com.webchat.controller.RegisterController" />
-    <bean id="mainController" class="com.webchat.controller.MainController" />
-    
     
     <!-- <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
