@@ -63,7 +63,7 @@
     </div>
   </li>
   <li>
-    <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">perm_identity</i>Friends Online</div>
+    <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">supervisor_account</i>Friends Online</div>
     <div class="collapsible-body">
     <div class="chip">
     <img src="${pageContext.request.contextPath}/Resources/AVATAR/avatar3.png" alt="Contact Person">
@@ -86,7 +86,7 @@
   </li>
   
    <li>
-    <div class="collapsible-header"><span class="badge">2</span><i class="material-icons red999">supervisor_account</i>Friend Request</div>
+    <div class="collapsible-header"><span class="badge">2</span><i class="material-icons red999">perm_identity</i>Friend Request</div>
     <div class="collapsible-body">
     
     <ul class="collection">

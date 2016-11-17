@@ -1,4 +1,4 @@
-<%-- 
+    <%-- 
     Document   : registration
     Created on : 2016-nov-14, 12:55:01
     Author     : Kristoffer
