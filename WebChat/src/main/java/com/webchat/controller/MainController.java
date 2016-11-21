@@ -6,7 +6,12 @@
 package com.webchat.controller;
 
 import com.webchat.model.User;
+import com.webchat.service.UserService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,15 +25,24 @@ import org.springframework.web.portlet.ModelAndView;
  *
  * @author sundi
  */
-@Controller
+
+
+
 @RequestMapping("/main")
+@Controller
+
 public class MainController {
+    @Autowired
+    private UserService userService;
+    
     @RequestMapping(method = RequestMethod.GET)
-    public String main(){
+    public String main(ModelMap model){
+        LinkedList<User> users = userService.getUserCollection();
+        model.addAttribute("users", users);
         return "main";
     }
     
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping( value="/logout" , method = RequestMethod.GET)
     public String logout(HttpSession session, ModelMap model){
         model.remove("user");
         session.removeAttribute("user");
