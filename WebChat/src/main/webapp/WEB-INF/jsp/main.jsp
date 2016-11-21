@@ -157,7 +157,8 @@
     </div>
 
         <script>
-            $( document ).ready(function(){
+            console.log("hrj");
+             $( document ).ready(function(){
               $('.button-collapse').sideNav({
       menuWidth: 320, // Default is 240
       edge: 'left', // Choose the horizontal origin

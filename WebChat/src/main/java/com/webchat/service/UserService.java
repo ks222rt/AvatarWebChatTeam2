@@ -28,8 +28,19 @@ public class UserService {
         return userDAO.loginUser(username, password);
     }
     
-    public Collection<User> getUserCollection(){
-        return userDAO.getAllUsers();
+    public LinkedList<User> getUserCollection(){
+        LinkedList<User> users = new LinkedList();
+        for(int i = 0; i < 100 ; i++){
+            User user = new User();
+            user.setUsername("Test"+i);
+            user.setFirstname("Tester");
+            user.setLastname("L"+i);
+            user.setEmail("test@tester"+i+".com");
+            user.setPassword("asdsadasdasdasdas");
+            user.setID(i);
+            users.add(user);
+        }
+        return users;
     }
     
 }

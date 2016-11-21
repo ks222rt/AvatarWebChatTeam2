@@ -38,6 +38,7 @@ public class MainController {
     @RequestMapping(method = RequestMethod.GET)
     public String main(ModelMap model){
         LinkedList<User> users = userService.getUserCollection();
+        
         model.addAttribute("users", users);
         return "main";
     }
