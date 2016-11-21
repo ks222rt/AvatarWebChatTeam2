@@ -10,6 +10,7 @@ import com.webchat.service.UserService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,8 +38,13 @@ public class MainController {
     
     @RequestMapping(method = RequestMethod.GET)
     public String main(ModelMap model){
-        LinkedList<User> users = userService.getUserCollection();
+        List<User> users = userService.getUserCollection();
         model.addAttribute("users", users);
+        
+        for (User user : users) {
+            System.out.println(user.getUsername());
+        }
+        
         return "main";
     }
     

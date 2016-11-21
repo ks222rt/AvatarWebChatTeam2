@@ -9,6 +9,7 @@ import com.webchat.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
@@ -28,7 +29,7 @@ public class UserService {
         return userDAO.loginUser(username, password);
     }
     
-    public Collection<User> getUserCollection(){
+    public List<User> getUserCollection(){
         return userDAO.getAllUsers();
     }
     

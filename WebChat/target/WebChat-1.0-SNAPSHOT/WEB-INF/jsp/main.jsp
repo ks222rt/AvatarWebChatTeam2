@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
     <head>
         <link href="${pageContext.request.contextPath}/Resources/CSS/style.css" rel="stylesheet" type="text/css" >
@@ -116,9 +117,10 @@
   
   <div class="util">
       <i class="left material-icons red999">settings</i>
-      <form method='post'>
-          <button value="logout" name="logout"><i class="material-icons red999">power_settings_new</i></button>
-      </form>
+      
+        <a href="<c:url value="/main/logout.htm" />">Logout</a>
+        <i class="material-icons red999">power_settings_new</i></button>
+      
       </div>
   
 </ul> 
@@ -154,12 +156,6 @@
         © 2016 Copyright by Avatar Corporation
     </div>
 
-      
-    
-    
-        
-        
-        
         <script>
             $( document ).ready(function(){
               $('.button-collapse').sideNav({
@@ -172,13 +168,9 @@
   
   $('input.autocomplete').autocomplete({
     data: {
-      "Sasha": null,
-      "Steven": null,
-      "Filip": null,
-      "Rikard": null,
-      "Adam": null,
-      "Kristoffer": null,
-      "Mathias": null,
+      <c:forEach var="listValue" items="${users}">
+      ${listValue.getLastname()} : null,
+      </c:forEach>
       "Google": 'http://placehold.it/250x250'
     }
   });
