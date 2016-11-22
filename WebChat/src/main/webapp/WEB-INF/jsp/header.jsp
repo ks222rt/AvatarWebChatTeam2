@@ -110,7 +110,7 @@
       <a href="contentSearch.htm">SÖK</a>
       <br>
       <br>
-        <a href="c:url value="/main/logout.htm">logga ut</a>
+         <a href="<c:url value="/main/logout.htm" />">Logout</a>
         </button>
       
       </div>
