@@ -87,9 +87,11 @@ public class UserDAO {
     */
     public User loginUser(String username, String password) {
         User userResult = getUserObject(username);
-        String userPassword = HashUtil.hashPassword(password, userResult.getSalt());
-        if (userPassword.equals(userResult.getPassword())) {
-            return userResult;
+        if (userResult != null) {
+            String userPassword = HashUtil.hashPassword(password, userResult.getSalt());
+            if (userPassword.equals(userResult.getPassword())) {
+                return userResult;
+            }
         }
         return null;
 
@@ -172,7 +174,7 @@ public class UserDAO {
                     return user;
                 }
             });
-
+            System.out.println(userResult.getClass());
             return userResult;
         } catch (EmptyResultDataAccessException e) {
             return null;
