@@ -6,6 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+
 <html>
     <head>
         <link href="${pageContext.request.contextPath}/Resources/CSS/style.css" rel="stylesheet" type="text/css" >
@@ -25,12 +29,19 @@
 
         <div class="container">
         <div class="z-depth-5 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-          <form class="col s12" method="post">
+            <form class="col s12" method="post">
             <div class='row'>
               <div class='col s12'>
               </div>
             </div>
-
+              
+            <c:if test="${not empty error_message}">
+                <blockquote class="card-panel chip red white-text">
+                    Error: ${error_message}
+                    <i class="close material-icons">close</i>
+                </blockquote>
+            </c:if>
+              
             <div class='row'>
               <div class='input-field col s12'>
                  <i class="small material-icons teal999" style=" float: left">perm_identity</i>

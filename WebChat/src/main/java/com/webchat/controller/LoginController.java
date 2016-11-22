@@ -17,6 +17,8 @@ import com.webchat.service.UserService;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import com.webchat.validator.UserValidator;
+import java.util.HashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -44,11 +46,14 @@ public class LoginController {
     @RequestMapping(method = RequestMethod.POST)
     public String doLogin(@RequestParam String username,
                           @RequestParam String password,
-                          ModelMap model){ 
+                          ModelMap model,
+                          RedirectAttributes redirectAttributes){ 
         
         /* verify the format of the user name and password */
-        if (!validator.validateLoginAttempt(username, password))
+        HashMap validationResult = validator.validateLoginAttempt(username, password);
+        if (validationResult.containsKey("error"))
         {
+            redirectAttributes.addFlashAttribute("error_message", validationResult.get("error"));
             return "redirect:/login.htm";
         }
         
@@ -58,6 +63,7 @@ public class LoginController {
             model.put("user", user);
             return "redirect:/main.htm";
         } else {
+            redirectAttributes.addFlashAttribute("error_message", "Wrong username/password");
             return "redirect:/login.htm";
         }
     }

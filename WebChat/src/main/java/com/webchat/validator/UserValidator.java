@@ -6,6 +6,7 @@
 package com.webchat.validator;
 
 import com.webchat.model.User;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.validation.ConstraintViolation;
@@ -31,23 +32,28 @@ public class UserValidator {
         unamePattern = Pattern.compile("[^a-zA-Z0-9]");
     }
 
-    public boolean validateLoginAttempt(String username, String password) {
-        if (username == null || password == null)
+    public HashMap validateLoginAttempt(String username, String password) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (username.length() == 0 || password.length() == 0)
         {
-            return false;
+            hashMap.put("error", "Username and password cant be empty!");
+            return hashMap;
         }
         
         if (unamePattern.matcher(username).find())
         {
-            return false;
+            hashMap.put("error", "Illegal characters in username");
+            return hashMap;
         }
         
         if (password.length() < 8)
         {
-            return false;
+            hashMap.put("error", "Password must be atleast 8 characters");
+            return hashMap;
         }
         
-        return true;
+        hashMap.put("success", "Validation OK!");
+        return hashMap;
     }
 
     public boolean validateRegisterAttempt(User user) {
