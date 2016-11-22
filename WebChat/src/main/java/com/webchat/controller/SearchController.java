@@ -27,11 +27,8 @@ import org.springframework.web.portlet.ModelAndView;
  * @author sundi
  */
 
-
-
-@RequestMapping("/contentSearch")
 @Controller
-
+@RequestMapping("/contentSearch")
 public class SearchController {
     @Autowired
     private UserService userService;
