@@ -139,7 +139,7 @@ public class UserDAO {
                      "avatar_webchat.chat_user.username = ? AND chat_user_info.id = chat_user.info_id;";
         
         try{
-            System.out.println("inne och skall köra queryn");
+            
             User userResult = jdbcTemplate.queryForObject(sql,
                     new Object[] { username },
                     new RowMapper<User>() {
@@ -158,8 +158,7 @@ public class UserDAO {
                             return user;                     
                         }
                         });  
-            System.out.println(userResult.getClass());
-            System.out.println(userResult.getUsername());
+            
             return userResult;
         }catch(EmptyResultDataAccessException e){
             return null;
