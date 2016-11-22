@@ -6,6 +6,7 @@
 package com.webchat.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
@@ -42,6 +43,24 @@ public class User implements Serializable{
     private String password;
     
     private byte[] salt;
+    private Timestamp created;
+    private int isAdmin;
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
     
     public void setID(int id){
         this.id = id;
