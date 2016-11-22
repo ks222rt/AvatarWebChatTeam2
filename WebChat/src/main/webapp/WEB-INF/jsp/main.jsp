@@ -170,7 +170,7 @@
   $('input.autocomplete').autocomplete({
     data: {
       <c:forEach var="listValue" items="${users}">
-      ${listValue.getLastname()} : null,
+      ${listValue.getUsername()} : null,
       </c:forEach>
       "Google": 'http://placehold.it/250x250'
     }

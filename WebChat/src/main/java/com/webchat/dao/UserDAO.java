@@ -13,6 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import com.webchat.util.HashUtil;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 /**
@@ -40,6 +43,40 @@ public class UserDAO {
     }
 
     public User loginUser(String username, String password) {
+        User userResult = getUserObject(username);
+        String userPassword = HashUtil.hashPassword(password, userResult.getSalt());        
+        if (userPassword.equals(userResult.getPassword())) {
+            return userResult;
+        }
+        return null;
+        
+    }
+    
+    public User searchUser(String username){
+        return getUserObject(username);
+    } 
+    
+    public List<User> getAllUsers(){
+        String sql = "SELECT * FROM avatar_webchat.user";       
+        LinkedList<User> users = new LinkedList();
+        
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+        for (Map row : rows) {
+            User user = new User();
+            user.setUsername((String)row.get("username"));
+            user.setFirstname((String)row.get("firstname"));
+            user.setLastname((String)row.get("lastname"));
+            user.setEmail((String)row.get("email"));
+            user.setSalt((byte[])row.get("salt"));
+            user.setPassword((String)row.get("password"));
+            user.setID((Integer)row.get("id"));
+            users.add(user);
+        }
+        
+        return users;
+    }
+    
+    private User getUserObject(String username){
         String sql = "SELECT * FROM avatar_webchat.user WHERE username = ?";
         
         try{
@@ -59,12 +96,7 @@ public class UserDAO {
                             return user;                     
                         }
                         });  
-
-            String userPassword = HashUtil.hashPassword(password, userResult.getSalt());        
-            if (userPassword.equals(userResult.getPassword())) {
-                return userResult;
-            }
-            return null;
+            return userResult;
         }catch(EmptyResultDataAccessException e){
             return null;
         }
