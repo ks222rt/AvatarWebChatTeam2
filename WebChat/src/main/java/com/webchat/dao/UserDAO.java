@@ -209,7 +209,7 @@ public class UserDAO {
                     return user;
                 }
             });
-            System.out.println(userResult.getClass());
+            
             return userResult;
         } catch (EmptyResultDataAccessException e) {
             return null;
