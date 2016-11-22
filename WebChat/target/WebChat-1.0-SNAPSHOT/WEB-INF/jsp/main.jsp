@@ -32,7 +32,8 @@
 
         <!--Script for menu & autocompleteSearch -->
         <script>
-            $( document ).ready(function(){
+            console.log("hrj");
+             $( document ).ready(function(){
               $('.button-collapse').sideNav({
       menuWidth: 320, // Default is 240
       edge: 'left', // Choose the horizontal origin
@@ -41,14 +42,15 @@
     }
      );
   
-    $('input.autocomplete').autocomplete({
-      data: {
-        <c:forEach var="listValue" items="${users}">
-        ${listValue.getLastname()} : null,
-        </c:forEach>
-        "Google": 'http://placehold.it/250x250'
-      }
-    });
+
+  $('input.autocomplete').autocomplete({
+    data: {
+      <c:forEach var="listValue" items="${users}">
+      ${listValue.getUsername()} : null,
+      </c:forEach>
+      "Google": 'http://placehold.it/250x250'
+    }
+  });
         })
         </script>
         
