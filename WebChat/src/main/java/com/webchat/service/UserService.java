@@ -32,4 +32,15 @@ public class UserService {
 
     }
     
+    public boolean addFriendRequest(int senderID, int recieverID){
+        return userDAO.addFriendRequest(senderID, recieverID );
+       
+    }
+    
+    public boolean respondToFriendRequest(int senderID, int recieverID, boolean accepted){
+        
+        return userDAO.respondToFriendRequest(senderID, recieverID, accepted);
+       
+    }
+    
 }

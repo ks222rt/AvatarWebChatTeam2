@@ -57,18 +57,20 @@ public class MainController {
     @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)
     public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
-        throw new UnsupportedOperationException("Not yet implemented");
-        
-       /*TODO: user.getID() and id should be sent to 
-        *      a service eg. userService.friendRequest(sender,target)
-        */
+            
+        if(userService.addFriendRequest(user.getID(), id)){
+            return "main";
+        }
+        return "main";
     }
     
-    @RequestMapping(value="/friendAccept/{id}", method = RequestMethod.GET)
-    public String acceptFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
+    @RequestMapping(value="/friendResponse/{response}/{id}", method = RequestMethod.GET)
+    public String respondFriendRequest(HttpServletRequest request,@PathVariable boolean response, @PathVariable int id){
         User user = (User) request.getSession().getAttribute("user");
-        throw new UnsupportedOperationException("Not yet implemented");
         
+        userService.respondToFriendRequest(user.getID(), id, response);
+      
+        return "main";
         /*TODO: user.getID() and id should be sent to 
          *      a service eg. userService.acceptFriend(sender,target)
          */
