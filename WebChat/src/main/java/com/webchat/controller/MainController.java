@@ -7,20 +7,17 @@ package com.webchat.controller;
 
 import com.webchat.model.User;
 import com.webchat.service.UserService;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.portlet.ModelAndView;
+
 
 /**
  *
@@ -31,10 +28,10 @@ import org.springframework.web.portlet.ModelAndView;
 
 @RequestMapping("/main")
 @Controller
-
 public class MainController {
     @Autowired
     private UserService userService;
+    
     
     @RequestMapping(method = RequestMethod.GET)
     public String main(ModelMap model){
@@ -43,18 +40,38 @@ public class MainController {
 
         model.addAttribute("users", users);
         
-        for (User user : users) {
-            System.out.println(user.getUsername());
+        for (User userVar : users) {
+            System.out.println(userVar.getUsername());
         }
         
         return "main";
     }
     
-    @RequestMapping( value="/logout" , method = RequestMethod.GET)
+    @RequestMapping(value="/logout" , method = RequestMethod.GET)
     public String logout(HttpSession session, ModelMap model){
         model.remove("user");
         session.removeAttribute("user");
         return "redirect:/login.htm";
+    }
+    
+    @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)
+    public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        throw new UnsupportedOperationException("Not yet implemented");
+        
+       /*TODO: user.getID() and id should be sent to 
+        *      a service eg. userService.friendRequest(sender,target)
+        */
+    }
+    
+    @RequestMapping(value="/friendAccept/{id}", method = RequestMethod.GET)
+    public String acceptFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        throw new UnsupportedOperationException("Not yet implemented");
+        
+        /*TODO: user.getID() and id should be sent to 
+         *      a service eg. userService.acceptFriend(sender,target)
+         */
     }
 }
 

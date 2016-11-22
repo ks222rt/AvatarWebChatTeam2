@@ -1,8 +1,9 @@
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\RegisterController.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\service\UserService.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\util\HashUtil.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\model\User.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\MainController.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\validator\UserValidator.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\dao\UserDAO.java
-C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\LoginController.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\SearchController.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\util\HashUtil.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\RegisterController.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\model\User.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\service\UserService.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\dao\UserDAO.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\MainController.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\controller\LoginController.java
+C:\Github_projects\AvatarWebChat\AvatarWebChatTeam2\WebChat\src\main\java\com\webchat\validator\UserValidator.java

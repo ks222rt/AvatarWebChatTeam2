@@ -30,4 +30,18 @@
           p:prefix="/WEB-INF/jsp/"
           p:suffix=".jsp" />    
    
+   
+    <!--<bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+        <property name="templateMode" value="HTML5" />
+         Template cache is set to false (default is true). 
+        <property name="cacheable" value="false" />
+    </bean>
+
+    <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+      <property name="templateResolver" ref="templateResolver" />
+    </bean>-->
+
+   
 </beans>
