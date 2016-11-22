@@ -39,7 +39,7 @@ public class SearchController {
         model.addAttribute("users", users);
     
         
-        return "search";
+        return "contentSearch";
     }
     
 }

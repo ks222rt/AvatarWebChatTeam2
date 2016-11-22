@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
     <head>
         <link href="${pageContext.request.contextPath}/Resources/CSS/style.css" rel="stylesheet" type="text/css" >
@@ -103,10 +104,13 @@
 
   
   <div class="util">
-      <i class="left material-icons red999">settings</i>
-      
-        <a href="<c:url value="/main/logout.htm" />Logout</a>
-        <i class="material-icons red999">power_settings_new</i></button>
+  
+        
+      <a href="contentSearch.htm">SÖK</a>
+      <br>
+      <br>
+        <a href="c:url value="/main/logout.htm">logga ut</a>
+        </button>
       
       </div>
   
