@@ -136,6 +136,41 @@ public class UserDAO {
 
         return users;
     }
+    
+    public List<User> getUserFriends(int userID){
+       String sqlGetFriends = "SELECT avatar_webchat.chat_user.id as id,\n" + 
+                               "avatar_webchat.chat_user.username as username,\n" + 
+                               "avatar_webchat.chat_user_info.firstname as firstname,\n" +
+                               "avatar_webchat.chat_user_info.lastname as lastname,\n" + 
+                               "avatar_webchat.chat_user_info.email as email\n" + 
+                               "FROM\n"+
+                               "avatar_webchat.chat_user\n" +
+                               "INNER JOIN avatar_webchat.chat_user_info\n" + 
+                               "on avatar_webchat.chat_user.info_id = avatar_webchat.chat_user_info.id\n" +
+                               "INNER JOIN avatar_webchat.friend\n" + 
+                               "on\n" + 
+                               "avatar_webchat.chat_user.id = avatar_webchat.friend.id2\n" +
+                               "WHERE avatar_webchat.friend.id1 = " + userID;
+       List<User> friends = new LinkedList<>();  
+       try{
+           
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlGetFriends);
+        for (Map row : rows) {
+            User user = new User();
+                user.setUsername((String) row.get("username"));
+                user.setFirstname((String) row.get("firstname"));
+                user.setLastname((String) row.get("lastname"));
+                user.setEmail((String) row.get("email"));
+                user.setID((Integer) row.get("id"));
+            friends.add(user);
+        }
+       }
+       catch(Exception e){
+           return null;
+       }
+        return friends;      
+    }
+    
     /*
         Gets the user object based on the username input.
     */

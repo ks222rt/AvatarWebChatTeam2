@@ -42,5 +42,10 @@ public class UserService {
         return userDAO.respondToFriendRequest(senderID, recieverID, accepted);
        
     }
+
+    public List<User> getUserFriends(int userID) {
+        
+       return userDAO.getUserFriends(userID);
+    }
     
 }

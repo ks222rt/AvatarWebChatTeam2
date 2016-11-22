@@ -34,10 +34,19 @@ public class MainController {
     
     
     @RequestMapping(method = RequestMethod.GET)
-    public String main(ModelMap model){
+    public String main(HttpServletRequest request, ModelMap model){
        
         List<User> users = userService.getUserCollection();
-
+        
+        User user = (User) request.getSession().getAttribute("user");
+        
+        List<User> friendList = userService.getUserFriends(user.getID());
+        System.out.println("---------------------------------------");
+        for(User friend : friendList){
+            System.out.print(friend.getUsername()+" | "+friend.getFirstname()+ " "+friend.getLastname()+" | "+friend.getEmail());
+        }
+         System.out.println("");
+        System.out.println("---------------------------------------");
         model.addAttribute("users", users);
         
         for (User userVar : users) {
