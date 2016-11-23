@@ -32,6 +32,14 @@ public class UserService {
 
     }
     
+    public boolean userExists(String username){
+        if (userDAO.searchUser(username) == null)
+        {
+            return false;
+        }
+        return true;
+    }
+    
     public boolean addFriendRequest(int senderID, int recieverID){
         return userDAO.addFriendRequest(senderID, recieverID );
        

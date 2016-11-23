@@ -45,15 +45,19 @@ public class RegisterController {
         /* validate the field in the user object */
         String errorMessage = validator.validateRegisterAttempt(user);
         if (errorMessage == null) { // no errors detected in users input, continue registration
-            byte[] salt = HashUtil.getNewSalt();
-            user.setSalt(salt);
-            user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
+            if (userService.userExists(user.getUsername())) {
+                errorMessage = "Username already registered";
+            } else {
+                byte[] salt = HashUtil.getNewSalt();
+                user.setSalt(salt);
+                user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
 
-            if (userService.registerUser(user)) {
-                return new ModelAndView("redirect:/login.htm", "user", user);
-            } 
+                if (userService.registerUser(user)) {
+                    return new ModelAndView("redirect:/login.htm", "user", user);
+                }
+            }
         }
-        
+
         // TODO: If we get here, validation failed and "errorMessage" contains 
         // a string that describes the reason why. Return this string to the 
         // view

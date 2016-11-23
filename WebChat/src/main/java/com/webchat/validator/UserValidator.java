@@ -6,6 +6,7 @@
 package com.webchat.validator;
 
 import com.webchat.model.User;
+
 import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -86,7 +87,11 @@ public class UserValidator {
             return "Incorrect e-mail address";
         }
         
-        // validation ok
+        if (violations.size() != 0) // incorrect e-mail address
+        {
+            return "Incorrect e-mail address";
+        }
+        
         return null;
     }
 }
