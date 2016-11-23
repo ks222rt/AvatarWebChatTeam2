@@ -1,8 +1,12 @@
 com\webchat\dao\UserDAO$1.class
+com\webchat\dao\UserDAO$7.class
 com\webchat\controller\LoginController.class
+com\webchat\dao\UserDAO$8.class
+com\webchat\dao\UserDAO$6.class
 com\webchat\util\HashUtil.class
 com\webchat\validator\UserValidator.class
 com\webchat\controller\RegisterController.class
+com\webchat\dao\UserDAO$5.class
 com\webchat\dao\UserDAO$4.class
 com\webchat\controller\MainController.class
 com\webchat\controller\SearchController.class
