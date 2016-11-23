@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div th:fragment="menu">
+      <ul id="slide-out" class="side-nav fixed">  
+    <li>
+      <div class="userView">
+        <div class="chip">
+          <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
+          <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
+        </div>
+      </div>
+    </li>
+    
+    <ul class="collapsible" data-collapsible="accordion" id="innerNav">
+      <li>
+        <div class="collapsible-header "><span class="new badge">3</span><i class="material-icons red999">chat</i>Message</div>
+        <div class="collapsible-body">
+          <a href="#!" class="collection-item">Alan<span class="badge">1</span></a>
+          <br>
+          <a href="#!" class="collection-item">Steven<span class="badge">2</span></a>
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header"><span class="badge" ></span>
+            <i class="material-icons red999">supervisor_account</i>All friends</div>
+        <div class="collapsible-body">    
+          <div th:each="user : ${friends}">
+            <div class="chip">
+              <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
+              <span th:text="${user.username}"></span>
+            </div>
+          </div>  
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">supervisor_account</i>Friends Online</div>
+        <div class="collapsible-body">
+          <div class="chip">
+            <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
+            STEEEEVEE
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header"><span class="badge">2</span><i class="material-icons red999">perm_identity</i>Friend Request</div>
+        <div class="collapsible-body">
+          <ul class="collection">
+            <li class="collection-item avatar">
+              <img src="../../../resources/AVATAR/avatar7.png" th:src="@{/resources/AVATAR/avatar7.png}" alt="" class="circle">
+              <span class="title">ALAAAAAN</span>
+              <p>Name: ALAAN Andersson<br>
+                 From: Canada
+              </p>
+      
+              <div class="accept">
+                <i class="left material-icons red999">thumb_up</i>
+                <i class="right material-icons red999">thumb_down</i>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </li>
+      
+    </ul> 
+    <div>
+        <a href="/main/contentSearch.htm" th:href="@{/main/search.htm}"><i class="left material-icons red999">search</i></a>
+        <a href="/main/logout.htm" th:href="@{/main/logout.htm}"><i class="right material-icons red999">settings_power</i></a>
+    </div>
+    </ul>
+    </div>
+  </body>
+</html>

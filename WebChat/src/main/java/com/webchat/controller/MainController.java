@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 
 /**
@@ -26,9 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 
 
-
-@RequestMapping("/main")
 @Controller
+@SessionAttributes("friends")
+@RequestMapping("/main")
 public class MainController {
     @Autowired
     private UserService userService;
@@ -36,23 +37,17 @@ public class MainController {
     
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
-     
-        
         User user = (User) request.getSession().getAttribute("user");
-        
         List<User> friendList = userService.getUserFriends(user.getId());
-        System.out.println("---------------------------------------");
-        for(User friend : friendList){
-            System.out.print(friend.getUsername()+" | "+friend.getFirstname()+ " "+friend.getLastname()+" | "+friend.getEmail());
-        }
-         System.out.println("");
-        System.out.println("---------------------------------------");        
+        model.addAttribute("friends", friendList);
+            
         return "main/welcome";
     }
     
     @RequestMapping(value="/logout" , method = RequestMethod.GET)
     public String logout(HttpSession session, ModelMap model){
         model.remove("user");
+        model.remove("friends");
         session.removeAttribute("user");
         return "redirect:/login.htm";
     }

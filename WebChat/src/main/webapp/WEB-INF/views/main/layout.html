@@ -18,12 +18,13 @@ and open the template in the editor.
     
     <title>Avatar - WebChat</title>
   </head>
-  <body>
-    <div th:replace="fragments/header :: header"></div>
-    
-    <div layout:fragment="content"></div>
-    
-    <div th:replace="fragments/footer :: footer"></div>
+  <body>    
+    <div class="row">
+      <div class="col s12" th:replace="fragments/header :: header"></div>
+      <div class="col s12 menu" th:replace="fragments/menu :: menu"></div>
+      <div class="col s12 blue" layout:fragment="content"></div>
+      <div class="col s12"th:replace="fragments/footer :: footer"></div>
+    </div>
     
     <script>
       $( document ).ready(function(){

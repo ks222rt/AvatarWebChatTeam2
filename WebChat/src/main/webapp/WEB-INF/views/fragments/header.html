@@ -6,14 +6,6 @@ and open the template in the editor.
 -->
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" href="../../../Resources/SCRIPT/myScript.js" th:href="@{Resources/SCRIPT/myScript.js}" ></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Avatar - WebChat</title>
   </head>
 <body>
@@ -23,61 +15,8 @@ and open the template in the editor.
     Menu
     <a href="#!" class="center brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
     
-  <ul id="slide-out" class="side-nav ">  
-    <li>
-      <div class="userView">
-        <div class="chip">
-          <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
-          <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
-        </div>
-      </div>
-    </li>
-    
-    <ul class="collapsible" data-collapsible="accordion" id="innerNav">
-      <li>
-        <div class="collapsible-header "><span class="new badge">3</span><i class="material-icons red999">chat</i>Message</div>
-        <div class="collapsible-body">
-          <a href="#!" class="collection-item">Alan<span class="badge">1</span></a>
-          <br>
-          <a href="#!" class="collection-item">Steven<span class="badge">2</span></a>
-        </div>
-      </li>
-      <li>
-        <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">supervisor_account</i>Friends Online</div>
-        <div class="collapsible-body">
-          <div class="chip">
-            <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
-            STEEEEVEE
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="collapsible-header"><span class="badge">2</span><i class="material-icons red999">perm_identity</i>Friend Request</div>
-        <div class="collapsible-body">
-          <ul class="collection">
-            <li class="collection-item avatar">
-              <img src="../../../resources/AVATAR/avatar7.png" th:src="@{/resources/AVATAR/avatar7.png}" alt="" class="circle">
-              <span class="title">ALAAAAAN</span>
-              <p>Name: ALAAN Andersson<br>
-                 From: Canada
-              </p>
-      
-              <div class="accept">
-                <i class="left material-icons red999">thumb_up</i>
-                <i class="right material-icons red999">thumb_down</i>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li>
-      
-    </ul> 
-    <div>
-        <a href="/main/contentSearch.htm" th:href="@{/main/search.htm}"><i class="left material-icons red999">search</i></a>
-        <a href="/main/logout.htm" th:href="@{/main/logout.htm}"><i class="right material-icons red999">settings_power</i></a>
-    </div>
-    </ul>
-    <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>           
+  
+    <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
   </nav>
 </body>
 </html>

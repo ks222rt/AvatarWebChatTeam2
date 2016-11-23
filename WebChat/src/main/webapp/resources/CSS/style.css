@@ -13,10 +13,13 @@ html {
 }
 body {
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .material-icons.teal999 { color: #008080; }
 .material-icons.red999 { color: #e57373; }
+
+
 
 
 #navBar{
@@ -24,6 +27,8 @@ body {
     color: white;
     font-size: 15px;
     font-weight: bolder;
+    float: right;
+    max-width: 81%;
 }
 
 #navBar ul{
@@ -33,6 +38,15 @@ body {
     color: #000;
 }
 
+.col.s12.blue{
+    min-height: 75vh;
+    max-width: 81%;
+    float:right;
+}
+
+.col.s8.btn.btn-large.waves-effect.teal{
+    max-height: 10vh;
+}
 
  .col.s14.m8.sl9.teal{
      min-height: 65vh;
@@ -46,17 +60,21 @@ body {
  }
 
 
-.col.s16.m8.sl9.grey{
+.col.s12.grey{
     text-align: center;
     vertical-align: middle;
     color: #fff;
     height: 5vh;
+    float: right;
+    max-width: 81%;
 }
-.col.s16.m8.sl9.grey.lighten-2{
+.col.s12.grey.lighten-2{
     text-align: center;
     vertical-align: middle;
     color: #000;
-    height: 20vh;
+    height: 10vh;
+    float: right;
+    max-width: 81%;
 }
 
 .collapsible-header{
