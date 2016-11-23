@@ -40,6 +40,10 @@ public class UserService {
         return true;
     }
     
+    public User getUserByUsername(String username){
+        return userDAO.searchUser(username);
+    }
+    
     public boolean addFriendRequest(int senderID, int recieverID){
         return userDAO.addFriendRequest(senderID, recieverID );
        

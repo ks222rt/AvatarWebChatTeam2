@@ -7,6 +7,7 @@ package com.webchat.controller;
 
 import com.webchat.model.User;
 import com.webchat.service.UserService;
+import java.io.Console;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -82,6 +83,14 @@ public class MainController {
         /*TODO: user.getID() and id should be sent to 
          *      a service eg. userService.acceptFriend(sender,target)
          */
+    }
+    
+    @RequestMapping(value="/user/{username}", method = RequestMethod.GET)
+    public String getUserPage(HttpServletRequest request,@PathVariable String username, ModelMap model){
+        User user = userService.getUserByUsername(username);
+        System.out.print("WAAAHSHASHASHSAHSAHAS");
+        model.addAttribute("user", user);
+        return "main/userpage";
     }
 }
 

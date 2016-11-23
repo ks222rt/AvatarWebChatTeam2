@@ -10,8 +10,8 @@
       <h1>Lists of users</h1>
         <tr th:each="user : ${users}">
         <div>
-        <p th:text="${user.username}"></p>
-        <a th:href="@{/users/{id}/details(id=${user.id},action='show_all')}">User page</a>
+        
+        <a th:href="@{user/{username}(username=${user.username})}"><span th:text="${user.username}"/></a>
         </div>
        
        
