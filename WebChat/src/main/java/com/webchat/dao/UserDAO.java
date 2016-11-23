@@ -221,6 +221,9 @@ public class UserDAO {
         the sender and reciever in the database.
     */
     public boolean addFriendRequest(final int senderID, final int recieverID) {
+        if(friendRequestExists(senderID, recieverID) || friendRequestExists(recieverID, senderID)){
+            return false;
+        }
         final String sqlAddFriend = "insert into avatar_webchat.friend_requests(sender, reciever)\n"
                 + "VALUES (?, ?)";
         try {
@@ -246,7 +249,7 @@ public class UserDAO {
     If accepted is -> false, do nothing.
     */
     public boolean respondToFriendRequest(final int senderID, final int recieverID, final boolean accepted) {
-        if (!isFriendRequestValid(recieverID, senderID)) {
+        if (!friendRequestExists(recieverID, senderID)) {
             return false;
         }
         final String sqlFriendRequestResponse = "insert into avatar_webchat.friend(id1, id2) \n"
@@ -288,7 +291,7 @@ public class UserDAO {
     private method which checks if the actually is a friend request between
     two users. Prevents force-adding.
     */
-    private boolean isFriendRequestValid(final int senderID, final int recieverID) {
+    private boolean friendRequestExists(final int senderID, final int recieverID) {
         final String sqlValidFriendRequest = " SELECT * FROM avatar_webchat.friend_requests\n"
                 + "WHERE avatar_webchat.friend_requests.sender = ?\n"
                 + " AND avatar_webchat.friend_requests.reciever = ?";
