@@ -35,23 +35,17 @@ public class MainController {
     
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
-        List<User> users = userService.getUserCollection();
+     
         
         User user = (User) request.getSession().getAttribute("user");
         
-        List<User> friendList = userService.getUserFriends(user.getID());
+        List<User> friendList = userService.getUserFriends(user.getId());
         System.out.println("---------------------------------------");
         for(User friend : friendList){
             System.out.print(friend.getUsername()+" | "+friend.getFirstname()+ " "+friend.getLastname()+" | "+friend.getEmail());
         }
          System.out.println("");
-        System.out.println("---------------------------------------");
-        model.addAttribute("users", users);
-        
-        for (User userVar : users) {
-            System.out.println(userVar.getUsername());
-        }
-        
+        System.out.println("---------------------------------------");        
         return "main/welcome";
     }
     
@@ -64,15 +58,15 @@ public class MainController {
     
     @RequestMapping(value="/search", method = RequestMethod.GET)
     public String serach(HttpSession session, ModelMap model){
-        
+        List<User> users = userService.getUserCollection();
+        model.addAttribute("users", users);
         return "main/search";
     }
     
     @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)
     public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
-            
-        if(userService.addFriendRequest(user.getID(), id)){
+        if(userService.addFriendRequest(user.getId(), id)){
             return "main";
         }
         return "main";
@@ -82,7 +76,7 @@ public class MainController {
     public String respondFriendRequest(HttpServletRequest request,@PathVariable boolean response, @PathVariable int id){
         User user = (User) request.getSession().getAttribute("user");
         
-        userService.respondToFriendRequest(user.getID(), id, response);
+        userService.respondToFriendRequest(user.getId(), id, response);
       
         return "main";
         /*TODO: user.getID() and id should be sent to 

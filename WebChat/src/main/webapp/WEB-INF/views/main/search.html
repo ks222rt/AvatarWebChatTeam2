@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <html layout:decorator="main/layout">
   <head>
     <title>TODO supply a title</title>
@@ -12,7 +7,18 @@ and open the template in the editor.
   </head>
   <body>
     <div layout:fragment="content">
-      <div>tjabba tjenna halloj</div>
-    </div>
+      <h1>Lists of users</h1>
+        <tr th:each="user : ${users}">
+        <div>
+        <p th:text="${user.username}"></p>
+        <a th:href="@{/users/{id}/details(id=${user.id},action='show_all')}">User page</a>
+        </div>
+       
+       
+
+      </tr>
+   
+  
   </body>
 </html>
+

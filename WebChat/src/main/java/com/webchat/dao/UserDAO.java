@@ -128,7 +128,7 @@ public class UserDAO {
             user.setEmail((String) row.get("email"));
             user.setSalt((byte[]) row.get("salt"));
             user.setPassword((String) row.get("password"));
-            user.setID((Integer) row.get("id"));
+            user.setId((Integer) row.get("id"));
             user.setCreated((Timestamp) row.get("created"));
             user.setIsAdmin((Integer) row.get("isAdmin"));
             users.add(user);
@@ -161,7 +161,7 @@ public class UserDAO {
                 user.setFirstname((String) row.get("firstname"));
                 user.setLastname((String) row.get("lastname"));
                 user.setEmail((String) row.get("email"));
-                user.setID((Integer) row.get("id"));
+                user.setId((Integer) row.get("id"));
             friends.add(user);
         }
        }
@@ -203,7 +203,7 @@ public class UserDAO {
                     user.setEmail(rs.getString("email"));
                     user.setSalt(rs.getBytes("salt"));
                     user.setPassword(rs.getString("password"));
-                    user.setID(rs.getInt("id"));
+                    user.setId(rs.getInt("id"));
                     user.setCreated(rs.getTimestamp("created"));
                     user.setIsAdmin(rs.getInt("isAdmin"));
                     return user;

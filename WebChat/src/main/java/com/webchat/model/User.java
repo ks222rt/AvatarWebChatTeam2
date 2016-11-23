@@ -62,11 +62,11 @@ public class User implements Serializable{
         this.isAdmin = isAdmin;
     }
     
-    public void setID(int id){
+    public void setId(int id){
         this.id = id;
     }
     
-    public int getID(){
+    public int getId(){
         return id;
     }
     
