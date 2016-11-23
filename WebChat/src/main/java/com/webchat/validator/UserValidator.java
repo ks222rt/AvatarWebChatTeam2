@@ -56,7 +56,7 @@ public class UserValidator {
         return hashMap;
     }
 
-    public boolean validateRegisterAttempt(User user) {
+    public String validateRegisterAttempt(User user) {
         Set<ConstraintViolation<User>> violations = validator.validateProperty(
                 user, "username");
 
@@ -64,27 +64,29 @@ public class UserValidator {
         // can be used to indicate the incorrect fields on the registration page
         if (violations.size() != 0 || unamePattern.matcher(user.getUsername()).find()) // incorrect username
         {
-            return false;
+            return "A valid username is 4 to 20 characters long and made up of the letters A - Z (a - z) and the numbers 0 - 9";
+            
         }
 
         violations = validator.validateProperty(user, "firstname");
         if (violations.size() != 0) // incorrect first name
         {
-            return false;
+            return "Incorrect first name";
         }
 
         violations = validator.validateProperty(user, "lastname");
         if (violations.size() != 0) // incorrect last name
         {
-            return false;
+            return "Incorrect last name";
         }
 
         violations = validator.validateProperty(user, "email");
         if (violations.size() != 0) // incorrect e-mail address
         {
-            return false;
+            return "Incorrect e-mail address";
         }
-
-        return true;
+        
+        // validation ok
+        return null;
     }
 }

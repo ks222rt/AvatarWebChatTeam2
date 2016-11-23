@@ -43,7 +43,8 @@ public class RegisterController {
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView registerUser(@ModelAttribute User user) {
         /* validate the field in the user object */
-        if (validator.validateRegisterAttempt(user)) {
+        String errorMessage = validator.validateRegisterAttempt(user);
+        if (errorMessage == null) { // no errors detected in users input, continue registration
             byte[] salt = HashUtil.getNewSalt();
             user.setSalt(salt);
             user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
@@ -53,6 +54,9 @@ public class RegisterController {
             } 
         }
         
+        // TODO: If we get here, validation failed and "errorMessage" contains 
+        // a string that describes the reason why. Return this string to the 
+        // view
         return new ModelAndView("failed");
     }
 }
