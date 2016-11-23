@@ -9,7 +9,7 @@ servlet but should be the only JSP outside of WEB-INF.
 <% 
     Object user = request.getSession().getAttribute("user");
     if(user != null){
-        response.sendRedirect("main.htm");    
+        response.sendRedirect("main/welcome.htm");    
     } else {
         response.sendRedirect("login.htm");
     }

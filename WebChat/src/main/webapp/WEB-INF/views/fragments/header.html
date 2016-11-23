@@ -7,9 +7,8 @@ and open the template in the editor.
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" href="../../Resources/SCRIPT/myScript.js" th:href="@{Resources/SCRIPT/myScript.js}" ></script>
+    <script type="text/javascript" href="../../../Resources/SCRIPT/myScript.js" th:href="@{Resources/SCRIPT/myScript.js}" ></script>
     
-    <link href="../../Resources/CSS/style.css" rel="stylesheet" type="text/css" th:href="@{Resources/CSS/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
@@ -28,7 +27,7 @@ and open the template in the editor.
     <li>
       <div class="userView">
         <div class="chip">
-          <img src="../../Resources/CSS/style.css" rel="stylesheet" th:src="@{Resources/AVATAR/avatar2.png}" alt="Contact Person">
+          <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
           <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
         </div>
       </div>
@@ -47,7 +46,7 @@ and open the template in the editor.
         <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">supervisor_account</i>Friends Online</div>
         <div class="collapsible-body">
           <div class="chip">
-            <img src="../../Resources/AVATAR/avatar4.png" th:src="@{Resources/AVATAR/avatar4.png}" alt="Contact Person">
+            <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
             STEEEEVEE
           </div>
         </div>
@@ -57,7 +56,7 @@ and open the template in the editor.
         <div class="collapsible-body">
           <ul class="collection">
             <li class="collection-item avatar">
-              <img src="../../Resources/AVATAR/avatar7.png" th:src="@{Resources/AVATAR/avatar7.png}" alt="" class="circle">
+              <img src="../../../resources/AVATAR/avatar7.png" th:src="@{/resources/AVATAR/avatar7.png}" alt="" class="circle">
               <span class="title">ALAAAAAN</span>
               <p>Name: ALAAN Andersson<br>
                  From: Canada
