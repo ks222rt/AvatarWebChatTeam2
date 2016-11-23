@@ -33,7 +33,7 @@ public class MainController {
     private UserService userService;
     
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         List<User> users = userService.getUserCollection();
         
@@ -52,7 +52,7 @@ public class MainController {
             System.out.println(userVar.getUsername());
         }
         
-        return "main";
+        return "main/welcome";
     }
     
     @RequestMapping(value="/logout" , method = RequestMethod.GET)
@@ -60,6 +60,12 @@ public class MainController {
         model.remove("user");
         session.removeAttribute("user");
         return "redirect:/login.htm";
+    }
+    
+    @RequestMapping(value="/search", method = RequestMethod.GET)
+    public String serach(HttpSession session, ModelMap model){
+        
+        return "main/search";
     }
     
     @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)

@@ -39,8 +39,8 @@ public class LoginController {
     }
     
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView login(){
-        return new ModelAndView("login");      
+    public String login(){
+        return "login";      
     }
     
     @RequestMapping(method = RequestMethod.POST)
@@ -61,7 +61,7 @@ public class LoginController {
         
         if(user != null){
             model.addAttribute("user", user);
-            return "redirect:/main.htm";
+            return "redirect:/main/welcome.htm";
         } else {
             redirectAttributes.addFlashAttribute("error_message", "Wrong username/password");
             return "redirect:/login.htm";
