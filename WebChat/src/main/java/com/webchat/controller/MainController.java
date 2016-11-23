@@ -35,7 +35,6 @@ public class MainController {
     
     @RequestMapping(method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
-       
         List<User> users = userService.getUserCollection();
         
         User user = (User) request.getSession().getAttribute("user");

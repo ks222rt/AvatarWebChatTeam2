@@ -60,7 +60,7 @@ public class LoginController {
         User user = userService.loginUser(username, password);
         
         if(user != null){
-            model.put("user", user);
+            model.addAttribute("user", user);
             return "redirect:/main.htm";
         } else {
             redirectAttributes.addFlashAttribute("error_message", "Wrong username/password");
