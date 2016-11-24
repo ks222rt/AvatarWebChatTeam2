@@ -16,82 +16,13 @@ body {
   overflow: hidden;
 }
 
-.material-icons.teal999 { color: #008080; }
-.material-icons.red999 { color: #e57373; }
+.col.s3.grey.lighten-3{
+    min-height: 100vh;
+    max-height: 100vh;
+    }
 
-
-
-
-#navBar{
-    height: 10vh;
-    color: white;
-    font-size: 15px;
-    font-weight: bolder;
-    float: right;
-    max-width: 81%;
-}
-
-#navBar ul{
-    float: left;
-    font-size: 15px;
-    font-weight: bold;
-    color: #000;
-}
-
-.col.s12.blue{
-    min-height: 75vh;
-    max-width: 81%;
-    float:right;
-}
-
-.col.s8.btn.btn-large.waves-effect.teal{
-    max-height: 10vh;
-}
-
- .col.s14.m8.sl9.teal{
-     min-height: 65vh;
- }
- #mainContent{
-     color: #fff;
-     margin-left: auto;
-     margin-right: auto;
-     width: 80%;
-     min-height: 62vh;
- }
-
-
-.col.s12.grey{
-    text-align: center;
-    vertical-align: middle;
-    color: #fff;
-    height: 5vh;
-    float: right;
-    max-width: 81%;
-}
-.col.s12.grey.lighten-2{
-    text-align: center;
-    vertical-align: middle;
-    color: #000;
-    height: 10vh;
-    float: right;
-    max-width: 81%;
-}
-
-.collapsible-header{
-    width: 300px;
-    float: left;
-    margin: 5px;
-}
-
-.accept{
-    height: 10vh;
-}
-
-.util{
-    margin: 100px;
-}
-.util button{
-    border: none;
-    background-color:transparent;
+.col.s9.grey.lighten-4{
+    min-height: 100vh;
+    max-height: 100vh;
 }
 

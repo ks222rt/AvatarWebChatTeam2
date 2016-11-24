@@ -38,8 +38,11 @@ public class MainController {
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
-        List<User> friendList = userService.getUserFriends(user.getId());
+        int id = user.getId();
+        List<User> friendList = userService.getUserFriends(id);
+        List<User> friendRequestList = userService.getUserFriendRequests(id);
         model.addAttribute("friends", friendList);
+        model.addAttribute("friendRequests", friendRequestList);
             
         return "main/welcome";
     }

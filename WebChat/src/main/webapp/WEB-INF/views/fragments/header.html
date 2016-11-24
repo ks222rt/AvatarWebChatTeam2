@@ -6,17 +6,38 @@ and open the template in the editor.
 -->
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Avatar - WebChat</title>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
-<body>
-        
-        
-  <nav class="pink" id="navBar" th:fragment="header">
-    Menu
-    <a href="#!" class="center brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
+  <body>
     
-  
-    <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+      <nav th:fragment="header" class="red lighten-2">
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+          <li><a href="#!">Friend Request</a></li>
+        <li><a href="#!">Friends</a></li>
+        <li><a href="/main/contentSearch.htm" th:href="@{/main/search.htm}">Search</a></li>
+       <li><a href="/main/logout.htm" th:href="@{/main/logout.htm}">Logout</a></li>
+        <li><div class="chip">
+          <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
+          <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
+        </div></li>
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+          <li><a href="#!">Friend Request</a></li>
+        <li><a href="#!">Friends</a></li>
+        <li><a href="/main/contentSearch.htm" th:href="@{/main/search.htm}">Search</a></li>
+        <li><a href="/main/logout.htm" th:href="@{/main/logout.htm}">Logout</a></li>
+        <li><div class="chip">
+          <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
+          <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
+        </div></li>
+      </ul>
+    </div>
   </nav>
-</body>
+      
+  </body>
 </html>
