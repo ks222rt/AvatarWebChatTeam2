@@ -63,21 +63,19 @@ public class MainController {
     public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
         if(userService.addFriendRequest(user.getId(), id)){
-            return "main";
+            return "main/welcome";
         }
-        return "main";
+        return "main/welcome";
     }
     
-    @RequestMapping(value="/friendResponse/{response}/{id}", method = RequestMethod.GET)
+    @RequestMapping(value="/friendResponse/{response}/{id}.htm", method = RequestMethod.GET)
     public String respondFriendRequest(HttpServletRequest request,@PathVariable boolean response, @PathVariable int id){
         User user = (User) request.getSession().getAttribute("user");
         
         userService.respondToFriendRequest(user.getId(), id, response);
       
-        return "main";
-        /*TODO: user.getID() and id should be sent to 
-         *      a service eg. userService.acceptFriend(sender,target)
-         */
+        return "main/welcome";
+   
     }
     
     @RequestMapping(value="/user/{username}", method = RequestMethod.GET)
