@@ -88,6 +88,12 @@ public class UserValidator {
             return "Incorrect e-mail address";
         }
         
+        violations = validator.validateProperty(user, "password");
+        if (violations.size() != 0) // incorrect e-mail address
+        {
+            return "Password must be atleast 8 characters long";
+        }
+        
         return null;
     }
 }
