@@ -7,11 +7,9 @@ com\webchat\util\HashUtil.class
 com\webchat\dao\UserDAO$9.class
 com\webchat\validator\UserValidator.class
 com\webchat\controller\RegisterController.class
-com\webchat\dao\UserDAO$10.class
 com\webchat\dao\UserDAO$5.class
 com\webchat\dao\UserDAO$4.class
 com\webchat\controller\MainController.class
-com\webchat\controller\SearchController.class
 com\webchat\dao\UserDAO$2.class
 com\webchat\service\UserService.class
 com\webchat\dao\UserDAO$3.class

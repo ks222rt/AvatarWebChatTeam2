@@ -42,7 +42,7 @@ and open the template in the editor.
                             <div class='row'>
                                 <div class='input-field col s12'>
                                     <i class="small material-icons teal999" style=" float: left">perm_identity</i>
-                                    <input class='validate' type='text' name='username' id='username'/>
+                                    <input class='validate' type='text' name='username' id='username' required="" minlength="4" maxlength="20"/>
                                     <label>Username</label>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@ and open the template in the editor.
                             <div class='row'>
                                 <div class='input-field col s12'>
                                     <i class="small material-icons teal999" style=" float: left">perm_identity</i>
-                                    <input class='validate' type='text' name='firstname' id='firstname'/>
+                                    <input class='validate' type='text' name='firstname' id='firstname' required maxlength="45"/>
                                     <label>First name</label>
                                 </div>
                             </div> 
@@ -60,7 +60,7 @@ and open the template in the editor.
                             <div class='row'>
                                 <div class='input-field col s12'>
                                     <i class="small material-icons teal999" style=" float: left">perm_identity</i>
-                                    <input class='validate' type='text' name='lastname' id='lastname'/>
+                                    <input class='validate' type='text' name='lastname' id='lastname' required maxlength="45"/>
                                     <label>Last name</label>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@ and open the template in the editor.
                             <div class='row'>
                                 <div class='input-field col s12'>
                                     <i class="small material-icons teal999" style=" float: left">email</i>
-                                    <input class='validate' type='email' name='email' id='email' />
+                                    <input class='validate' type='email' name='email' id='email' required maxlength="45"/>
                                     <label>Email</label>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@ and open the template in the editor.
                             <div class='row '>
                                 <div class='input-field col s12 '>
                                     <i class="small material-icons teal999" style=" float: left">https</i>
-                                    <input class='validate ' type='password' name='password' id='password' />
+                                    <input class='validate ' type='password' name='password' id='password' required minlength="8"/>
                                     <label  for='password'>Password</label>
                                 </div>			
                             </div>
