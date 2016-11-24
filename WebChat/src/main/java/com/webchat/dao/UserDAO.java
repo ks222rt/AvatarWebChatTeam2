@@ -136,6 +136,36 @@ public class UserDAO {
 
         return users;
     }
+
+    public boolean alreadyFriends(final int senderID, final int recieverID) {
+        
+        String sqlAlreadyFriends = "SELECT avatar_webchat.friend.sender\n"+
+                                   "FROM avatar_webchat.friend\n"+
+                                   "WHERE avatar_webchat.friend.sender = " + senderID+"\n"+
+                                   "AND avatar_webchat.friend.reciever = " + recieverID;
+       
+        try {
+
+            List<Integer> resultList = jdbcTemplate.queryForObject(sqlAlreadyFriends,
+                    new Object[]{senderID, recieverID},
+                    new RowMapper<List<Integer>>() {
+                @Override
+                public List<Integer> mapRow(ResultSet rs, int i) throws SQLException {
+                    List<Integer> test = new LinkedList<Integer>();
+                    test.add(rs.getInt("sender"));
+                    return test;  
+                }
+            });
+            
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+        
+        
+        
+        
+    }
     
     public List<User> getUserFriends(int userID){
        String sqlGetFriends = "SELECT avatar_webchat.chat_user.id as id,\n" + 
@@ -221,7 +251,7 @@ public class UserDAO {
         the sender and reciever in the database.
     */
     public boolean addFriendRequest(final int senderID, final int recieverID) {
-        if(friendRequestExists(senderID, recieverID) || friendRequestExists(recieverID, senderID)){
+        if(friendRequestExists(senderID, recieverID) || friendRequestExists(recieverID, senderID) || alreadyFriends(senderID, recieverID)){
             return false;
         }
         final String sqlAddFriend = "insert into avatar_webchat.friend_requests(sender, reciever)\n"
