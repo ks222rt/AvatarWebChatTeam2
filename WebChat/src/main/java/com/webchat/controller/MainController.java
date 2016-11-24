@@ -103,5 +103,24 @@ public class MainController {
         userService.removeFriend(user.getId(), id);
         return "main/welcome";
     }
+    
+        @RequestMapping(value="/friendRequests", method = RequestMethod.GET)
+    public String friendRequests(HttpServletRequest request, ModelMap model){
+         User user = (User) request.getSession().getAttribute("user");
+         System.out.println(user.getId());
+         List<User> friends = userService.getUserFriendRequests(user.getId());
+         
+             for(User friend : friends){
+                 System.out.println(friend.getUsername());
+             }
+         if(friends != null){
+             
+         
+             
+            model.addAttribute("friendRequests", friends);
+            return "main/friendRequest";
+        }
+          return "redirect:/main/welcome.htm";
+    }
 }
 
