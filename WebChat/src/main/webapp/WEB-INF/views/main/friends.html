@@ -14,7 +14,7 @@ and open the template in the editor.
     <div layout:fragment="content">
       <h2 class="friends-header">Your amazing friends</h2>
       <div class="row" th:if="${not #lists.isEmpty(friendList)}">
-        <div class="col s4" th:each="friend : ${friendList}">
+        <div class="col s6" th:each="friend : ${friendList}">
           <h4 class="header" th:text="${friend.username}"></h4>
           <div class="card horizontal">
             <div class="card-image">
@@ -27,7 +27,7 @@ and open the template in the editor.
                 <span class="labelForFriend">Email: </span><p th:text="${friend.email}"></p>
               </div>
               <div class="card-action profile-page-button">
-                <a th:href="@{user/{username}.htm(username=${friend.username})}">Profile page</a>
+                <a class="red-text text-lighten-2" th:href="@{user/{username}.htm(username=${friend.username})}">Profile page</a>
               </div>
             </div>
           </div>
