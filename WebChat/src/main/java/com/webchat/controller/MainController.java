@@ -68,7 +68,7 @@ public class MainController {
         return "main/welcome";
     }
     
-    @RequestMapping(value="/friendResponse/{response}/{id}.htm", method = RequestMethod.GET)
+    @RequestMapping(value="/friendResponse/{response}/{id}", method = RequestMethod.GET)
     public String respondFriendRequest(HttpServletRequest request,@PathVariable boolean response, @PathVariable int id){
         User user = (User) request.getSession().getAttribute("user");
         
@@ -84,6 +84,13 @@ public class MainController {
         System.out.print("WAAAHSHASHASHSAHSAHAS");
         model.addAttribute("user", user);
         return "main/userpage";
+    }
+    
+    @RequestMapping(value="/removeFriend/{id}", method = RequestMethod.GET)
+    public String removeFriend(HttpServletRequest request,@PathVariable int id, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        userService.removeFriend(user.getId(), id);
+        return "main/welcome";
     }
 }
 
