@@ -296,10 +296,14 @@ public class UserDAO {
     public List<User> getFriendRequests(final int userID) {
         
         final String sqlGetFriendRequests = "SELECT avatar_webchat.friend_requests.sender,\n"+
-                                            "avatar_webchat.chat_user.username\n"+
+                                            "avatar_webchat.chat_user.username,\n"+
+                                            "avatar_webchat.chat_user_info.firstname,\n"+
+                                            "avatar_webchat.chat_user_info.lastname\n"+
                                             "FROM avatar_webchat.friend_requests\n"+
-                                            "INNER JOIN chat_user\n"+
+                                            "INNER JOIN avatar_webchat.chat_user\n"+
                                             "ON avatar_webchat.friend_requests.sender = avatar_webchat.chat_user.id\n"+
+                                            "INNER JOIN avatar_webchat.chat_user_info\n"+
+                                            "ON avatar_webchat.chat_user.info_id = avatar_webchat.chat_user_info.id\n"+
                                             "WHERE avatar_webchat.friend_requests.reciever = " + userID;
         
         List<User> friendRequests = new LinkedList<>();  
@@ -311,6 +315,8 @@ public class UserDAO {
                  User user = new User();
                      user.setUsername((String) row.get("username"));
                      user.setId((int)row.get("sender"));
+                     user.setFirstname((String)row.get("firstname"));
+                     user.setLastname((String)row.get("lastname"));
                  friendRequests.add(user);
              }
         }
