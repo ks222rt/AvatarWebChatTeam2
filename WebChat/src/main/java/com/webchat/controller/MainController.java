@@ -38,8 +38,11 @@ public class MainController {
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
-        List<User> friendList = userService.getUserFriends(user.getId());
+        int id = user.getId();
+        List<User> friendList = userService.getUserFriends(id);
+        List<User> friendRequestList = userService.getUserFriendRequests(id);
         model.addAttribute("friends", friendList);
+        model.addAttribute("friendRequests", friendRequestList);
             
         return "main/welcome";
     }
@@ -57,6 +60,14 @@ public class MainController {
         List<User> users = userService.getUserCollection();
         model.addAttribute("users", users);
         return "main/search";
+    }
+    
+    @RequestMapping(value="/friends", method = RequestMethod.GET)
+    public String friends(HttpServletRequest request, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        List<User> friendList = userService.getUserFriends(user.getId());
+        model.addAttribute("friendList", friendList);
+        return "main/friends";
     }
     
     @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)

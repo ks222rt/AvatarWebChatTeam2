@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html layout:decorator="main/layout">
+  <head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <p>HEJSANHEJSAN</p>
+      <div class="row">
+        <div class="col s4" th:each="friend : ${friends}">
+          <h2 class="header" th:text="${friend.username"></h2>
+          <div class="card horizontal">
+            <div class="card-image">
+              <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
+            </div>
+            <div class="card-stacked">
+              <div class="card-content">
+                <p th:text="${friend.firstname}"></p>
+                <p th:text="${friend.lastname}"></p>
+              </div>
+              <div class="card-action">
+                <a href="#">This is a link</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

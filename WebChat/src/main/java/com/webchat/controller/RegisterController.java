@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.webchat.service.UserService;
 import com.webchat.util.HashUtil;
 import com.webchat.validator.UserValidator;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -34,14 +36,13 @@ public class RegisterController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView registration(Model model) {
-        model.addAttribute("registration", new User());
-
-        return new ModelAndView("registration");
+    public String registration() {
+        return "registration";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView registerUser(@ModelAttribute User user) {
+    public String registerUser(@ModelAttribute User user, ModelMap model,
+            RedirectAttributes redirectAttributes) {
         /* validate the field in the user object */
         String errorMessage = validator.validateRegisterAttempt(user);
         if (errorMessage == null) { // no errors detected in users input, continue registration
@@ -53,7 +54,8 @@ public class RegisterController {
                 user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
 
                 if (userService.registerUser(user)) {
-                    return new ModelAndView("redirect:/login.htm", "user", user);
+                    model.addAttribute("user", user);
+                    return "redirect:/login.htm";
                 }
             }
         }
@@ -61,6 +63,8 @@ public class RegisterController {
         // TODO: If we get here, validation failed and "errorMessage" contains 
         // a string that describes the reason why. Return this string to the 
         // view
-        return new ModelAndView("failed");
+        redirectAttributes.addFlashAttribute("error_message", errorMessage);
+        model.addAttribute("user", user);
+        return "redirect:/registration.htm";
     }
 }
