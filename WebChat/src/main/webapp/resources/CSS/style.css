@@ -38,6 +38,10 @@ div.card-action.profile-page-button{
     padding: 12px !important;
 }
 
+div.card-action.friend-request-button-container{
+    padding: 7px !important;
+}
+
 .friends-header{
     text-align: center;
 }

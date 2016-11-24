@@ -9,24 +9,22 @@
   <body>
 
     <div class="col s9 grey lighten-4" layout:fragment="content">
-      <h1>Friend Request</h1>
+      <h1 class="friends-header">Friend Requests</h1>
       <tr th:each="friend : ${friendRequests}">
              
-    <div class="col s7">
-        <div class="card horizontal">
-            <div class="card-image">
-                <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
+    <div class="col s6">
+      <div class="card horizontal">
+        <div class="card-image">
+          <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
         </div>
         <div class="card-stacked">
-        <div class="card-content">
+          <div class="card-content">
             <h3><td th:text="${friend.username}">Friend </td></h3>
-            
-                <span class="labelForFriend">Name: </span>
-                  <p th:text="${friend.firstname} + ' ' + ${friend.lastname}"></p>
-                
-              </div>
-        <div class="card-action ">
-           <a class="left green-text text-lighten-2" th:href="@{/main/friendResponse/true/{id}.htm(id=${friend.id})}"><i class="small material-icons green-text lighten-2">thumb_up</i> Accept</a>
+              <span class="labelForFriend">Name: </span>
+              <p th:text="${friend.firstname} + ' ' + ${friend.lastname}"></p>  
+        </div>
+        <div class="card-action friend-request-button-container">
+          <a class="left green-text text-lighten-2" th:href="@{/main/friendResponse/true/{id}.htm(id=${friend.id})}"><i class="small material-icons green-text lighten-2">thumb_up</i> Accept</a>
           <a class="right red-text text-lighten-2" th:href="@{/main/friendResponse/false/{id}.htm(id=${friend.id})}"><i class="small material-icons red-text  lighten-2">thumb_down</i> Reject</a>
         </div>
       </div>
