@@ -62,6 +62,14 @@ public class MainController {
         return "main/search";
     }
     
+    @RequestMapping(value="/friends", method = RequestMethod.GET)
+    public String friends(HttpServletRequest request, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        List<User> friendList = userService.getUserFriends(user.getId());
+        model.addAttribute("friendList", friendList);
+        return "main/friends";
+    }
+    
     @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)
     public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
