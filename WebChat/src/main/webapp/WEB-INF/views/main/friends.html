@@ -12,10 +12,9 @@ and open the template in the editor.
   </head>
   <body>
     <div layout:fragment="content">
-      <p>HEJSANHEJSAN</p>
-      <div class="row">
-        <div class="col s4" th:each="friend : ${friends}">
-          <h2 class="header" th:text="${friend.username"></h2>
+      <div class="row" th:if="${not #lists.isEmpty(friendList)}">
+        <div class="col s4" th:each="friend : ${friendList}">
+          <h4 class="header" th:text="${friend.username}"></h4>
           <div class="card horizontal">
             <div class="card-image">
               <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
@@ -32,6 +31,7 @@ and open the template in the editor.
           </div>
         </div>
       </div>
+      <span th:if="${#lists.isEmpty(friendList)}">Sorry, you have no friends :(</span>
     </div>
   </body>
 </html>
