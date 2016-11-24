@@ -85,7 +85,7 @@ public class MainController {
         
         userService.respondToFriendRequest(user.getId(), id, response);
       
-        return "main/welcome";
+        return "redirect:/main/friendResponse.htm";
    
     }
     
