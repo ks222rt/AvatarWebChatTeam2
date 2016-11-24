@@ -14,6 +14,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import org.hibernate.validator.HibernateValidator;
 
 /**
  *
@@ -28,7 +29,7 @@ public class UserValidator {
     private Pattern unamePattern;
    
     public UserValidator() {
-        ValidatorFactory vFactory = Validation.buildDefaultValidatorFactory();
+       ValidatorFactory vFactory = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory();
         validator = vFactory.getValidator();
         unamePattern = Pattern.compile("[^a-zA-Z0-9]");
     }
@@ -82,11 +83,6 @@ public class UserValidator {
         }
 
         violations = validator.validateProperty(user, "email");
-        if (violations.size() != 0) // incorrect e-mail address
-        {
-            return "Incorrect e-mail address";
-        }
-        
         if (violations.size() != 0) // incorrect e-mail address
         {
             return "Incorrect e-mail address";

@@ -36,10 +36,12 @@ public class User implements Serializable{
     private String lastname;
     
     @NotNull
+    @NotBlank
     @Email
     @Size(max = 45)
     private String email;
     
+    @NotNull
     @NotBlank
     @Size(min = 8)
     private String password;
