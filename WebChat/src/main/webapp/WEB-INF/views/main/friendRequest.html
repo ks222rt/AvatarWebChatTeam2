@@ -1,0 +1,21 @@
+
+<html layout:decorator="main/layout">
+  <head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  </head>
+  <body>
+
+    <div class="col s9 grey lighten-4" layout:fragment="content">
+      <h1>Friend Request</h1>
+      <tr th:each="friend : ${friendRequests}">
+          Request:<td th:text="${friend.username}">Friend </td>
+      </tr>
+    </div>
+        
+  
+  </body>
+</html>
+
