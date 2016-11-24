@@ -13,8 +13,8 @@
         
     <input class="awesomplete" list="mylist" />
     <datalist id="mylist">
-	<option th:each="user : ${users}"><a th:href="@{user/{username}.htm(username=${user.username})}"><span th:text="${user.username}"/></a></option>
-
+	
+	<a th:each="user : ${users}" th:href="@{user/{username}.htm(username=${user.username})}" th:text="${user.username}">element</a>
     </datalist>    
       
 
