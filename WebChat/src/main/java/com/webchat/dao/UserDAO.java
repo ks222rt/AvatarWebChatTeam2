@@ -286,6 +286,29 @@ public class UserDAO {
         }
     
     }
+    public boolean removeFriend(final int senderID, final int recieverID){
+        final String sqlRemoveFriend = "DELETE FROM avatar_webchat.friend\n"+
+                                       "WHERE (avatar_webchat.friend.id1 = ? AND avatar_webchat.friend.id2 = ?)\n"+
+                                       "OR (avatar_webchat.friend.id1 = ? AND avatar_webchat.friend.id2 = ?)";
+      
+            try {
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlRemoveFriend);
+                    ps.setInt(1, senderID);
+                    ps.setInt(2, recieverID);
+                    ps.setInt(3, recieverID);
+                    ps.setInt(4, senderID);
+                    return ps;
+                }
+            });
+            return true;
+            
+             } catch (Exception e) {
+                return false;
+            }
+    }
     /*
     isFriendRequestValid(int senderID, int recieverID).
     private method which checks if the actually is a friend request between

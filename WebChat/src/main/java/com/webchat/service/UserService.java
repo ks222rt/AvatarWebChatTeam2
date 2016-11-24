@@ -60,4 +60,9 @@ public class UserService {
        return userDAO.getUserFriends(userID);
     }
     
+    public boolean removeFriend(int senderID, int recieverID) {
+        
+        return userDAO.removeFriend(senderID, recieverID);
+    }
+    
 }
