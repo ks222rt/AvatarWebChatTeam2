@@ -7,24 +7,15 @@
   
   </head>
   <body>
-    <div layout:fragment="content">
 
+    <div class="col s9 grey lighten-4" layout:fragment="content">
       <h1>Lists of users</h1>
-
-      <input class="awesomplete" data-list="#mylist" />
-        <ul id="mylist" th:each="user : ${users}">
-	<li><a th:href="@{user/{username}.htm(username=${user.username})}"><span th:text="${user.username}"/></a></li>
-        </ul>
-       
-        <div>
+    
         
       
-        </div>
-       
-       
 
-      </tr>
-   
+        </div>
+        
   
   </body>
 </html>
