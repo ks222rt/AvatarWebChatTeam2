@@ -33,15 +33,7 @@ and open the template in the editor.
       </li>
       <li>
         <div class="collapsible-header"><span class="badge" ></span>
-            <i class="material-icons red999">supervisor_account</i>All friends</div>
-        <div class="collapsible-body">    
-          <div th:each="user : ${friends}">
-            <div class="chip">
-              <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
-              <span th:text="${user.username}"></span>
-            </div>
-          </div>  
-        </div>
+          <i class="material-icons red999">supervisor_account</i><a th:href="@{friends}">All friends</a></div>
       </li>
       <li>
         <div class="collapsible-header"><span class="badge">4</span><i class="material-icons red999">supervisor_account</i>Friends Online</div>
