@@ -13,67 +13,49 @@ html {
 }
 body {
   min-height: 100vh;
+  overflow: hidden;
 }
 
-.material-icons.teal999 { color: #008080; }
-.material-icons.red999 { color: #e57373; }
 
-
-#navBar{
-    height: 10vh;
-    color: white;
-    font-size: 15px;
-    font-weight: bolder;
+#row2{
+    overflow-y: scroll;
+    height: 100%;
+    padding-bottom: 10%;
 }
 
-#navBar ul{
-    float: left;
-    font-size: 15px;
+.col.s3.grey.lighten-3{
+    min-height: 100vh;
+    max-height: 100vh;
+    }
+
+.col.s9.grey.lighten-4{
+    min-height: 100vh;
+    max-height: 100vh;
+}
+
+.labelForFriend{
     font-weight: bold;
-    color: #000;
+    font-size: 105%;
 }
 
+div.card-action.profile-page-button{
+    padding: 12px !important;
+}
 
- .col.s14.m8.sl9.teal{
-     min-height: 65vh;
- }
- #mainContent{
-     color: #fff;
-     margin-left: auto;
-     margin-right: auto;
-     width: 80%;
-     min-height: 62vh;
- }
+div.card-action.friend-request-button-container{
+    padding: 7px !important;
+}
 
-
-.col.s16.m8.sl9.grey{
+.friends-header{
     text-align: center;
-    vertical-align: middle;
-    color: #fff;
-    height: 5vh;
 }
-.col.s16.m8.sl9.grey.lighten-2{
+
+.h1-header-welcome-page{
+    margin-top: 20%;
     text-align: center;
-    vertical-align: middle;
-    color: #000;
-    height: 20vh;
 }
 
-.collapsible-header{
-    width: 300px;
-    float: left;
-    margin: 5px;
-}
-
-.accept{
-    height: 10vh;
-}
-
-.util{
-    margin: 100px;
-}
-.util button{
-    border: none;
-    background-color:transparent;
+.h3-header-welcome-page{
+    text-align: center;
 }
 
