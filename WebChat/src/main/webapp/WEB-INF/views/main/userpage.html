@@ -6,21 +6,37 @@ and open the template in the editor.
 -->
 <html layout:decorator="main/layout">
     <head>
-        <title>TODO supply a title</title>
+        <title>Avatar - WebChat</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div layout:fragment="content">
+      <div layout:fragment="content">
+        <div class="row">
+          <div class="col s4 userpage-info-card">
+              <div class="card">
+                <div class="card-image">
+                  <img src="../../../resources/AVATAR/avatar4.png" th:src="@{/resources/AVATAR/avatar4.png}" alt="Contact Person">
+                  <span class="card-title black white-text" th:text="${user.username}"></span>
+                </div>
                 
-            <h3 th:text="${user.username}">Username</h3>
-            
-            Name:<span th:text="${user.firstname}">Firstname</span>  
-            <span th:text="${user.lastname}">Lastname</span>
-            Email:<span th:text="${user.email}">Email</span>
-            
-            <a th:href="@{/main/friendRequest/{id}.htm(id=${user.id})}">Send friend request</a>
+                <div class="card-content">
+                  <span>
+                    Hello my name is <span class="red-text text-lighten-2" th:text="${user.firstname} + ' ' + ${user.lastname}"></span>!
+                  </span>
+                  <p>
+                    Add me if you want so we can be friends for ever and ever!
+                  </p>
+                </div>
+                
+                <div class="card-action">
+                  <a class="waves-effect waves-light btn green" href="#">Add me</a>
+                  <a class="waves-effect waves-light btn red" href="#">Remove me</a>
+                </div>
+              </div>
+          </div>
         </div>
+      </div>
        
     </body>
 </html>
