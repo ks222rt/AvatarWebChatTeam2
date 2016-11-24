@@ -149,12 +149,18 @@ public class UserDAO {
            
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlAlreadyFriends);
         for (Map row : rows) {
-                
+            identifiers.add((int)row.get("id1"));
         }
        }
        catch(EmptyResultDataAccessException e){
            return false;
        }
+       
+       if(identifiers.size() <= 0)
+       {
+           return false;
+       }
+       else
         return true;              
     }
     
