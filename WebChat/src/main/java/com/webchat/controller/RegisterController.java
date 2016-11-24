@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.webchat.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 import com.webchat.service.UserService;
 import com.webchat.util.HashUtil;
 import com.webchat.validator.UserValidator;
