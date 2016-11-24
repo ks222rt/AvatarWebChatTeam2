@@ -150,7 +150,9 @@ public class UserDAO {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlAlreadyFriends);
         for (Map row : rows) {
             identifiers.add((int)row.get("id1"));
+            
         }
+        
        }
        catch(EmptyResultDataAccessException e){
            return false;
@@ -248,7 +250,7 @@ public class UserDAO {
         the sender and reciever in the database.
     */
     public boolean addFriendRequest(final int senderID, final int recieverID) {
-        if(friendRequestExists(senderID, recieverID) || friendRequestExists(recieverID, senderID) || alreadyFriends(senderID, recieverID)){
+        if(friendRequestExists(senderID, recieverID) || friendRequestExists(recieverID, senderID) || alreadyFriends(senderID, recieverID) || senderID == recieverID){
             return false;
         }
         final String sqlAddFriend = "insert into avatar_webchat.friend_requests(sender, reciever)\n"
