@@ -139,32 +139,23 @@ public class UserDAO {
 
     public boolean alreadyFriends(final int senderID, final int recieverID) {
         
-        String sqlAlreadyFriends = "SELECT avatar_webchat.friend.sender\n"+
+        String sqlAlreadyFriends = "SELECT avatar_webchat.friend.id1\n"+
                                    "FROM avatar_webchat.friend\n"+
-                                   "WHERE avatar_webchat.friend.sender = " + senderID+"\n"+
-                                   "AND avatar_webchat.friend.reciever = " + recieverID;
+                                   "WHERE avatar_webchat.friend.id1 = " + senderID +"\n"+
+                                   "AND avatar_webchat.friend.id2 = " + recieverID;
        
-        try {
-
-            List<Integer> resultList = jdbcTemplate.queryForObject(sqlAlreadyFriends,
-                    new Object[]{senderID, recieverID},
-                    new RowMapper<List<Integer>>() {
-                @Override
-                public List<Integer> mapRow(ResultSet rs, int i) throws SQLException {
-                    List<Integer> test = new LinkedList<Integer>();
-                    test.add(rs.getInt("sender"));
-                    return test;  
-                }
-            });
-            
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
+        List<Integer> identifiers = new LinkedList<>();  
+       try{
+           
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlAlreadyFriends);
+        for (Map row : rows) {
+                
         }
-        
-        
-        
-        
+       }
+       catch(EmptyResultDataAccessException e){
+           return false;
+       }
+        return true;              
     }
     
     public List<User> getUserFriends(int userID){
