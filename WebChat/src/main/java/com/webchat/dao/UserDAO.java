@@ -241,6 +241,8 @@ public class UserDAO {
             return false;
         }
     }
+    
+    
     /*
     respondToFriendRequest(int senderID, int recieverID, boolean accepted).
     Checks if there actually is a friend request between the two identfiers.
@@ -286,6 +288,42 @@ public class UserDAO {
         }
     
     }
+    /*
+    Returns list of user objects containing ID and username
+    Used to list all friend requests to provided user
+    */
+    
+    public List<User> getFriendRequests(final int userID) {
+        
+        final String sqlGetFriendRequests = "SELECT avatar_webchat.friend_requests.sender as SenderID\n"+
+                                            "avatar_webchat.chat_user.username\n"+
+                                            "FROM avatar_webchat.friend_requests\n"+
+                                            "INNER JOIN chat_user\n"+
+                                            "ON friend_requests.sender = chat_user.id\n"+
+                                            "WHERE friend_requests.reciever = " + userID;
+        
+        List<User> friendRequests = new LinkedList<>();  
+        
+        try{
+
+             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlGetFriendRequests);
+             for (Map row : rows) {
+                 User user = new User();
+                     user.setUsername((String) row.get("username"));
+                     user.setId((int)row.get("SenderID"));
+                 friendRequests.add(user);
+             }
+        }
+        catch(Exception e){
+            return null;
+        }
+         return friendRequests;     
+    }
+    
+    /*
+    removeFriend(int senderID, int recieverID)
+    Removes all instances of friend requests between senderID and recieverID and vice versa (due to double linking in DB)
+    */
     public boolean removeFriend(final int senderID, final int recieverID){
         final String sqlRemoveFriend = "DELETE FROM avatar_webchat.friend\n"+
                                        "WHERE (avatar_webchat.friend.id1 = ? AND avatar_webchat.friend.id2 = ?)\n"+

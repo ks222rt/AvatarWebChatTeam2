@@ -65,4 +65,9 @@ public class UserService {
         return userDAO.removeFriend(senderID, recieverID);
     }
     
+    public List<User> getUserFriendRequests(int userID) {
+            
+        return userDAO.getFriendRequests(userID);       
+    }
+    
 }
