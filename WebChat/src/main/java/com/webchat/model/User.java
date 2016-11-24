@@ -20,6 +20,8 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class User implements Serializable{
     private int id;
+
+
     
     @NotBlank
     @Size(min = 4, max = 20)
@@ -45,7 +47,15 @@ public class User implements Serializable{
     private byte[] salt;
     private Timestamp created;
     private int isAdmin;
+    
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public Timestamp getCreated() {
         return created;
     }
@@ -61,14 +71,7 @@ public class User implements Serializable{
     public void setIsAdmin(int isAdmin) {
         this.isAdmin = isAdmin;
     }
-    
-    public void setId(int id){
-        this.id = id;
-    }
-    
-    public int getId(){
-        return id;
-    }
+
     
     public void setUsername(String username){
         this.username = username;

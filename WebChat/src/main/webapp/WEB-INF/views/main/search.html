@@ -9,12 +9,16 @@
   <body>
 
     <div class="col s9 grey lighten-4" layout:fragment="content">
-      <h1>Lists of users</h1>
-    
+    <h3>Search user</h3>
         
+    <input class="awesomplete" list="mylist" />
+    <datalist id="mylist">
+	<option th:each="user : ${users}"><a th:href="@{user/{username}.htm(username=${user.username})}"><span th:text="${user.username}"/></a></option>
+
+    </datalist>    
       
 
-        </div>
+    </div>
         
   
   </body>
