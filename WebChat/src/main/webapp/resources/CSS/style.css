@@ -17,6 +17,7 @@ body {
 }
 #row2{
     overflow-y: scroll;
+    height: 100%;
 }
 
 .col.s3.grey.lighten-3{
