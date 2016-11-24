@@ -11,7 +11,7 @@
         <tr th:each="user : ${users}">
         <div>
         
-        <a th:href="@{user/{username}(username=${user.username})}"><span th:text="${user.username}"/></a>
+        <a th:href="@{user/{username}.htm(username=${user.username})}"><span th:text="${user.username}"/></a>
         </div>
        
        

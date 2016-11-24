@@ -19,7 +19,7 @@ and open the template in the editor.
             <span th:text="${user.lastname}">Lastname</span>
             Email:<span th:text="${user.email}">Email</span>
             
-            <a th:href="@{/friendRequest/{id}(id=${user.id})}">Send friend request</a>
+            <a th:href="@{/main/friendRequest/{id}.htm(id=${user.id})}">Send friend request</a>
         </div>
        
     </body>
