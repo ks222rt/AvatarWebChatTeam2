@@ -11,12 +11,14 @@
     <div class="col s9 grey lighten-4" layout:fragment="content">
     <h3>Search user</h3>
         
-    <input class="awesomplete" list="mylist" />
+    <input class="awesomplete" list="mylist" onChange="window.location.href='user/'+this.value+'.htm'" />
     <datalist id="mylist">
-	
-	<a th:each="user : ${users}" th:href="@{user/{username}.htm(username=${user.username})}" th:text="${user.username}">element</a>
+
+        <option th:each="user : ${users}" >
+        <span th:text="${user.username}">Username</span>
+
     </datalist>    
-      
+    
 
     </div>
         
