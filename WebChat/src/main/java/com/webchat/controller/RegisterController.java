@@ -39,10 +39,12 @@ public class RegisterController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String registerUser(@ModelAttribute User user, ModelMap model,
-            RedirectAttributes redirectAttributes) {
+    public String registerUser(@ModelAttribute User user, 
+                                String password_two,
+                                ModelMap model,
+                                RedirectAttributes redirectAttributes) {
         /* validate the field in the user object */
-        String errorMessage = validator.validateRegisterAttempt(user);
+        String errorMessage = validator.validateRegisterAttempt(user, password_two);
         if (errorMessage == null) { // no errors detected in users input, continue registration
             if (userService.userExists(user.getUsername())) {
                 errorMessage = "Username already registered";
@@ -52,6 +54,7 @@ public class RegisterController {
                 user.setPassword(HashUtil.hashPassword(user.getPassword(), salt));
 
                 if (userService.registerUser(user)) {
+                    redirectAttributes.addFlashAttribute("success_message", "Account successfully created!");
                     model.addAttribute("user", user);
                     return "redirect:/login.htm";
                 }

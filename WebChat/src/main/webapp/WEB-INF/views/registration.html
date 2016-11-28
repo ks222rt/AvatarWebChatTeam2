@@ -38,49 +38,53 @@ and open the template in the editor.
                                     <i class="close material-icons">close</i>
                                 </blockquote>
                             </div>
-                            <!-- Div for username label and input field -->
+                            
                             <div class='row'>
-                                <div class='input-field col s12'>
-                                    <i class="small material-icons teal999" style=" float: left">perm_identity</i>
-                                    <input class='validate' type='text' name='username' id='username' required="" minlength="4" maxlength="20"/>
-                                    <label>Username</label>
-                                </div>
+                              <!-- Div for username label and input field -->
+                              <div class='input-field col s6'>
+                                  <i class="small material-icons teal999" style=" float: left">perm_identity</i>
+                                  <input class='validate' type='text' name='username' id='username' required="" minlength="4" maxlength="20"/>
+                                  <label>Username</label>
+                              </div>
+                              
+                              <!-- Div for email label and input field -->  
+                              <div class='input-field col s6'>
+                                    <i class="small material-icons teal999" style=" float: left">email</i>
+                                    <input class='validate' type='email' name='email' id='email' required maxlength="45"/>
+                                    <label>Email</label>
+                              </div>
                             </div>
-
-                            <!-- Div for firstname label and input field -->
+                            
                             <div class='row'>
-                                <div class='input-field col s12'>
+                                <!-- Div for firstname label and input field -->
+                                <div class='input-field col s6'>
                                     <i class="small material-icons teal999" style=" float: left">perm_identity</i>
                                     <input class='validate' type='text' name='firstname' id='firstname' required maxlength="45"/>
                                     <label>First name</label>
                                 </div>
-                            </div> 
-
-                            <!-- Div for lastname label and input field -->
-                            <div class='row'>
-                                <div class='input-field col s12'>
+                                
+                                <!-- Div for lastname label and input field -->
+                                <div class='input-field col s6'>
                                     <i class="small material-icons teal999" style=" float: left">perm_identity</i>
                                     <input class='validate' type='text' name='lastname' id='lastname' required maxlength="45"/>
                                     <label>Last name</label>
                                 </div>
                             </div>
-
-                            <!-- Div for email label and input field -->  
-                            <div class='row'>
-                                <div class='input-field col s12'>
-                                    <i class="small material-icons teal999" style=" float: left">email</i>
-                                    <input class='validate' type='email' name='email' id='email' required maxlength="45"/>
-                                    <label>Email</label>
-                                </div>
-                            </div>
-
-                            <!-- Div for password label and input field -->
+                            
                             <div class='row '>
-                                <div class='input-field col s12 '>
+                                <!-- Div for password label and input field -->
+                                <div class='input-field col s6'>
                                     <i class="small material-icons teal999" style=" float: left">https</i>
                                     <input class='validate ' type='password' name='password' id='password' required minlength="8"/>
                                     <label  for='password'>Password</label>
-                                </div>			
+                                </div>	
+                              
+                                <!-- Repeat password -->
+                                <div class='input-field col s6'>
+                                    <i class="small material-icons teal999" style=" float: left">https</i>
+                                    <input class='validate ' type='password' name='password_two' id='password_two' required minlength="8"/>
+                                    <label  for='password'>Password again</label>
+                                </div>	
                             </div>
 
                             <!-- Center tag for submit button -->

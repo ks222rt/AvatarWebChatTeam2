@@ -59,7 +59,7 @@ public class UserValidator {
         return hashMap;
     }
 
-    public String validateRegisterAttempt(User user) {
+    public String validateRegisterAttempt(User user, String password) {
         Set<ConstraintViolation<User>> violations = validator.validateProperty(
                 user, "username");
 
@@ -93,6 +93,14 @@ public class UserValidator {
         if (violations.size() != 0) // incorrect e-mail address
         {
             return "Password must be atleast 8 characters long";
+        }
+        
+        if (!user.getPassword().equals(password)) {
+            return "Passwords doesn´t match";
+        }
+        
+        if (password.length() < 8 && user.getPassword().length() < 8) {
+            return "passwords must be atleast 8 characters";
         }
         
         return null;

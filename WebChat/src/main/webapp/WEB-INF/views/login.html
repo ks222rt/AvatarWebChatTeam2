@@ -38,6 +38,12 @@ and open the template in the editor.
                       <i class="close material-icons">close</i>
                   </blockquote>
               </div>
+              <div th:if="${success_message}">
+                  <blockquote class="card-panel chip green white-text">
+                      Success: <span th:text="${success_message}"></span>
+                      <i class="close material-icons">close</i>
+                  </blockquote>
+              </div>
 
               <!-- Div for username label and input field -->
               <div class='row'>
@@ -55,7 +61,7 @@ and open the template in the editor.
                       <input class='validate' type='password' name='password' id='password' required placeholder=" " minlength="8"/>
                       <label for='password'>Enter your password</label>
                   </div>
-                  <a class='pink-text' href='#!'><b>Forgot Password?</a>					
+                  <!--<a class='pink-text' href='#!'><b>Forgot Password?</a>-->
               </div>
 
               <!-- Div for Login buttong -->
