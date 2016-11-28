@@ -186,13 +186,14 @@ public class MainController {
         
         if (validator.validatePasswordWhenDeletingAccount(user, password, password_again)) {
             // delete account
+            if (userService.deleteAccountWithFriends(user)) {
+                // remove from friendlists
             
-            // remove from friendlists
-            
-            // delete session
-            
-            // redirect to welcome
-            
+                // delete session
+
+                // redirect to welcome
+            }
+                        
             redirectAttributes.addFlashAttribute("success_message", "Account was 'removed'");
             return "redirect:/main/settings.htm";
         }

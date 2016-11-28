@@ -21,14 +21,15 @@ and open the template in the editor.
 
               <div class="card-content">
                 <p>
-                  This is the settings page where you can change your password
+                  This is the settings page where you can delete your account
                 </p>
               </div>
             </div>
         </div>
         <div class="col s8 change-password-container">
           <div class="row">
-            <form class="col s12" action="#" th:action="@{/main/settings/deleteAccount.htm}" th:object="${user}" method="post">
+            <form class="col s12" action="#" th:action="@{/main/settings/deleteAccount.htm}" th:object="${user}" method="post" 
+                  onsubmit="return confirm('Are you sure you want to delete your account? This is a final warning!!')">
               <div class="row">
                 <h3 class="col s12">
                   Delete account
@@ -66,7 +67,7 @@ and open the template in the editor.
               <!-- Center tag for submit button -->
               <center>
                   <div class='row'>
-                      <a href='#' onclick="return confirm('Are you sure you want to delete your account? This is a final warning!!')"> 
+                      <a href='#' > 
                         <button type='submit' name='btn_login' class='col s6 btn btn-large waves-effect red '>Delete account!!</button>
                       </a>
                   </div>

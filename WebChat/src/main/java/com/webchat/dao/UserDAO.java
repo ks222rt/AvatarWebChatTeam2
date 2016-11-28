@@ -482,4 +482,14 @@ public class UserDAO {
         }
     }
 
+    public boolean deleteAccountWithFriends(User user) {
+        String sql = "";
+        
+        try{
+            return false;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
 }
