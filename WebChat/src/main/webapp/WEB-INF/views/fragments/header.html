@@ -21,7 +21,7 @@ and open the template in the editor.
         <li><a href="/main/friends.htm" th:href="@{/main/friends.htm}">Friends</a></li>
         <li><a href="/main/contentSearch.htm" th:href="@{/main/search.htm}">Search</a></li>
        <li><a href="/main/logout.htm" th:href="@{/main/logout.htm}">Logout</a></li>
-          <li><a class="wide" th:href="@{/main/user/{username}.htm(username=${session.user.username})}"><div class="chip">
+          <li><a class="wide" th:href="@{/main/settings.htm}"><div class="chip">
                   
           <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
           <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>

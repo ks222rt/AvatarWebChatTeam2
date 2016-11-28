@@ -6,6 +6,7 @@
 package com.webchat.validator;
 
 import com.webchat.model.User;
+import com.webchat.util.HashUtil;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -95,5 +96,30 @@ public class UserValidator {
         }
         
         return null;
+    }
+    
+    public boolean validateOldPassword(User user, String password){
+        return user.getPassword().equals(HashUtil.hashPassword(password, user.getSalt()));
+    }
+    
+    public boolean validateBothNewPasswords(User user, String password1, String password2){
+        if (!password1.equals(password2)) {
+            return false;
+        }
+        
+        if (password1.length() < 8) {
+            return false;
+        }
+        
+        if (password2.length() < 8) {
+            return false;
+        }
+        
+        if (user.getPassword().equals(HashUtil.hashPassword(password2, user.getSalt()))
+                || user.getPassword().equals(HashUtil.hashPassword(password1, user.getSalt()))) {
+            return false;
+        }
+        
+        return true;
     }
 }

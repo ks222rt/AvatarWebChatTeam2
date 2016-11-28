@@ -69,5 +69,9 @@ public class UserService {
             
         return userDAO.getFriendRequests(userID);       
     }
+
+    public boolean updateUserPassword(User user) {
+        return userDAO.updateUserPassword(user);
+    }
     
 }

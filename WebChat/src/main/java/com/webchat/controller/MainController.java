@@ -7,18 +7,20 @@ package com.webchat.controller;
 
 import com.webchat.model.User;
 import com.webchat.service.UserService;
-import java.io.Console;
+import com.webchat.util.HashUtil;
+import com.webchat.validator.UserValidator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
@@ -34,6 +36,11 @@ public class MainController {
     @Autowired
     private UserService userService;
     
+    private UserValidator validator;
+    
+    public MainController(){
+        validator = new UserValidator();
+    }
     
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
@@ -104,7 +111,7 @@ public class MainController {
         return "main/welcome";
     }
     
-        @RequestMapping(value="/friendRequests", method = RequestMethod.GET)
+    @RequestMapping(value="/friendRequests", method = RequestMethod.GET)
     public String friendRequests(HttpServletRequest request, ModelMap model){
          User user = (User) request.getSession().getAttribute("user");
          System.out.println(user.getId());
@@ -121,6 +128,44 @@ public class MainController {
             return "main/friendRequest";
         }
           return "redirect:/main/welcome.htm";
+    }
+    
+    @RequestMapping(value="/settings", method = RequestMethod.GET)
+    public String userSettings(HttpServletRequest request, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user", user);
+        return "userSettings/settings";
+    }
+    
+    @RequestMapping(value="/settings/changePassword", method = RequestMethod.GET)
+    public String changePasswordPage(HttpServletRequest request, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user", user);
+        return "userSettings/changePassword";
+    }
+    
+    @RequestMapping(value="/settings/changePassword", method = RequestMethod.POST)
+    public String changePassword(@RequestParam String first_password,
+                                 @RequestParam String second_password,
+                                 @RequestParam String old_password,
+                                 HttpServletRequest request,
+                                 ModelMap model,
+                                 RedirectAttributes redirectAttributes){
+        User user = (User) request.getSession().getAttribute("user");
+        
+        // Check if old password is right
+        if (validator.validateOldPassword(user, old_password)) {
+            // Check if new1 and new2 password is the same
+            if (validator.validateBothNewPasswords(user, first_password, second_password)) {
+                user.setPassword(HashUtil.hashPassword(first_password, user.getSalt()));
+                if (userService.updateUserPassword(user)) {
+                    redirectAttributes.addFlashAttribute("success_message", "Password is changed!");
+                    return "redirect:/main/settings.htm";
+                }
+            }
+        }
+        redirectAttributes.addFlashAttribute("error_message", "Something went wrong!");
+        return "redirect:/main/settings/changePassword.htm";
     }
 }
 

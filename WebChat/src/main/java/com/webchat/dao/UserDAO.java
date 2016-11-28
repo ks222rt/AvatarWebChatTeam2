@@ -365,18 +365,18 @@ public class UserDAO {
                                        "OR (avatar_webchat.friend.id1 = ? AND avatar_webchat.friend.id2 = ?)";
       
             try {
-            jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sqlRemoveFriend);
-                    ps.setInt(1, senderID);
-                    ps.setInt(2, recieverID);
-                    ps.setInt(3, recieverID);
-                    ps.setInt(4, senderID);
-                    return ps;
-                }
-            });
-            return true;
+                jdbcTemplate.update(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sqlRemoveFriend);
+                        ps.setInt(1, senderID);
+                        ps.setInt(2, recieverID);
+                        ps.setInt(3, recieverID);
+                        ps.setInt(4, senderID);
+                        return ps;
+                    }
+                });
+                return true;
             
              } catch (Exception e) {
                 return false;
@@ -457,6 +457,28 @@ public class UserDAO {
             return result == null;
         } catch (EmptyResultDataAccessException e) {
             return true;
+        }
+    }
+
+    public boolean updateUserPassword(final User user) {
+        final String sql = "UPDATE avatar_webchat.chat_user\n" +
+                     "SET password = ?" +
+                     "WHERE avatar_webchat.chat_user.id = ?;";
+        
+        try{
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setString(1, user.getPassword());
+                        ps.setInt(2, user.getId());
+                        return ps;
+                    }
+            });
+            return true;
+                
+        }catch(Exception e){
+            return false;
         }
     }
 

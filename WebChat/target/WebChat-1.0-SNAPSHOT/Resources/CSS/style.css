@@ -65,3 +65,35 @@ div.card-action.friend-request-button-container{
     padding-top: 5% !important;
 }
 
+.table-header{
+    font-size: 230%;
+    border-bottom: solid 2px;
+    padding-bottom: 1%;
+    width: 50%;
+}
+
+span.table-title{
+    font-weight: bold;
+    font-size: 140%;
+}
+
+td.tablerow{
+    margin-bottom: 5%;
+}
+
+span.table-text{
+    font-size: 140%;
+}
+
+div.col.s8.table-container{
+    margin-top: 8%;
+}
+
+div.col.s8.change-password-container{
+    margin-top: 1%;
+}
+
+a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
+    margin-left: 1%;
+}
+
