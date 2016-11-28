@@ -167,5 +167,39 @@ public class MainController {
         redirectAttributes.addFlashAttribute("error_message", "Something went wrong!");
         return "redirect:/main/settings/changePassword.htm";
     }
+    
+    @RequestMapping(value="/settings/deleteAccount", method = RequestMethod.GET)
+    public String deleteAccountPage(HttpServletRequest request, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user", user);
+        return "userSettings/deleteAccount";
+    }
+    
+    @RequestMapping(value="/settings/deleteAccount", method = RequestMethod.POST)
+    public String deleteAccount(@RequestParam String password,
+                                @RequestParam String password_again,
+                                HttpServletRequest request,
+                                ModelMap model,
+                                RedirectAttributes redirectAttributes){
+        
+        User user = (User) request.getSession().getAttribute("user");
+        
+        if (validator.validatePasswordWhenDeletingAccount(user, password, password_again)) {
+            // delete account
+            
+            // remove from friendlists
+            
+            // delete session
+            
+            // redirect to welcome
+            
+            redirectAttributes.addFlashAttribute("success_message", "Account was 'removed'");
+            return "redirect:/main/settings.htm";
+        }
+        
+        redirectAttributes.addFlashAttribute("error_message", "Passwords doesn not match!");
+        return "redirect:/main/settings/deleteAccount.htm";
+        
+    }
 }
 

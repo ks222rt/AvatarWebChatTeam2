@@ -110,7 +110,31 @@ public class UserValidator {
         return user.getPassword().equals(HashUtil.hashPassword(password, user.getSalt()));
     }
     
-    public boolean validateBothNewPasswords(User user, String password1, String password2){
+    public boolean validateBothNewPasswords(User user, String password1, String password2){       
+        if (user.getPassword().equals(HashUtil.hashPassword(password2, user.getSalt()))
+                || user.getPassword().equals(HashUtil.hashPassword(password1, user.getSalt()))) {
+            return false;
+        }
+        
+        if (!validateTwoPasswordFromForm(password1, password2)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean validatePasswordWhenDeletingAccount(User user, String password1, String password2){
+        if (validateTwoPasswordFromForm(password1, password2)) {
+            if (user.getPassword().equals(HashUtil.hashPassword(password2, user.getSalt()))
+                && user.getPassword().equals(HashUtil.hashPassword(password1, user.getSalt()))) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private boolean validateTwoPasswordFromForm(String password1, String password2){
         if (!password1.equals(password2)) {
             return false;
         }
@@ -120,11 +144,6 @@ public class UserValidator {
         }
         
         if (password2.length() < 8) {
-            return false;
-        }
-        
-        if (user.getPassword().equals(HashUtil.hashPassword(password2, user.getSalt()))
-                || user.getPassword().equals(HashUtil.hashPassword(password1, user.getSalt()))) {
             return false;
         }
         
