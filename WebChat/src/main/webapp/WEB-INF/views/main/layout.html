@@ -6,15 +6,15 @@ and open the template in the editor.
 -->
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
   <head>
-    <script type="text/javascript" href="../../../resources/SCRIPT/myScript.js" th:href="@{/resources/SCRIPT/myScript.js}" ></script>
+    <script type="text/javascript" href="../../resources/SCRIPT/myScript.js" th:href="@{/resources/SCRIPT/myScript.js}" ></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
     
-    <link href="../../../resources/CSS/style.css" rel="stylesheet" type="text/css" th:href="@{/resources/CSS/style.css}">
+    <link href="../../resources/CSS/style.css" rel="stylesheet" type="text/css" th:href="@{/resources/CSS/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../../../resources/autoComplete/awesomplete.css" th:href="@{/resources/autoComplete/awesomplete.css}" />  
-    <script src="../../../resources/autoComplete/awesomplete.js" async th:href="@{/resources/autoComplete/awesomplete.js}"></script>
-    
+    <link rel="stylesheet" href="../../resources/autoComplete/awesomplete.css" th:href="@{/resources/autoComplete/awesomplete.css}" />  
+   
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
@@ -30,14 +30,16 @@ and open the template in the editor.
     </div>
      
       
-      
+  <th:block layout:fragment="script">
+    
+  </th:block>
     <script>
       $( document ).ready(function(){
          $(".button-collapse").sideNav();
     })
     </script>
-    
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+   
   </body>
 </html>
