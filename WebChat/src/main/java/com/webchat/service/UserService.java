@@ -78,4 +78,8 @@ public class UserService {
         return userDAO.deleteAccount(user);
     }
     
+    public boolean areWeFriends(int userID, int friendID){
+        return userDAO.alreadyFriends(userID, friendID);
+    }
+    
 }

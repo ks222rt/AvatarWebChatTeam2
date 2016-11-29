@@ -146,13 +146,11 @@ public class UserDAO {
        
         List<Integer> identifiers = new LinkedList<>();  
        try{
-           
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlAlreadyFriends);
-        for (Map row : rows) {
-            identifiers.add((int)row.get("id1"));
-            
-        }
-        
+            List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlAlreadyFriends);
+            for (Map row : rows) {
+                identifiers.add((int)row.get("id1"));
+
+            }        
        }
        catch(EmptyResultDataAccessException e){
            return false;
