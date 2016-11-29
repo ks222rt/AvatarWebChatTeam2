@@ -482,31 +482,69 @@ public class UserDAO {
         }
     }
 
-    public boolean deleteAccountWithFriends(final User user) {
+    public boolean deleteAccount(final User user) {
         
+        if(!deleteFriendRequestsAndFriends(user)) {
+            return false;
+        }
+
         final int userID = user.getId();
-        final String deleteFriendRequests = "DELETE avatar_webchat.friend_requests\n"+
-                     "FROM avatar_webchat.friend_requests\n"+
-                     "WHERE (avatar_webchat.friend_requests.sender = ?) OR (avatar_webchat.friend_requests.reciever = ?)\n";
-        final String deleteFriends = "DELETE avatar_webchat.friend\n"+
-                     "FROM avatar_webchat.friend\n"+
-                     "WHERE (avatar_webchat.friend.id1 = ?) OR (avatar_webchat.friend.id2 = ?)\n";
         final String deleteUser = "DELETE avatar_webchat.chat_user, avatar_webchat.chat_user_info\n"+
                      "FROM avatar_webchat.chat_user\n"+
                      "INNER JOIN avatar_webchat.chat_user_info\n"+
                      "WHERE (avatar_webchat.chat_user.id = ?) AND (avatar_webchat.chat_user_info.id = avatar_webchat.chat_user.info_id)";
-        
-        try{
+        try {
+               
             jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public  PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps3 = connection.prepareStatement(deleteUser);
+                ps3.setInt(1, userID);
+                return ps3;
+            }
+            });
+
+        }catch(Exception e){
+            return false;
+        }
+   
+        return true;
+    }
+    
+    public boolean deleteFriendRequestsAndFriends(final User user)
+    {
+         final int userID = user.getId();
+         final String deleteFriendRequests = "DELETE avatar_webchat.friend, avatar_webchat.friend_requests\n" +
+                                             "FROM avatar_webchat.friend\n" +
+                                             "LEFT OUTER JOIN avatar_webchat.friend_requests\n" +
+                                             "ON (avatar_webchat.friend.id1 = avatar_webchat.friend_requests.sender)\n"+
+                                             "OR (avatar_webchat.friend.id1 = avatar_webchat.friend_requests.reciever)\n"+
+                                             "OR (avatar_webchat.friend.id2 = avatar_webchat.friend_requests.sender)\n"+ 
+                                             "OR (avatar_webchat.friend.id2 = avatar_webchat.friend_requests.reciever)\n"+
+                                             "WHERE avatar_webchat.friend.id1 = ?";
+             try {
+         jdbcTemplate.update(new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(deleteFriendRequests);                     
                         ps.setInt(1, userID);
-                        ps.setInt(2, userID);  
                         return ps;
                     }});
-            
-                    jdbcTemplate.update(new PreparedStatementCreator() {
+         }catch (Exception e){
+             return false;
+         }       
+        return true;
+    }
+    
+    /*public boolean deleteAllFriends(final User user)
+    {
+        final int userID = user.getId();
+        final String deleteFriends = "DELETE avatar_webchat.friend\n"+
+             "FROM avatar_webchat.friend\n"+
+             "WHERE (avatar_webchat.friend.id1 = ?) OR (avatar_webchat.friend.id2 = ?)\n";
+        
+        try {
+         jdbcTemplate.update(new PreparedStatementCreator() {
                     @Override
                     public  PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                         PreparedStatement ps2 = connection.prepareStatement(deleteFriends);
@@ -515,22 +553,10 @@ public class UserDAO {
                         return ps2;
                     }
                     });
-                    
-                    jdbcTemplate.update(new PreparedStatementCreator() {
-                    @Override
-                    public  PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps3 = connection.prepareStatement(deleteUser);
-                        ps3.setInt(1, userID);
-                        return ps3;
-                    }
-                    });
-                          
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
             return false;
         }
-   
         return true;
     }
-
+    */
 }

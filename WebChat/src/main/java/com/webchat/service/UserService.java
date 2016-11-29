@@ -74,8 +74,8 @@ public class UserService {
         return userDAO.updateUserPassword(user);
     }
 
-    public boolean deleteAccountWithFriends(User user) {
-        return userDAO.deleteAccountWithFriends(user);
+    public boolean deleteAccount(User user) {
+        return userDAO.deleteAccount(user);
     }
     
 }

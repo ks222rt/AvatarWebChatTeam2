@@ -186,7 +186,7 @@ public class MainController {
         
         if (validator.validatePasswordWhenDeletingAccount(user, password, password_again)) {
             // delete account and remove from friendlists
-            if (userService.deleteAccountWithFriends(user)) {
+            if (userService.deleteAccount(user)) {
                 // delete user from modelmap and session
                 model.remove("user");
                 request.getSession().removeAttribute("user");
