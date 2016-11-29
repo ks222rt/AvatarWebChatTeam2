@@ -185,17 +185,16 @@ public class MainController {
         User user = (User) request.getSession().getAttribute("user");
         
         if (validator.validatePasswordWhenDeletingAccount(user, password, password_again)) {
-            // delete account
+            // delete account and remove from friendlists
             if (userService.deleteAccountWithFriends(user)) {
-                // remove from friendlists
-            
-                // delete session
-
-                // redirect to welcome
+                // delete user from modelmap and session
+                model.remove("user");
+                request.getSession().removeAttribute("user");
+                
+                // redirect to welcome        
+                redirectAttributes.addFlashAttribute("success_message", "Account was removed");
+                return "redirect:/login.htm";
             }
-                        
-            redirectAttributes.addFlashAttribute("success_message", "Account was 'removed'");
-            return "redirect:/main/settings.htm";
         }
         
         redirectAttributes.addFlashAttribute("error_message", "Passwords doesn not match!");
