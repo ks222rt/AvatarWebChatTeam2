@@ -107,7 +107,6 @@ public class MainController {
         // Check if the user is in the friendlist
         boolean isFriend = userService.areWeFriends(loggedInUser.getId(), user.getId());
         
-        System.out.println(user.getUsername() + " is friend: " + isFriend);
         model.addAttribute("isFriend", isFriend);
         model.addAttribute("user", user);
         return "main/userpage";
