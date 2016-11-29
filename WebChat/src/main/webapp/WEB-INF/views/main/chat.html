@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html layout:decorator="main/layout">
+  <head>
+    <title>Avatar - WebChat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+
+  </head>
+  <body>
+
+    <div class="col s9 grey lighten-4" layout:fragment="content" onload="disconnect()">
+        
+        <h4>Chat test</h4>
+        <div>
+                <input type="text" id="from" placeholder="Choose a nickname"/>
+            </div>
+        <br />
+           <div>
+                <button id="connect" >Connect</button>
+                <button id="disconnect" disabled="disabled" onclick="disconnect();">
+                    Disconnect
+                </button>
+            </div>
+            <br />
+            
+            <div id="conversationDiv">
+                <input type="text" id="text" placeholder="Write a message..."/>
+                <button id="sendMessage" onclick="sendMessage();">Send</button>
+                <p id="response"></p>
+            </div>
+            
+    </div>
+        
+    <th:block layout:fragment="script">
+    <script src="../../resources/SCRIPT/sockjs-0.3.4.js" th:src="@{/resources/SCRIPT/sockjs-0.3.4.js}"></script>
+    <script src="../../resources/SCRIPT/stomp.js" th:src="@{/resources/SCRIPT/stomp.js}"/></script>
+    <script type="text/javascript">
+      var stompClient = null;
+             
+            function setConnected(connected) {
+                document.getElementById('connect').disabled = connected;
+                document.getElementById('disconnect').disabled = !connected;
+                document.getElementById('conversationDiv').style.visibility 
+                  = connected ? 'visible' : 'hidden';
+                document.getElementById('response').innerHTML = '';
+            }
+            document.querySelector('#connect').addEventListener("click", connect);
+            function connect() {
+                
+                var socket = new SockJS('/WebChat/chat');
+                console.log("Har instansierat SockJS");
+                stompClient = Stomp.over(socket);  
+                stompClient.connect({}, function(frame) {
+                    setConnected(true);
+                    console.log('Connected: ' + frame);
+                    stompClient.subscribe('/topic/messages', function(Message) {
+                        showMessageOutput(JSON.parse(Message.body));
+                    });
+                });
+                  console.log("Gick att connecta");
+            }
+             
+            function disconnect() {
+                if(stompClient !== null) {
+                    stompClient.disconnect();
+                }
+                setConnected(false);
+                console.log("Disconnected");
+            }
+             
+            function sendMessage() {
+                var from = document.getElementById('from').value;
+                var text = document.getElementById('text').value;
+                stompClient.send("/app/chat", {}, 
+                  JSON.stringify({'from':from, 'text':text}));
+            }
+             
+            function showMessageOutput(Message) {
+                console.log("kioskjvel");
+                var response = document.getElementById('response');
+                var p = document.createElement('p');
+                p.style.wordWrap = 'break-word';
+                p.appendChild(document.createTextNode(Message.from + ": " 
+                  + Message.text));
+                response.appendChild(p);
+            }
+        </script>
+  </th:block>
+  </body>
+</html>
