@@ -12,7 +12,7 @@
     <div class="col s9 grey lighten-4" layout:fragment="content">
     <h3>Search user</h3>
         
-    <input class="awesomplete" list="mylist" onChange="window.location.href='user/'+this.value+'.htm'" />
+    <input class="awesomplete" list="mylist" onChange="window.location.href='user/'+this.value" />
     <datalist id="mylist">
 
         <option th:each="user : ${users}" >

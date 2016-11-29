@@ -54,17 +54,17 @@ public class LoginController {
         if (validationResult.containsKey("error"))
         {
             redirectAttributes.addFlashAttribute("error_message", validationResult.get("error"));
-            return "redirect:/login.htm";
+            return "redirect:/login";
         }
         
         User user = userService.loginUser(username, password);
         
         if(user != null){
             model.addAttribute("user", user);
-            return "redirect:/main/welcome.htm";
+            return "redirect:/main/welcome";
         } else {
             redirectAttributes.addFlashAttribute("error_message", "Wrong username/password");
-            return "redirect:/login.htm";
+            return "redirect:/login";
         }
     }
 }

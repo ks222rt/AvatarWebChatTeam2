@@ -24,8 +24,8 @@
               <p th:text="${friend.firstname} + ' ' + ${friend.lastname}"></p>  
         </div>
         <div class="card-action friend-request-button-container">
-          <a class="left green-text text-lighten-2" th:href="@{/main/friendResponse/true/{id}.htm(id=${friend.id})}"><i class="small material-icons green-text lighten-2">thumb_up</i> Accept</a>
-          <a class="right red-text text-lighten-2" th:href="@{/main/friendResponse/false/{id}.htm(id=${friend.id})}"><i class="small material-icons red-text  lighten-2">thumb_down</i> Reject</a>
+          <a class="left green-text text-lighten-2" th:href="@{/main/friendResponse/true/{id}(id=${friend.id})}"><i class="small material-icons green-text lighten-2">thumb_up</i> Accept</a>
+          <a class="right red-text text-lighten-2" th:href="@{/main/friendResponse/false/{id}(id=${friend.id})}"><i class="small material-icons red-text  lighten-2">thumb_down</i> Reject</a>
         </div>
       </div>
     </div>

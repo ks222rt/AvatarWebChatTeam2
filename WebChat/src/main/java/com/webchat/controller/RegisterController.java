@@ -56,7 +56,7 @@ public class RegisterController {
                 if (userService.registerUser(user)) {
                     redirectAttributes.addFlashAttribute("success_message", "Account successfully created!");
                     model.addAttribute("user", user);
-                    return "redirect:/login.htm";
+                    return "redirect:/login";
                 }
             }
         }
@@ -66,6 +66,6 @@ public class RegisterController {
         // view
         redirectAttributes.addFlashAttribute("error_message", errorMessage);
         model.addAttribute("user", user);
-        return "redirect:/registration.htm";
+        return "redirect:/registration";
     }
 }

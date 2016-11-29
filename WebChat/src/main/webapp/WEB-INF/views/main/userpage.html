@@ -30,9 +30,9 @@ and open the template in the editor.
                 </div>
                 
                 <div class="card-action">
-                  <a class="waves-effect waves-light btn green"th:href="@{/main/friendRequest/{id}.htm(id=${user.id})}">Add me</a>
+                  <a class="waves-effect waves-light btn green"th:href="@{/main/friendRequest/{id}(id=${user.id})}">Add me</a>
                   <a class="waves-effect waves-light btn red" 
-                     th:href="@{/main/removeFriend/{id}.htm(id=${user.id})}"
+                     th:href="@{/main/removeFriend/{id}(id=${user.id})}"
                      onclick="return confirm('Are you sure you want to remove this friend?')">Remove me</a>
                 </div>
               </div>

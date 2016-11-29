@@ -27,7 +27,7 @@ and open the template in the editor.
                 <span class="labelForFriend">Email: </span><p th:text="${friend.email}"></p>
               </div>
               <div class="card-action profile-page-button">
-                <a class="red-text text-lighten-2" th:href="@{user/{username}.htm(username=${friend.username})}">Profile page</a>
+                <a class="red-text text-lighten-2" th:href="@{user/{username}(username=${friend.username})}">Profile page</a>
               </div>
             </div>
           </div>

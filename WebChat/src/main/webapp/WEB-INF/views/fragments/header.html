@@ -14,14 +14,14 @@ and open the template in the editor.
     
       <nav th:fragment="header" class="red lighten-2">
     <div class="nav-wrapper">
-      <a href="/main/welcome.htm" th:href="@{/main/welcome.htm}" class="brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
+      <a href="/main/welcome" th:href="@{/main/welcome}" class="brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="/main/friendRequests.htm" th:href="@{/main/friendRequests.htm}">Friend Requests</a></li>
-        <li><a href="/main/friends.htm" th:href="@{/main/friends.htm}">Friends</a></li>
-        <li><a href="/main/contentSearch.htm" th:href="@{/main/search.htm}">Search</a></li>
-       <li><a href="/main/logout.htm" th:href="@{/main/logout.htm}">Logout</a></li>
-          <li><a class="wide" th:href="@{/main/settings.htm}"><div class="chip">
+        <li><a href="/main/friendRequests" th:href="@{/main/friendRequests}">Friend Requests</a></li>
+        <li><a href="/main/friends" th:href="@{/main/friends}">Friends</a></li>
+        <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
+       <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
+          <li><a class="wide" th:href="@{/main/settings}"><div class="chip">
                   
           <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
           <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
@@ -29,12 +29,12 @@ and open the template in the editor.
             </div></a></li> 
       </ul>
       <ul class="side-nav" id="mobile-demo">
-        <li><a href="/main/friendRequests.htm" th:href="@{/main/friendRequests.htm}">Friend Requests</a></li>
-        <li><a href="/main/friends.htm" th:href="@{/main/friends.htm}">Friends</a></li>
-        <li><a href="/main/contentSearch.htm" th:href="@{/main/search.htm}">Search</a></li>
-        <li><a href="/main/logout.htm" th:href="@{/main/logout.htm}">Logout</a></li>
+        <li><a href="/main/friendRequests" th:href="@{/main/friendRequests}">Friend Requests</a></li>
+        <li><a href="/main/friends" th:href="@{/main/friends}">Friends</a></li>
+        <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
+        <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
         
-        <li><a class="wide" th:href="@{/main/user/{username}.htm(username=${session.user.username})}"><div class="chip">
+        <li><a class="wide" th:href="@{/main/user/{username}(username=${session.user.username})}"><div class="chip">
                   
           <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
           <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>

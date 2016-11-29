@@ -59,7 +59,7 @@ public class MainController {
         model.remove("user");
         model.remove("friends");
         session.removeAttribute("user");
-        return "redirect:/login.htm";
+        return "redirect:/login";
     }
     
     @RequestMapping(value="/search", method = RequestMethod.GET)
@@ -92,7 +92,7 @@ public class MainController {
         
         userService.respondToFriendRequest(user.getId(), id, response);
       
-        return "redirect:/main/friendRequests.htm";
+        return "redirect:/main/friendRequests";
    
     }
     
@@ -127,7 +127,7 @@ public class MainController {
             model.addAttribute("friendRequests", friends);
             return "main/friendRequest";
         }
-          return "redirect:/main/welcome.htm";
+          return "redirect:/main/welcome";
     }
     
     @RequestMapping(value="/settings", method = RequestMethod.GET)
@@ -160,12 +160,12 @@ public class MainController {
                 user.setPassword(HashUtil.hashPassword(first_password, user.getSalt()));
                 if (userService.updateUserPassword(user)) {
                     redirectAttributes.addFlashAttribute("success_message", "Password is changed!");
-                    return "redirect:/main/settings.htm";
+                    return "redirect:/main/settings";
                 }
             }
         }
         redirectAttributes.addFlashAttribute("error_message", "Something went wrong!");
-        return "redirect:/main/settings/changePassword.htm";
+        return "redirect:/main/settings/changePassword";
     }
     
     @RequestMapping(value="/settings/deleteAccount", method = RequestMethod.GET)
@@ -193,12 +193,12 @@ public class MainController {
                 
                 // redirect to welcome        
                 redirectAttributes.addFlashAttribute("success_message", "Account was removed");
-                return "redirect:/login.htm";
+                return "redirect:/login";
             }
         }
         
         redirectAttributes.addFlashAttribute("error_message", "Passwords doesn not match!");
-        return "redirect:/main/settings/deleteAccount.htm";
+        return "redirect:/main/settings/deleteAccount";
         
     }
 }
