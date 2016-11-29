@@ -5,8 +5,6 @@
  */
 package com.webchat.controller;
 
-import com.webchat.model.Message;
-import com.webchat.model.OutputMessage;
 import com.webchat.model.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
