@@ -5,15 +5,22 @@
  */
 package com.webchat.config;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 /**
  *
@@ -23,20 +30,28 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
  */
 
 @Configuration
-@ComponentScan(basePackages = {"com.webchat"})
-@EnableWebSocketMessageBroker
-@EnableWebMvc
 @EnableWebSocket
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class WebSocketConfig implements WebSocketConfigurer{
  
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
-        config.setApplicationDestinationPrefixes("/app");
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(new Chathandler(), "/chat");
     }
- 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-         registry.addEndpoint("/chat").withSockJS();
+    
+    class Chathandler extends TextWebSocketHandler{
+        
+        private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+        
+        @Override
+        public void afterConnectionEstablished(WebSocketSession session) throws Exception{
+            sessions.add(session);
+        }
+        
+        @Override
+        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
+            for(WebSocketSession s : sessions){
+                s.sendMessage(message);
+            }
+        }
     }
 }

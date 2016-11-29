@@ -10,83 +10,52 @@
   </head>
   <body>
 
-    <div class="col s9 grey lighten-4" layout:fragment="content" onload="disconnect()">
+    <div class="col s9 grey lighten-4" layout:fragment="content" >
         
         <h4>Chat test</h4>
-        <div>
-                <input type="text" id="from" placeholder="Choose a nickname"/>
-            </div>
-        <br />
-           <div>
-                <button id="connect" >Connect</button>
-                <button id="disconnect" disabled="disabled" onclick="disconnect();">
-                    Disconnect
-                </button>
-            </div>
-            <br />
-            
+        
             <div id="conversationDiv">
-                <input type="text" id="text" placeholder="Write a message..."/>
-                <button id="sendMessage" onclick="sendMessage();">Send</button>
-                <p id="response"></p>
+                <input type="text" id="inputText" placeholder="Write a message..."/>
+                <button id="sendMessage">Send</button>
+              
             </div>
+            
+            <ul id="myList">
+            
+           
+            </ul>
             
     </div>
         
     <th:block layout:fragment="script">
-    <script src="../../resources/SCRIPT/sockjs-0.3.4.js" th:src="@{/resources/SCRIPT/sockjs-0.3.4.js}"></script>
-    <script src="../../resources/SCRIPT/stomp.js" th:src="@{/resources/SCRIPT/stomp.js}"/></script>
+
     <script type="text/javascript">
-      var stompClient = null;
-             
-            function setConnected(connected) {
-                document.getElementById('connect').disabled = connected;
-                document.getElementById('disconnect').disabled = !connected;
-                document.getElementById('conversationDiv').style.visibility 
-                  = connected ? 'visible' : 'hidden';
-                document.getElementById('response').innerHTML = '';
-            }
-            document.querySelector('#connect').addEventListener("click", connect);
-            function connect() {
+      
+      var ws;
+        
+        $(document).ready(function(){
+             document.querySelector('#sendMessage').addEventListener('click', sendMessage);
+            ws = new WebSocket('ws://localhost:8080/WebChat/chat');
+            
+            
+            ws.onmessage = function(data) {
+            var node = document.createElement("LI");
+            var textnode = document.createTextNode(data.data);
+            node.appendChild(textnode);
+            document.getElementById("myList").appendChild(node);
+            };
                 
-                var socket = new SockJS('/WebChat/chat');
-                console.log("Har instansierat SockJS");
-                stompClient = Stomp.over(socket);  
-                stompClient.connect({}, function(frame) {
-                    setConnected(true);
-                    console.log('Connected: ' + frame);
-                    stompClient.subscribe('/topic/messages', function(Message) {
-                        showMessageOutput(JSON.parse(Message.body));
-                    });
-                });
-                  console.log("Gick att connecta");
-            }
+        });
+        
+             function sendMessage(){
+                var message = document.getElementById("inputText").value;
+              
              
-            function disconnect() {
-                if(stompClient !== null) {
-                    stompClient.disconnect();
-                }
-                setConnected(false);
-                console.log("Disconnected");
+       
+                ws.send("[[${username}]]" +  ':'  + message);
             }
-             
-            function sendMessage() {
-                var from = document.getElementById('from').value;
-                var text = document.getElementById('text').value;
-                stompClient.send("/app/chat", {}, 
-                  JSON.stringify({'from':from, 'text':text}));
-            }
-             
-            function showMessageOutput(Message) {
-                console.log("kioskjvel");
-                var response = document.getElementById('response');
-                var p = document.createElement('p');
-                p.style.wordWrap = 'break-word';
-                p.appendChild(document.createTextNode(Message.from + ": " 
-                  + Message.text));
-                response.appendChild(p);
-            }
-        </script>
+           
+    </script>
   </th:block>
   </body>
 </html>
