@@ -98,8 +98,16 @@ public class MainController {
     
     @RequestMapping(value="/user/{username}", method = RequestMethod.GET)
     public String getUserPage(HttpServletRequest request,@PathVariable String username, ModelMap model){
+        // Get the user we want to show
         User user = userService.getUserByUsername(username);
-        System.out.print("WAAAHSHASHASHSAHSAHAS");
+        
+        // Get the user whos logged in
+        User loggedInUser = (User) request.getSession().getAttribute("user");
+        
+        // Check if the user is in the friendlist
+        boolean isFriend = userService.areWeFriends(loggedInUser.getId(), user.getId());
+        
+        model.addAttribute("isFriend", isFriend);
         model.addAttribute("user", user);
         return "main/userpage";
     }
