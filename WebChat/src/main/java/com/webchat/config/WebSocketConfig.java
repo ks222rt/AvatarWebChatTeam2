@@ -26,32 +26,26 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
  *
  * @author filip
  * This is a modified version of the Spring-WebSocket Tutorial.
- * Just for trying and learning websockets atm.
+ * Just for trying and learning 
  */
 
 @Configuration
-@EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer{
- 
+@EnableWebSocketMessageBroker
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
+
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new Chathandler(), "/chat");
+    public void registerStompEndpoints(StompEndpointRegistry ser) {
+        ser.addEndpoint("/chat").withSockJS();
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/app")
+                .enableSimpleBroker("/topic");
     }
     
-    class Chathandler extends TextWebSocketHandler{
-        
-        private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-        
-        @Override
-        public void afterConnectionEstablished(WebSocketSession session) throws Exception{
-            sessions.add(session);
-        }
-        
-        @Override
-        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
-            for(WebSocketSession s : sessions){
-                s.sendMessage(message);
-            }
-        }
-    }
+    
+ 
+
+
 }

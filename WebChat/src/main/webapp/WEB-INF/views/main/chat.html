@@ -16,7 +16,7 @@
         
             <div id="conversationDiv">
                 <input type="text" id="inputText" placeholder="Write a message..."/>
-                <button id="sendMessage">Send</button>
+                <button id="sendMessage" >Send</button>
               
             </div>
             
@@ -28,34 +28,38 @@
     </div>
         
     <th:block layout:fragment="script">
-
-    <script type="text/javascript">
-      
-      var ws;
-        
-        $(document).ready(function(){
-             document.querySelector('#sendMessage').addEventListener('click', sendMessage);
-            ws = new WebSocket('ws://localhost:8080/WebChat/chat');
-            
-            
-            ws.onmessage = function(data) {
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(data.data);
-            node.appendChild(textnode);
-            document.getElementById("myList").appendChild(node);
-            };
-                
-        });
-        
-             function sendMessage(){
-                var message = document.getElementById("inputText").value;
-              
-             
        
-                ws.send("[[${username}]]" +  ':'  + message);
+    <script type="text/javascript">
+             
+            var ws;
+            var stompClient;
+            
+            
+            $(document).ready(function(){
+                document.querySelector('#sendMessage').addEventListener('click', send);
+                ws = new SockJS("/WebChat/chat");
+                stompClient = Stomp.over(ws);
+
+                stompClient.connect({}, function(frame){
+
+                    stompClient.subscribe("/topic/messages", function(message){
+                        var content = JSON.parse(message.body);
+                        var node = document.createElement("LI");
+                        var textnode = document.createTextNode(content.from + " says " + content.text + "|" + content.time);
+                        node.appendChild(textnode);
+                        document.getElementById("myList").appendChild(node);
+                    });
+                });
+            });
+            function send(){
+                var message = document.getElementById("inputText").value;
+                var user = "[[${session.user.username}]]";
+                stompClient.send("/app/chat",{}, JSON.stringify({'from':user, 'text':message} ));
             }
-           
+            
     </script>
+     <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
+        <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
   </th:block>
   </body>
 </html>

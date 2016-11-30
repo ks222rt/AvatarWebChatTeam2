@@ -5,6 +5,7 @@
  */
 package com.webchat.controller;
 
+import com.webchat.model.Message;
 import com.webchat.model.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,4 +30,13 @@ public class ChatController {
         model.addAttribute("username", user.getUsername());
         return "main/chat";
     }
+    
+    @MessageMapping("/chat")
+    @SendTo("/topic/messages")
+    public Message chatMessage(Message message){
+       
+        String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        return new Message(message.getFrom(),message.getText(),time);
+    }
+    
 }
