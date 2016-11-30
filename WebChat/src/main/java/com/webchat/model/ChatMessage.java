@@ -5,6 +5,7 @@
  */
 package com.webchat.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 /**
@@ -13,11 +14,11 @@ import java.util.Map;
  */
 public class ChatMessage {
 
-    public User getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
@@ -37,9 +38,18 @@ public class ChatMessage {
         this.message = message;
     }
     
-    private User sender;
+    private String sender;
     private Map<User, Boolean> messageRecieverMap; //User object linked to boolean value referencing if user has deleted message history.
     private String message;
+    private SimpleDateFormat timeStamp;
+
+    public SimpleDateFormat getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(SimpleDateFormat timeStamp) {
+        this.timeStamp = timeStamp;
+    }
     
     
 }
