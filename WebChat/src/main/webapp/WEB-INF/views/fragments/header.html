@@ -12,29 +12,38 @@ and open the template in the editor.
   </head>
   <body>
     
-      <nav th:fragment="header" class="red lighten-2">
+  <nav th:fragment="header" class="red lighten-2">
+    <!-- Dropdown Structure -->
+    <ul id="dropdown1" class="dropdown-content">
+      <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
+      <li><a href="/main/settings" th:href="@{/main/settings}">Settings</a></li>
+      <li class="divider"></li>
+      <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
+    </ul>
+    
     <div class="nav-wrapper">
       <a href="/main/welcome" th:href="@{/main/welcome}" class="brand-logo"><i class="material-icons">cloud</i>Avatar - WebChat</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
+        <li><a href="/main/chat/none" th:href="@{/main/chat/none}">Chat</a></li>
         <li><a href="/main/friendRequests" th:href="@{/main/friendRequests}">Friend Requests</a></li>
         <li><a href="/main/friends" th:href="@{/main/friends}">Friends</a></li>
-        <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
-       <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
-          <li><a class="wide" th:href="@{/main/settings}"><div class="chip">
-                  
-          <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
-          <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
       
-            </div></a></li> 
+        <li><a class="dropdown-button wide" data-activates="dropdown1" href="#!">
+          <div class="chip">         
+            <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
+            <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
+          </div>
+        </a></li> 
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <li><a href="/main/friendRequests" th:href="@{/main/friendRequests}">Friend Requests</a></li>
         <li><a href="/main/friends" th:href="@{/main/friends}">Friends</a></li>
         <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
+        <li><a href="/main/chat/none" th:href="@{/main/chat/none}"/>Chat</li>
         <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
         
-        <li><a class="wide" th:href="@{/main/user/{username}(username=${session.user.username})}"><div class="chip">
+        <li><a class="wide" th:href="@{/main/settings}"><div class="chip">
                   
           <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
           <span th:text="${session.user.firstname} + ' ' + ${session.user.lastname}"></span>
