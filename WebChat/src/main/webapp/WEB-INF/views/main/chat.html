@@ -38,7 +38,7 @@
             $(document).ready(function(){
                 document.querySelector('#sendMessage').addEventListener('click', send);
                 //ws = new SockJS("/WebChat/chat");
-                ws = new SockJS("wss://avatar-web-chat.herokuapp.com/chat");
+                ws = new SockJS("https://avatar-web-chat.herokuapp.com/chat");
                 stompClient = Stomp.over(ws);
                 stompClient.connect({}, function(frame){
                     
