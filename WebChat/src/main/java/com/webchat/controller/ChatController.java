@@ -5,6 +5,8 @@
  */
 package com.webchat.controller;
 
+import com.webchat.model.ChatMessage;
+import com.webchat.model.ChatRoom;
 import com.webchat.model.Message;
 import com.webchat.model.User;
 import java.text.SimpleDateFormat;
@@ -16,6 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import com.webchat.service.ChatService;
+import java.util.LinkedList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -24,10 +30,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ChatController {
     
+    @Autowired
+    private ChatService chatService;
+    
     @RequestMapping(value = "/main/chat", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
         model.addAttribute("username", user.getUsername());
+  
         return "main/chat";
     }
     
