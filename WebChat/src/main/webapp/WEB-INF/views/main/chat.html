@@ -40,10 +40,9 @@
                 //ws = new SockJS("/WebChat/chat");
                 //ws = new SockJS('http://' + window.location.host + '/chat');
                 ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
-                console.log(ws);
                 stompClient = Stomp.over(ws);
                 stompClient.connect({}, function(frame){
-                    
+                    console.log("connected");
                     
                     
                     stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){

@@ -30,7 +30,8 @@ public class AppInitializer implements WebApplicationInitializer{
         appContext.setDisplayName("Avatar Web Chat");
         appContext.register(AppContext.class);
         appContext.register(SecurityConfig.class);
-       
+        appContext.register(WebSocketConfig.class);
+        
         context.addListener(httpSessionEventPublisher());
         context.addListener(new ContextLoaderListener(appContext));
         
@@ -38,6 +39,7 @@ public class AppInitializer implements WebApplicationInitializer{
                 new AnnotationConfigWebApplicationContext();
         
         servletContext.register(ServletConfig.class);
+        
         //servletContext.register(SecurityConfig.class);
         
         ServletRegistration.Dynamic dispatcher =
