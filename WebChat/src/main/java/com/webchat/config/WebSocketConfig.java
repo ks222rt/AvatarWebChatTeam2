@@ -25,7 +25,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry ser) {
-        ser.addEndpoint("/chat").setHandshakeHandler(new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy())).setAllowedOrigins("*").withSockJS();
+        ser.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
        
     }
 
@@ -36,8 +36,5 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
                 
     }
     
-    
- 
-
 
 }
