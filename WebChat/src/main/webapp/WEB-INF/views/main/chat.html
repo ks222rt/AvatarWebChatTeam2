@@ -37,7 +37,8 @@
             
             $(document).ready(function(){
                 document.querySelector('#sendMessage').addEventListener('click', send);
-                ws = new SockJS("/WebChat/chat");
+                //ws = new SockJS("/WebChat/chat");
+                ws = new SockJS("/main/chat");
                 stompClient = Stomp.over(ws);
                 stompClient.connect({}, function(frame){
                     
@@ -61,7 +62,8 @@
                     var content = JSON.parse(list.body);
                     for(var i = 0; i < content.length; i++){
                         var aTag = document.createElement('a');
-                        aTag.setAttribute('href',"/WebChat/main/chat/"+content[i].roomId);
+                        aTag.setAttribute('href',"/main/chat/"+content[i].roomId);
+                        //aTag.setAttribute('href',"/WebChat/main/chat/"+content[i].roomId);
                         aTag.setAttribute('id', 'friendStyle');
                         var textnode = document.createTextNode(content[i].username);
                         aTag.appendChild(textnode);
