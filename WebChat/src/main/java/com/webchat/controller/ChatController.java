@@ -58,8 +58,14 @@ public class ChatController {
     public String chatWithUser(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
         User user = (User) request.getSession().getAttribute("user");
         chatRoomAndFriendIds = userService.getRoomsForUser(user.getId());
-        model.addAttribute("roomId", roomId);
-        return "main/chat";
+        
+        if(hasAccessToRoom(roomId)){    
+            model.addAttribute("roomId", roomId);
+            return "main/chat";
+        }
+        
+        return "redirect:/main/chat/none";
+        
     }
     
     @MessageMapping("/chat/{roomId}")
@@ -95,6 +101,17 @@ public class ChatController {
          }
          return onlineFriends;
     }
+    
+        private boolean hasAccessToRoom(int roomId){
+            for(ChatRoom room : chatRoomAndFriendIds){
+
+                if(room.getRoomId() == roomId){
+                    return true;
+                }
+            }
+            return false;
+        }
+    
 }
 
 
