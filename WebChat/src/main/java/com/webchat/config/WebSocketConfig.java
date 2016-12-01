@@ -23,7 +23,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry ser) {
-        ser.addEndpoint("/chat").withSockJS();
+        ser.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
        
     }
 
