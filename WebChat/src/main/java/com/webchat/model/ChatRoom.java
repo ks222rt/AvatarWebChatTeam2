@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,30 +7,30 @@
 package com.webchat.model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Adam
  */
 public class ChatRoom {
+
+  
     
     private int roomId;
-    private String roomName;
-
+    private List<ChatMessage> messages;
+    private List<Map<String,Integer>> members;
+    
+    public ChatRoom(int roomId) {
+        this.roomId = roomId;
+    }
+    
     public int getRoomId() {
         return roomId;
     }
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;
-    }
-
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
     }
 
     public List<ChatMessage> getMessages() {
@@ -40,14 +41,11 @@ public class ChatRoom {
         this.messages = messages;
     }
 
-    public List<User> getMembers() {
+    public List<Map<String,Integer>> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(List<Map<String,Integer>> members) {
         this.members = members;
     }
-    private List<ChatMessage> messages;
-    private List<User> members;
-    
 }

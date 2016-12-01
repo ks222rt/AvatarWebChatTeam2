@@ -29,7 +29,7 @@
         
     <th:block layout:fragment="script">
        
-    <script type="text/javascript">
+       <script type="text/javascript">
              
             var ws;
             var stompClient;
@@ -39,23 +39,53 @@
                 document.querySelector('#sendMessage').addEventListener('click', send);
                 ws = new SockJS("/WebChat/chat");
                 stompClient = Stomp.over(ws);
-
                 stompClient.connect({}, function(frame){
-
-                    stompClient.subscribe("/topic/messages", function(message){
+                    
+                    
+                    
+                    stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
                         var content = JSON.parse(message.body);
                         var node = document.createElement("LI");
-                        var textnode = document.createTextNode(content.from + " says " + content.text + "|" + content.time);
+                        var textnode = document.createTextNode(content.time +"| "+content.from + " says " + content.text);
                         node.appendChild(textnode);
                         document.getElementById("myList").appendChild(node);
                     });
+                    
+                    stompClient.subscribe("/app/initChat", function(list){ 
+                       
+                        var node = document.createElement("LI");
+                        var textnode = document.createTextNode("You are are in the chat-room:"+"[[${roomId}]]");
+                        node.appendChild(textnode);
+                        document.getElementById("myList").appendChild(node);
+                        
+                    var content = JSON.parse(list.body);
+                    for(var i = 0; i < content.length; i++){
+                        var aTag = document.createElement('a');
+                        aTag.setAttribute('href',"/WebChat/main/chat/"+content[i].roomId);
+                        aTag.setAttribute('id', 'friendStyle');
+                        var textnode = document.createTextNode(content[i].username);
+                        aTag.appendChild(textnode);
+                        var mybr = document.createElement('br');
+
+                        document.getElementById("usersOnline").appendChild(aTag);
+                           document.getElementById("usersOnline").appendChild(mybr);
+                        }
+                    });                 
                 });
             });
             function send(){
                 var message = document.getElementById("inputText").value;
                 var user = "[[${session.user.username}]]";
-                stompClient.send("/app/chat",{}, JSON.stringify({'from':user, 'text':message} ));
+          
+                stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message} ));
             }
+                
+//            function refresh() {
+//                var username = "[[${session.user.username}]]";
+//                stompClient.send("/app/user",{}, JSON.stringify({'username':username}));
+//                setTimeout(refresh, 5000);
+//            }
+//            setTimeout(refresh, 5000);
             
     </script>
      <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>

@@ -5,9 +5,12 @@
  */
 package com.webchat.service;
 import com.webchat.dao.UserDAO;
+import com.webchat.model.ChatRoom;
 import com.webchat.model.User;
+import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
@@ -51,8 +54,14 @@ public class UserService {
     
     public boolean respondToFriendRequest(int senderID, int recieverID, boolean accepted){
         
-        return userDAO.respondToFriendRequest(senderID, recieverID, accepted);
-       
+        if(userDAO.respondToFriendRequest(senderID, recieverID, accepted))
+        {
+            List<Integer> userIds = new ArrayList<>();
+            userIds.add(senderID);
+            userIds.add(recieverID);
+            return userDAO.createRoom(userIds);
+        }
+        return false;
     }
 
     public List<User> getUserFriends(int userID) {
@@ -82,4 +91,7 @@ public class UserService {
         return userDAO.alreadyFriends(userID, friendID);
     }
     
+    public List<ChatRoom> getRoomsForUser(int userId){
+        return userDAO.getChatRooms(userId);
+    }
 }

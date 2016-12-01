@@ -5,6 +5,7 @@
  */
 package com.webchat.dao;
 
+import com.webchat.model.ChatRoom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.webchat.model.User;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -309,6 +311,7 @@ public class UserDAO {
                     }
                 });
             }
+          
             return true;
         } catch (EmptyResultDataAccessException e) {
             return false;
@@ -352,6 +355,93 @@ public class UserDAO {
         }
          return friendRequests;     
     }
+    
+    public boolean createRoom(final List<Integer> userIds) {
+       
+        final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name)\n"
+                + "values(?)";
+        String sqlForAddUserToRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id)\n"
+                + "values(?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        try {
+            Number keyResult;
+            int result = 0;
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlForCreateRoom, Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, "testRoom");
+
+                    return ps;
+                }
+
+            }, keyHolder);
+            keyResult = keyHolder.getKey();
+            for(Integer userId : userIds){
+                
+                if (keyResult != null) {
+                 result = jdbcTemplate.update(sqlForAddUserToRoom,
+                     new Object[]{(int) keyResult.intValue(),userId});
+                }   
+            }
+            return result != 0; 
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return false;
+        }  
+    }
+    // MAP <userID(of friend), chatRoomID>
+    public List<ChatRoom> getChatRooms(final int userID) {
+        
+        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id\n"+
+                                            "FROM avatar_webchat.chat_room\n"+
+                                            "INNER JOIN avatar_webchat.chat_room_members\n"+
+                                            "ON avatar_webchat.chat_room_members.chat_room_id = avatar_webchat.chat_room.id\n"+
+                                            "WHERE avatar_webchat.chat_room_members.user_id = "+userID;
+        
+        
+        
+        List<Integer> roomIds = new LinkedList<>();  
+        List<ChatRoom> userRoomList = new ArrayList<>();
+        try{
+
+             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingRooms);
+             for (Map row : rows) {
+                 roomIds.add((Integer)row.get("id"));
+                 System.out.println(roomIds.size());
+             }
+             
+             if(roomIds.size() > 0 ) {
+                 
+                 for(Integer i : roomIds) { 
+                    String sqlForFetchingFriendsInChatRoom = "SELECT avatar_webchat.chat_room_members.user_id as userID,\n"+
+                                                            "avatar_webchat.chat_user.username as username\n"+
+                                                            "FROM avatar_webchat.chat_room_members\n"+
+                                                            "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_room_members.user_id = avatar_webchat.chat_user.id\n"+
+                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+i+"\n"+
+                                                            "AND avatar_webchat.chat_room_members.user_id != "+userID;
+                    
+                    List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
+                    for (Map row : rowsForUser) {
+                       List<Map<String,Integer>> usersInChatRoom = new ArrayList<>();
+                       Map<String,Integer> map = new TreeMap<>();
+                       map.put((String)row.get("username"), (Integer)row.get("userID"));
+                       
+                       ChatRoom room = new ChatRoom(i);
+                       usersInChatRoom.add(map);
+                       room.setMembers(usersInChatRoom);
+                       userRoomList.add(room);
+                    }    
+                 } 
+                 return userRoomList;
+             }
+        }
+        catch(Exception e){
+            return null;
+        }
+         return null;     
+    }
+    
     
     /*
     removeFriend(int senderID, int recieverID)
