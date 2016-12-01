@@ -8,6 +8,7 @@ package com.webchat.controller;
 import com.webchat.model.User;
 import com.webchat.service.UserService;
 import com.webchat.util.HashUtil;
+import com.webchat.util.SessionUtil;
 import com.webchat.validator.UserValidator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -38,8 +39,12 @@ public class MainController {
     
     private UserValidator validator;
     
+    @Autowired
+    private SessionUtil sessionUtil;
+    
     public MainController(){
         validator = new UserValidator();
+        
     }
     
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
@@ -50,12 +55,14 @@ public class MainController {
         List<User> friendRequestList = userService.getUserFriendRequests(id);
         model.addAttribute("friends", friendList);
         model.addAttribute("friendRequests", friendRequestList);
-            
+        
         return "main/welcome";
     }
     
     @RequestMapping(value="/logout" , method = RequestMethod.GET)
-    public String logout(HttpSession session, ModelMap model){
+    public String logout(HttpServletRequest request, HttpSession session, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        sessionUtil.removeSession(user.getUsername().toString());
         model.remove("user");
         model.remove("friends");
         session.removeAttribute("user");
@@ -142,6 +149,7 @@ public class MainController {
     public String userSettings(HttpServletRequest request, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
         model.addAttribute("user", user);
+                
         return "userSettings/settings";
     }
     

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -18,6 +20,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * 
  * The minimal requirement for an user 14-11-2016
  */
+@Component
+@Scope("session")
 public class User implements Serializable{
     private int id;
 

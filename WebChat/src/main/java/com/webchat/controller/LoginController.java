@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 import com.webchat.service.UserService;
+import com.webchat.util.SessionUtil;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import com.webchat.validator.UserValidator;
@@ -33,6 +34,9 @@ public class LoginController {
     @Autowired
     private UserService userService;
     private UserValidator validator;
+    
+    @Autowired
+    private SessionUtil sessionUtil;
     
     public LoginController() {
         validator = new UserValidator();
@@ -60,6 +64,7 @@ public class LoginController {
         User user = userService.loginUser(username, password);
         
         if(user != null){
+            sessionUtil.registerNewSession(user);
             model.addAttribute("user", user);
             return "redirect:/main/welcome";
         } else {
