@@ -38,7 +38,7 @@
             $(document).ready(function(){
                 document.querySelector('#sendMessage').addEventListener('click', send);
                 //ws = new SockJS("/WebChat/chat");
-                ws = new SockJS("/main/chat");
+                ws = new SockJS("/chat");
                 stompClient = Stomp.over(ws);
                 stompClient.connect({}, function(frame){
                     
