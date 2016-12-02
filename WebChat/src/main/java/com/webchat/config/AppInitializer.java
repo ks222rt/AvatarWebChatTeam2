@@ -44,6 +44,7 @@ public class AppInitializer implements WebApplicationInitializer{
         
         ServletRegistration.Dynamic dispatcher =
                 context.addServlet("dispatcher", new DispatcherServlet(servletContext));
+        dispatcher.setAsyncSupported(true);
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }
