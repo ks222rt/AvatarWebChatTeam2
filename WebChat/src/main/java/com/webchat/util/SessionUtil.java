@@ -5,6 +5,7 @@
  */
 package com.webchat.util;
 
+import com.webchat.model.ChatUserHelper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;

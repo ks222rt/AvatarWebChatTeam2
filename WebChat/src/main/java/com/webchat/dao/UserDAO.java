@@ -428,8 +428,7 @@ public class UserDAO {
                                                             "AND avatar_webchat.chat_room_members.user_id != "+userID;
                     List<ChatUserHelper> usersInRoom = new ArrayList<>();
                     List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
-                    for (Map row : rowsForUser) {
-                    
+                    for (Map row : rowsForUser) {            
                        System.out.println("Adding friend " + (String)row.get("username") + " to room " + room.getRoomId());
                        usersInRoom.add(new ChatUserHelper(room.getRoomId(),
                                                          (Integer)row.get("userID"),                                      

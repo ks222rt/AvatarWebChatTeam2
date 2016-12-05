@@ -99,8 +99,6 @@ public class ChatController {
          
          
         for(ChatRoom room : chatRoomAndFriendIds){
-             
-             
             List<ChatUserHelper> listOfUsersInRoom = room.getMembers();
             if(room.getIsGroupRoom() == 0){
                for(ChatUserHelper user : listOfUsersInRoom){
@@ -111,8 +109,7 @@ public class ChatController {
             }else{
                 roomsToBeReturned.add(room);
             }
-        }    
-        
+        }
         return roomsToBeReturned;
     }
     
