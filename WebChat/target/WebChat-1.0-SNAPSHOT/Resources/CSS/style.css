@@ -97,3 +97,14 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
     margin-left: 1%;
 }
 
+.conversationDiv{
+    position: fixed;
+    bottom: 3%;
+    margin-left: auto;
+    margin-right: auto;
+    display: auto;
+}
+
+
+
+

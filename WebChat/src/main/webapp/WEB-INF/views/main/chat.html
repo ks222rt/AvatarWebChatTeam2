@@ -14,11 +14,21 @@
         
         <h4>Chat test</h4>
         
-            <div id="conversationDiv">
-                <input type="text" id="inputText" placeholder="Write a message..."/>
-                <button id="sendMessage" >Send</button>
-              
+            <div class="conversationDiv">
+                <div class="chatButton">
+               <input type="text" class="inputChat" placeholder="Write a message..."/>
+               <a class="btn-floating btn-small red">
+                    <i id="addToGroup" class=" material-icons">not_interested</i>Leave Group
+               </a>
+               <a class="btn-floating btn-small red">
+                    <i id="addToGroup" class=" material-icons">playlist_add</i>Add Friend To Group
+               </a>
+               <a class="btn-floating btn-small red">
+                    <i class=" material-icons">mode_edit</i>Send
+               </a>
+               
             </div>
+            
             
             <ul id="myList">
             
@@ -82,13 +92,7 @@
           
                 stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message} ));
             }
-                
-//            function refresh() {
-//                var username = "[[${session.user.username}]]";
-//                stompClient.send("/app/user",{}, JSON.stringify({'username':username}));
-//                setTimeout(refresh, 5000);
-//            }
-//            setTimeout(refresh, 5000);
+      
             
     </script>
      <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
