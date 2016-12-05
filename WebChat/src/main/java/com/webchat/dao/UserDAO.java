@@ -359,7 +359,7 @@ public class UserDAO {
     public boolean createRoom(final List<Integer> userIds, final int isGroup) {
        
         final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name, isGroup)\n"
-                + "values(?)";
+                + "values(?,?)";
         String sqlForAddUserToRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id)\n"
                 + "values(?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();

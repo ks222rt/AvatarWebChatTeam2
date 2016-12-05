@@ -15,8 +15,7 @@ and open the template in the editor.
   <nav th:fragment="header" class="red lighten-2">
     <!-- Dropdown Structure -->
     <ul id="dropdown1" class="dropdown-content">
-      <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
-      <li><a href="/main/settings" th:href="@{/main/settings}">Settings</a></li>
+            <li><a href="/main/settings" th:href="@{/main/settings}">Settings</a></li>
       <li class="divider"></li>
       <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
     </ul>
@@ -28,7 +27,7 @@ and open the template in the editor.
         <li><a href="/main/chat/none" th:href="@{/main/chat/none}">Chat</a></li>
         <li><a href="/main/friendRequests" th:href="@{/main/friendRequests}">Friend Requests</a></li>
         <li><a href="/main/friends" th:href="@{/main/friends}">Friends</a></li>
-      
+        <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
         <li><a class="dropdown-button wide" data-activates="dropdown1" href="#!">
           <div class="chip">         
             <img src="../../../resources/CSS/style.css" rel="stylesheet" th:src="@{/resources/AVATAR/avatar2.png}" alt="Contact Person">
@@ -38,9 +37,9 @@ and open the template in the editor.
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <li><a href="/main/friendRequests" th:href="@{/main/friendRequests}">Friend Requests</a></li>
+        <li><a href="/main/chat/none" th:href="@{/main/chat/none}"/>Chat</li>
         <li><a href="/main/friends" th:href="@{/main/friends}">Friends</a></li>
         <li><a href="/main/contentSearch" th:href="@{/main/search}">Search</a></li>
-        <li><a href="/main/chat/none" th:href="@{/main/chat/none}"/>Chat</li>
         <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
         
         <li><a class="wide" th:href="@{/main/settings}"><div class="chip">

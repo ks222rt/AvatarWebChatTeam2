@@ -21,6 +21,7 @@ com\webchat\controller\LoginController.class
 com\webchat\dao\UserDAO$9.class
 com\webchat\validator\UserValidator.class
 com\webchat\dao\UserDAO$5.class
+com\webchat\dao\UserDAO$14.class
 com\webchat\dao\UserDAO$4.class
 com\webchat\config\AppContext.class
 com\webchat\controller\MainController.class
