@@ -11,9 +11,11 @@ import com.webchat.model.Message;
 import com.webchat.model.User;
 import com.webchat.service.UserService;
 import com.webchat.util.SessionUtil;
-import groovy.lang.MissingPropertyException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -54,6 +55,9 @@ public class ChatController {
         return "main/chat";
     }
     
+    //@RequestMapping(value = "/main/chat/createRoom/{roomId}", method = RequestMethod.GET)
+    //public String createGroup()
+    
     
     
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
@@ -79,29 +83,37 @@ public class ChatController {
     }
     
     @SubscribeMapping("/initChat")
-    public List<ChatUserHelper> listFriends (){
+    public List<ChatRoom> listFriends (){
         return getListOfOnlineFriends();
     } 
     
     
-    private List<ChatUserHelper> getListOfOnlineFriends(){
+    private List<ChatRoom> getListOfOnlineFriends(){
          List<User> onlineUsers = sessionUtil.getOnlineUsers();
-         List<ChatUserHelper> onlineFriends = new LinkedList<>();
-         for(ChatRoom room : chatRoomAndFriendIds){
-             
-             for(Map<String, Integer> mep : room.getMembers()) {
-                 
-                 for(User user : onlineUsers){
-                     if(mep.containsKey(user.getUsername())){
-                         ChatUserHelper onlineUser = new ChatUserHelper(room.getRoomId(), user.getId(), user.getUsername());
-                         onlineFriends.add(onlineUser);
-                         break;
-                     }
-                 }
-                 
-             }
+         HashSet<String> onlineUsernames = new HashSet<>();
+         for(User u : onlineUsers) { 
+             onlineUsernames.add(u.getUsername());            
          }
-         return onlineFriends;
+         System.out.println("Online Users:" + onlineUsers.size());
+         List<ChatRoom> roomsToBeReturned = new ArrayList<>();
+         
+         
+        for(ChatRoom room : chatRoomAndFriendIds){
+             
+             
+            List<ChatUserHelper> listOfUsersInRoom = room.getMembers();
+            if(room.getIsGroupRoom() == 0){
+               for(ChatUserHelper user : listOfUsersInRoom){
+                    if(onlineUsernames.contains(user.getUsername())){
+                       roomsToBeReturned.add(room);
+                    }     
+               }
+            }else{
+                roomsToBeReturned.add(room);
+            }
+        }    
+        
+        return roomsToBeReturned;
     }
     
         private boolean hasAccessToRoom(int roomId){

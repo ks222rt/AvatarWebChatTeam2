@@ -6,6 +6,7 @@
 package com.webchat.dao;
 
 import com.webchat.model.ChatRoom;
+import com.webchat.model.ChatUserHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.webchat.model.User;
@@ -397,7 +398,8 @@ public class UserDAO {
     // List of Chatrooms
     // NOTE: chatrooms include a MAP<String, Integer> (Username, userId)
     public List<ChatRoom> getChatRooms(final int userID) {
-        
+        System.out.println("|--------------GET---------------|");
+        System.out.println("|-----CALLING getChatRooms()-----|");
         final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup\n"+
                                             "FROM avatar_webchat.chat_room\n"+
                                             "INNER JOIN avatar_webchat.chat_room_members\n"+
@@ -414,7 +416,7 @@ public class UserDAO {
              for (Map row : rows) {
                  userRoomList.add(new ChatRoom((Integer)row.get("id"),(Integer)row.get("isGroup")));
              }
-             
+             System.out.println("Amount of rooms user has access to: " + userRoomList.size());
              if(userRoomList.size() > 0 ) {
                  
                  for(ChatRoom room : userRoomList) { 
@@ -424,15 +426,19 @@ public class UserDAO {
                                                             "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_room_members.user_id = avatar_webchat.chat_user.id\n"+
                                                             "WHERE avatar_webchat.chat_room_members.chat_room_id = "+room.getRoomId()+"\n"+
                                                             "AND avatar_webchat.chat_room_members.user_id != "+userID;
-                    
+                    List<ChatUserHelper> usersInRoom = new ArrayList<>();
                     List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
                     for (Map row : rowsForUser) {
-                       List<Map<String,Integer>> usersInRoom = new ArrayList<>();
-                       Map<String,Integer> map = new TreeMap<>();
-                       map.put((String)row.get("username"), (Integer)row.get("userID"));
-                       room.setMembers(usersInRoom);
+                    
+                       System.out.println("Adding friend " + (String)row.get("username") + " to room " + room.getRoomId());
+                       usersInRoom.add(new ChatUserHelper(room.getRoomId(),
+                                                         (Integer)row.get("userID"),                                      
+                                                         (String)row.get("username")));
                     }    
+                    room.setMembers(usersInRoom);
+
                  } 
+                 System.out.println("Returning to Controller");
                  return userRoomList;
              }
         }
