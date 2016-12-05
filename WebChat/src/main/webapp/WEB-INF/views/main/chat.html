@@ -13,18 +13,31 @@
     <div class="col s9 grey lighten-4" layout:fragment="content" >
         
         <h4>Chat test</h4>
-        
-            <div id="conversationDiv">
-                <input type="text" id="inputText" placeholder="Write a message..."/>
-                <button id="sendMessage" >Send</button>
-              
-            </div>
             
-            <ul id="myList">
+            <ul id="messageList">
             
            
             </ul>
+        
+            <div class="conversationDiv">
+                <div class="chatButton">
+               <input type="text" id="inputChat" placeholder="Write a message..."/>
+               <a class="btn-floating btn-small red">
+                    <i id="addToGroup" class=" material-icons">not_interested</i>Leave Group
+               </a>
+               <a class="btn-floating btn-small red">
+                    <i id="addToGroup" class=" material-icons">playlist_add</i>Add Friend To Group
+               </a>
+               <a id="sendMessage" class="btn-floating btn-small red">
+                    <i class=" material-icons">mode_edit</i>Send
+               </a>
+               
+            </div>
             
+            
+            
+            
+    </div>
     </div>
         
     <th:block layout:fragment="script">
@@ -47,10 +60,13 @@
                     
                     stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
                         var content = JSON.parse(message.body);
-                        var node = document.createElement("LI");
-                        var textnode = document.createTextNode(content.time +"| "+content.from + " says " + content.text);
-                        node.appendChild(textnode);
-                        document.getElementById("myList").appendChild(node);
+                        var li = document.createElement("LI");
+                        var span = document.createElement("SPAN");
+                        var img = document.createElement("IMG");
+                        img.src = "@{/resources/AVATAR/avatar2.png}";
+                        var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
+                        li.appendChild(textnode);
+                        document.getElementById("messageList").appendChild(li);
                     });
                     
                     stompClient.subscribe("/app/initChat", function(list){ 
@@ -58,7 +74,7 @@
                         var node = document.createElement("LI");
                         var textnode = document.createTextNode("You are are in the chat-room:"+"[[${roomId}]]");
                         node.appendChild(textnode);
-                        document.getElementById("myList").appendChild(node);
+                        document.getElementById("messageList").appendChild(node);
                         
                     var content = JSON.parse(list.body);
                     for(var i = 0; i < content.length; i++){
@@ -77,18 +93,13 @@
                 });
             });
             function send(){
-                var message = document.getElementById("inputText").value;
+                var message = document.getElementById("inputChat").value;
                 var user = "[[${session.user.username}]]";
           
                 stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message} ));
+                message.value = "";
             }
-                
-//            function refresh() {
-//                var username = "[[${session.user.username}]]";
-//                stompClient.send("/app/user",{}, JSON.stringify({'username':username}));
-//                setTimeout(refresh, 5000);
-//            }
-//            setTimeout(refresh, 5000);
+      
             
     </script>
      <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
