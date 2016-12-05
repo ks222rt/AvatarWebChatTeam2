@@ -107,7 +107,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
             <version>4.2.4.RELEASE</version>
-            <scope>provided</scope>
+            
         </dependency>
         
         <!-- To build messages with JSON -->

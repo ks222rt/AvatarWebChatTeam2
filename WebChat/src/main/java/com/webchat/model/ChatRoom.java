@@ -16,13 +16,24 @@ import java.util.Map;
 public class ChatRoom {
 
   
-    
+    private int isGroupRoom = 0;
+
+
     private int roomId;
     private List<ChatMessage> messages;
     private List<Map<String,Integer>> members;
     
     public ChatRoom(int roomId) {
         this.roomId = roomId;
+    }
+    
+    
+    public int getIsGroupRoom() {
+        return isGroupRoom;
+    }
+
+    public void setIsGroupRoom(int isGroupRoom) {
+        this.isGroupRoom = isGroupRoom;
     }
     
     public int getRoomId() {

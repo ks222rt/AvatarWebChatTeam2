@@ -413,12 +413,12 @@ public class UserDAO {
              
              if(roomIds.size() > 0 ) {
                  
-                 for(Integer i : roomIds) { 
+                 for(Integer roomId : roomIds) { 
                     String sqlForFetchingFriendsInChatRoom = "SELECT avatar_webchat.chat_room_members.user_id as userID,\n"+
                                                             "avatar_webchat.chat_user.username as username\n"+
                                                             "FROM avatar_webchat.chat_room_members\n"+
                                                             "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_room_members.user_id = avatar_webchat.chat_user.id\n"+
-                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+i+"\n"+
+                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+roomId+"\n"+
                                                             "AND avatar_webchat.chat_room_members.user_id != "+userID;
                     
                     List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
@@ -427,7 +427,7 @@ public class UserDAO {
                        Map<String,Integer> map = new TreeMap<>();
                        map.put((String)row.get("username"), (Integer)row.get("userID"));
                        
-                       ChatRoom room = new ChatRoom(i);
+                       ChatRoom room = new ChatRoom(roomId);
                        usersInChatRoom.add(map);
                        room.setMembers(usersInChatRoom);
                        userRoomList.add(room);
@@ -440,6 +440,10 @@ public class UserDAO {
             return null;
         }
          return null;     
+    }
+    
+    public boolean insertUserToChatRoom(final int userId, final int roomId){
+        throw new UnsupportedOperationException("Not yet implemented");
     }
     
     
