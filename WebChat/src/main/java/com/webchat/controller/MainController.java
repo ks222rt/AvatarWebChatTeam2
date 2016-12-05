@@ -175,6 +175,7 @@ public class MainController {
             if (validator.validateBothNewPasswords(user, first_password, second_password)) {
                 user.setPassword(HashUtil.hashPassword(first_password, user.getSalt()));
                 if (userService.updateUserPassword(user)) {
+                    request.getSession().setAttribute("user", user);
                     redirectAttributes.addFlashAttribute("success_message", "Password is changed!");
                     return "redirect:/main/settings";
                 }
@@ -198,7 +199,8 @@ public class MainController {
                                 ModelMap model,
                                 RedirectAttributes redirectAttributes){
         
-        User user = (User) request.getSession().getAttribute("user");
+        User userSession = (User) request.getSession().getAttribute("user");
+        User user = userService.getUserByUsername(userSession.getUsername());
         
         if (validator.validatePasswordWhenDeletingAccount(user, password, password_again)) {
             // delete account and remove from friendlists
