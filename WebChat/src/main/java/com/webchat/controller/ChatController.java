@@ -54,6 +54,8 @@ public class ChatController {
         return "main/chat";
     }
     
+    
+    
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
     public String chatWithUser(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
         User user = (User) request.getSession().getAttribute("user");

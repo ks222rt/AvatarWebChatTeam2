@@ -356,14 +356,16 @@ public class UserDAO {
          return friendRequests;     
     }
     
-    public boolean createRoom(final List<Integer> userIds) {
+    public boolean createRoom(final List<Integer> userIds, final int isGroup) {
        
-        final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name)\n"
+        final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name, isGroup)\n"
                 + "values(?)";
         String sqlForAddUserToRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id)\n"
                 + "values(?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
+        
+      
+        
         try {
             Number keyResult;
             int result = 0;
@@ -372,7 +374,9 @@ public class UserDAO {
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sqlForCreateRoom, Statement.RETURN_GENERATED_KEYS);
                     ps.setString(1, "testRoom");
-
+                    ps.setInt(2, isGroup);
+                    
+                    
                     return ps;
                 }
 
@@ -390,10 +394,11 @@ public class UserDAO {
             return false;
         }  
     }
-    // MAP <userID(of friend), chatRoomID>
+    // List of Chatrooms
+    // NOTE: chatrooms include a MAP<String, Integer> (Username, userId)
     public List<ChatRoom> getChatRooms(final int userID) {
         
-        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id\n"+
+        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup\n"+
                                             "FROM avatar_webchat.chat_room\n"+
                                             "INNER JOIN avatar_webchat.chat_room_members\n"+
                                             "ON avatar_webchat.chat_room_members.chat_room_id = avatar_webchat.chat_room.id\n"+
@@ -401,36 +406,31 @@ public class UserDAO {
         
         
         
-        List<Integer> roomIds = new LinkedList<>();  
+        
         List<ChatRoom> userRoomList = new ArrayList<>();
         try{
 
              List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingRooms);
              for (Map row : rows) {
-                 roomIds.add((Integer)row.get("id"));
-                 System.out.println(roomIds.size());
+                 userRoomList.add(new ChatRoom((Integer)row.get("id"),(Integer)row.get("isGroup")));
              }
              
-             if(roomIds.size() > 0 ) {
+             if(userRoomList.size() > 0 ) {
                  
-                 for(Integer roomId : roomIds) { 
+                 for(ChatRoom room : userRoomList) { 
                     String sqlForFetchingFriendsInChatRoom = "SELECT avatar_webchat.chat_room_members.user_id as userID,\n"+
                                                             "avatar_webchat.chat_user.username as username\n"+
                                                             "FROM avatar_webchat.chat_room_members\n"+
                                                             "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_room_members.user_id = avatar_webchat.chat_user.id\n"+
-                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+roomId+"\n"+
+                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+room.getRoomId()+"\n"+
                                                             "AND avatar_webchat.chat_room_members.user_id != "+userID;
                     
                     List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
                     for (Map row : rowsForUser) {
-                       List<Map<String,Integer>> usersInChatRoom = new ArrayList<>();
+                       List<Map<String,Integer>> usersInRoom = new ArrayList<>();
                        Map<String,Integer> map = new TreeMap<>();
                        map.put((String)row.get("username"), (Integer)row.get("userID"));
-                       
-                       ChatRoom room = new ChatRoom(roomId);
-                       usersInChatRoom.add(map);
-                       room.setMembers(usersInChatRoom);
-                       userRoomList.add(room);
+                       room.setMembers(usersInRoom);
                     }    
                  } 
                  return userRoomList;
@@ -443,7 +443,24 @@ public class UserDAO {
     }
     
     public boolean insertUserToChatRoom(final int userId, final int roomId){
-        throw new UnsupportedOperationException("Not yet implemented");
+        final String sqlInsertUserToChatRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id) \n"
+                + "values(?, ?)";
+        
+        try{
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlInsertUserToChatRoom);
+                    ps.setInt(1, roomId);
+                    ps.setInt(2, userId);
+                    return ps;
+                }
+            });
+          return true;
+         }catch(Exception e){
+             return false;
+         }
+        
     }
     
     

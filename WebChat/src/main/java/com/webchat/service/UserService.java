@@ -59,7 +59,7 @@ public class UserService {
             List<Integer> userIds = new ArrayList<>();
             userIds.add(senderID);
             userIds.add(recieverID);
-            return userDAO.createRoom(userIds);
+            return userDAO.createRoom(userIds, 0); //the zero defines if its group chat or not (0 is false.)
         }
         return false;
     }
@@ -93,5 +93,16 @@ public class UserService {
     
     public List<ChatRoom> getRoomsForUser(int userId){
         return userDAO.getChatRooms(userId);
+    }
+    
+    public boolean createGroupChat(List<Integer> userIds){
+        if(userIds.size() > 2){
+            return userDAO.createRoom(userIds, 1);//1 defines if its group chat or not (1 is true.)
+        }
+        return false;
+    }
+    
+    public boolean addUserToGroup(int userId, int roomId){
+        return userDAO.insertUserToChatRoom(userId, roomId);
     }
 }

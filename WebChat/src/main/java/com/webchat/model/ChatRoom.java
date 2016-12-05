@@ -27,6 +27,11 @@ public class ChatRoom {
         this.roomId = roomId;
     }
     
+    public ChatRoom(int roomId, int isGroup) {
+        this.roomId = roomId;
+        this.isGroupRoom = isGroup;
+    }
+    
     
     public int getIsGroupRoom() {
         return isGroupRoom;
