@@ -13,21 +13,17 @@ import java.util.Map;
  * @author Adam
  */
 public class ChatMessage {
-
+    
+    private String sender;
+    private String message;
+    private SimpleDateFormat timeStamp;
+    
     public String getSender() {
         return sender;
     }
 
     public void setSender(String sender) {
         this.sender = sender;
-    }
-
-    public Map<User, Boolean> getMessageRecieverMap() {
-        return messageRecieverMap;
-    }
-
-    public void setMessageRecieverMap(Map<User, Boolean> messageRecieverMap) {
-        this.messageRecieverMap = messageRecieverMap;
     }
 
     public String getMessage() {
@@ -38,11 +34,6 @@ public class ChatMessage {
         this.message = message;
     }
     
-    private String sender;
-    private Map<User, Boolean> messageRecieverMap; //User object linked to boolean value referencing if user has deleted message history.
-    private String message;
-    private SimpleDateFormat timeStamp;
-
     public SimpleDateFormat getTimeStamp() {
         return timeStamp;
     }

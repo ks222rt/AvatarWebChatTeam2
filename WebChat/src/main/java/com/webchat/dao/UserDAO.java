@@ -7,6 +7,7 @@ package com.webchat.dao;
 
 import com.webchat.model.ChatRoom;
 import com.webchat.model.ChatUserHelper;
+import com.webchat.model.Message;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.webchat.model.User;
@@ -15,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import com.webchat.util.HashUtil;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -24,7 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -356,7 +357,7 @@ public class UserDAO {
         }
          return friendRequests;     
     }
-    
+    //|-------------CHATDAO---------------|
     public boolean createRoom(final List<Integer> userIds, final int isGroup) {
        
         final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name, isGroup)\n"
@@ -397,18 +398,15 @@ public class UserDAO {
     }
     // List of Chatrooms
     // NOTE: chatrooms include a MAP<String, Integer> (Username, userId)
+    //|-------------CHATDAO---------------|
     public List<ChatRoom> getChatRooms(final int userID) {
-        System.out.println("|--------------GET---------------|");
-        System.out.println("|-----CALLING getChatRooms()-----|");
+        
         final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup\n"+
                                             "FROM avatar_webchat.chat_room\n"+
                                             "INNER JOIN avatar_webchat.chat_room_members\n"+
                                             "ON avatar_webchat.chat_room_members.chat_room_id = avatar_webchat.chat_room.id\n"+
                                             "WHERE avatar_webchat.chat_room_members.user_id = "+userID;
-        
-        
-        
-        
+
         List<ChatRoom> userRoomList = new ArrayList<>();
         try{
 
@@ -420,24 +418,9 @@ public class UserDAO {
              if(userRoomList.size() > 0 ) {
                  
                  for(ChatRoom room : userRoomList) { 
-                    String sqlForFetchingFriendsInChatRoom = "SELECT avatar_webchat.chat_room_members.user_id as userID,\n"+
-                                                            "avatar_webchat.chat_user.username as username\n"+
-                                                            "FROM avatar_webchat.chat_room_members\n"+
-                                                            "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_room_members.user_id = avatar_webchat.chat_user.id\n"+
-                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+room.getRoomId()+"\n"+
-                                                            "AND avatar_webchat.chat_room_members.user_id != "+userID;
-                    List<ChatUserHelper> usersInRoom = new ArrayList<>();
-                    List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
-                    for (Map row : rowsForUser) {            
-                       System.out.println("Adding friend " + (String)row.get("username") + " to room " + room.getRoomId());
-                       usersInRoom.add(new ChatUserHelper(room.getRoomId(),
-                                                         (Integer)row.get("userID"),                                      
-                                                         (String)row.get("username")));
-                    }    
+                    List<ChatUserHelper> usersInRoom = getUsersInRoom(room.getRoomId(), userID);
                     room.setMembers(usersInRoom);
-
                  } 
-                 System.out.println("Returning to Controller");
                  return userRoomList;
              }
         }
@@ -446,7 +429,31 @@ public class UserDAO {
         }
          return null;     
     }
+    //|-------------CHATDAO---------------|
+    public List<ChatUserHelper> getUsersInRoom(int roomId, int userID){
+         String sqlForFetchingFriendsInChatRoom = "SELECT avatar_webchat.chat_room_members.user_id as userID,\n"+
+                                                            "avatar_webchat.chat_user.username as username\n"+
+                                                            "FROM avatar_webchat.chat_room_members\n"+
+                                                            "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_room_members.user_id = avatar_webchat.chat_user.id\n"+
+                                                            "WHERE avatar_webchat.chat_room_members.chat_room_id = "+roomId+"\n"+
+                                                            "AND avatar_webchat.chat_room_members.user_id != "+userID;
+        List<ChatUserHelper> usersInRoom = new ArrayList<>();
+        try{
+            List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlForFetchingFriendsInChatRoom);
+
+            for (Map row : rowsForUser) {            
+               System.out.println("Adding friend " + (String)row.get("username") + " to room " + roomId);
+               usersInRoom.add(new ChatUserHelper(roomId,
+                                                 (Integer)row.get("userID"),                                      
+                                                 (String)row.get("username")));
+            } 
+        }catch(Exception e){
+            return null;
+        }
+        return usersInRoom;
+    }
     
+       //|-------------CHATDAO---------------|
     public boolean insertUserToChatRoom(final int userId, final int roomId){
         final String sqlInsertUserToChatRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id) \n"
                 + "values(?, ?)";
@@ -468,6 +475,26 @@ public class UserDAO {
         
     }
     
+    public boolean addMessageToRoom(final Message message, final int roomId){
+         final String sqlInsertMessageToRoom = "insert into avatar_webchat.chat_line(line_text,user_id,chat_room_id)\n"
+                + "values(?,?,?)";
+        try{
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlInsertMessageToRoom, Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, message.getText());
+                    ps.setInt(2, message.getUser_id());
+                    ps.setInt(3, roomId);
+                    return ps;
+                } 
+            });
+                return true;
+        }catch(Exception e){
+          return false;       
+        }
+         
+    }
     
     /*
     removeFriend(int senderID, int recieverID)
@@ -597,32 +624,41 @@ public class UserDAO {
     }
 
     public boolean deleteAccount(final User user) {
-        if(!deleteFriendRequestsAndFriends(user)) {
-            return false;
-        }
+        CallableStatement cs = null;
         
-        final int userID = user.getId();
-        final String deleteUser = "DELETE avatar_webchat.chat_user, avatar_webchat.chat_user_info\n"+
-                                  "FROM avatar_webchat.chat_user\n"+
-                                  "INNER JOIN avatar_webchat.chat_user_info\n"+
-                                  "WHERE (avatar_webchat.chat_user.id = ?) AND (avatar_webchat.chat_user_info.id = avatar_webchat.chat_user.info_id)";
-        try {
-            jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public  PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps3 = connection.prepareStatement(deleteUser);
-                ps3.setInt(1, userID);
-                return ps3;
-            }
-            });
+        return false;
 
+    }
+    
+            /*final String sql = "SET FOREIGN_KEY_CHECKS = 0\n"+
+                           "DELETE avatar_webchat.chat_room_members, avatar_webchat.chat_line, avatar_webchat.friend, avatar_webchat.friend_requests, avatar_webchat.chat_user, avatar_webchat.chat_user_info, avatar_webchat.chat_room\n" +
+                           "FROM avatar_webchat.chat_room_members\n"+
+                           "LEFT OUTER JOIN avatar_webchat.chat_line\n"+
+                           "ON avatar_webchat.chat_line.user_id = avatar_webchat.chat_room_members.user_id\n" +
+                           "LEFT OUTER JOIN avatar_webchat.friend\n"+
+                           "ON (avatar_webchat.friend.id1 = avatar_webchat.chat_room_members.user_id) OR (avatar_webchat.friend.id2 = avatar_webchat.chat_room_members.user_id)\n" +
+                           "LEFT OUTER JOIN avatar_webchat.friend_requests\n"+
+                           "ON (avatar_webchat.friend_requests.sender = avatar_webchat.chat_room_members.user_id) OR (avatar_webchat.friend_requests.reciever = avatar_webchat.chat_room_members.user_id)\n" +
+                           "LEFT OUTER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_user.id = avatar_webchat.chat_room_members.user_id\n" +
+                           "LEFT OUTER JOIN avatar_webchat.chat_user_info ON avatar_webchat.chat_user.info_id = avatar_webchat.chat_user_info.id\n" +
+                           "LEFT OUTER JOIN avatar_webchat.chat_room ON avatar_webchat.chat_room.id = avatar_webchat.chat_room_members.chat_room_id\n" +
+                           "WHERE avatar_webchat.chat_room_members.user_id = "+user.getId()+ " AND avatar_webchat.chat_room.isGroup = 0";
+        final String anotherSql = "SET FOREIGN_KEY_CHECKS = 0\n"+
+                           "DELETE avatar_webchat.chat_room_members\n" +
+                           "FROM avatar_webchat.chat_room_members\n" +
+                           "WHERE avatar_webchat.chat_room_members.user_id = "+user.getId();
+                          
+        
+         try {
+            jdbcTemplate.execute(sql);
+            jdbcTemplate.execute(anotherSql);
+ 
         }catch(Exception e){
             System.out.println(e.getMessage());
             return false;
         }
-        
-        return true;
-    }
+                           
+        return true;*/
     
     public boolean deleteFriendRequestsAndFriends(final User user)
     {

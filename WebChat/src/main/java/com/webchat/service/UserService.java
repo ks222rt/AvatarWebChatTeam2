@@ -6,6 +6,8 @@
 package com.webchat.service;
 import com.webchat.dao.UserDAO;
 import com.webchat.model.ChatRoom;
+import com.webchat.model.ChatUserHelper;
+import com.webchat.model.Message;
 import com.webchat.model.User;
 import java.util.ArrayList;
 
@@ -90,19 +92,27 @@ public class UserService {
     public boolean areWeFriends(int userID, int friendID){
         return userDAO.alreadyFriends(userID, friendID);
     }
-    
+    //|-------------CHATSerivce--------------|
     public List<ChatRoom> getRoomsForUser(int userId){
         return userDAO.getChatRooms(userId);
     }
-    
+    //|-------------CHATSerivce--------------|
     public boolean createGroupChat(List<Integer> userIds){
         if(userIds.size() > 2){
             return userDAO.createRoom(userIds, 1);//1 defines if its group chat or not (1 is true.)
         }
         return false;
     }
-    
+    //|-------------CHATSerivce--------------|
     public boolean addUserToGroup(int userId, int roomId){
         return userDAO.insertUserToChatRoom(userId, roomId);
+    }
+       //|-------------CHATSerivce--------------|
+    public boolean addMessageToRoom(Message message, int roomId){
+        return userDAO.addMessageToRoom(message, roomId);
+    }
+    
+    public List<ChatUserHelper> getUsersinRoom(int roomId, int userId){
+        return userDAO.getUsersInRoom(roomId, userId);
     }
 }

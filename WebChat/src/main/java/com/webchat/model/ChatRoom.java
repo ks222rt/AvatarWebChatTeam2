@@ -7,7 +7,6 @@
 package com.webchat.model;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -18,7 +17,9 @@ public class ChatRoom {
   
     private int isGroupRoom;
 
+    private String groupname;
 
+  
     private int roomId;
     private List<ChatMessage> messages;
     private List<ChatUserHelper> members;
@@ -31,8 +32,7 @@ public class ChatRoom {
         this.roomId = roomId;
         this.isGroupRoom = isGroup;
     }
-    
-    
+     
     public int getIsGroupRoom() {
         return isGroupRoom;
     }
@@ -63,5 +63,13 @@ public class ChatRoom {
 
     public void setMembers(List<ChatUserHelper> members) {
         this.members = members;
+    }
+    
+    public String getGroupname() {
+        return groupname;
+    }
+
+    public void setGroupName(String groupname) {
+        this.groupname = groupname;
     }
 }

@@ -12,7 +12,7 @@
 
     <div class="col s9 grey lighten-4" layout:fragment="content" >
       <div>
-        <h4 class="chat-room-header" id="chat-room-header"></h4>
+        <h5 class="chat-room-header" id="chat-room-header"></h5>
         <!-- Dropdown Trigger -->
         <a class='dropdown-button btn' href='#' data-activates='add-friends-chat'
            onclick="myFunction()">Drop Me!</a>
@@ -97,13 +97,21 @@
                 document.getElementById("message-list-chat").appendChild(messagesContainer);
                 $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
             });
-            stompClient.subscribe("/app/initChat", function(list){ 
-                //var node = document.createElement("LI");
-                //var textnode = document.createTextNode("You are are in the chat-room:"+"[[${roomId}]]");
-                //node.appendChild(textnode);
-                //document.getElementById("messageList").appendChild(node);
-                document.getElementById("chat-room-header").innerHTML = "Chat room: "+"[[${roomId}]]";
-                var listOfChatRooms = JSON.parse(list.body);
+            
+            stompClient.subscribe("/app/"+"[[${roomId}]]"+"/getRoomUsers", function(JsonArrayOfUsersInRoom){
+                document.getElementById("chat-room-header").innerHTML = "Chat room with:"
+                var listOfUsers = JSON.parse(JsonArrayOfUsersInRoom.body);
+                for (var user in listOfUsers) {
+                    if (listOfUsers.hasOwnProperty(user)) {
+                       document.getElementById("chat-room-header").innerHTML +=  " " + listOfUsers[user].username;
+                    }
+                }
+                  
+            });
+            
+            stompClient.subscribe("/app/initChat", function(JsonListOfChatRooms){ 
+              
+                var listOfChatRooms = JSON.parse(JsonListOfChatRooms.body);
                 for (var chatRoom in listOfChatRooms) {
                     if (listOfChatRooms.hasOwnProperty(chatRoom)) {
                         var members = listOfChatRooms[chatRoom].members;
@@ -124,7 +132,7 @@
                         else {
                             var aTag = document.createElement('a');
                             aTag.setAttribute('href',"/WebChat/main/chat/"+listOfChatRooms[chatRoom].roomId);
-                            var textnode = document.createTextNode("Group of Awesome");
+                            var textnode = document.createTextNode("Default Group");
                             aTag.appendChild(textnode);
                             var mybr = document.createElement('br');
                             document.getElementById("groupList").appendChild(aTag);
@@ -170,7 +178,8 @@
                 return;
             }
             var user = "[[${session.user.username}]]";
-            stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message} ));
+            var userId = "[[${session.user.id}]]";
+            stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message, 'user_id':userId}));
             document.getElementById('inputChat').value='';
         }
       

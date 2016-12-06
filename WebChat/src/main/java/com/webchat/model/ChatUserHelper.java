@@ -21,7 +21,7 @@ public class ChatUserHelper {
         this.username = username;
     }
 
-     public int getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 
