@@ -103,6 +103,40 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
     display: auto;
 }
 
+.message-div{
+    width: 70%;
+    margin: auto;
+    padding-left: 5px;
+    padding-top: 5px;
+    -webkit-box-shadow: 2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+    -moz-box-shadow:    2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+    box-shadow:         2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+}
+
+.message-list-window{
+    width: 100%;
+    margin: auto;
+    position: relative;
+    height: 425px;
+}
+
+div#message-list-chat.message-list-chat{
+    overflow: auto;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+p.message-text{
+    padding-bottom: 5px;
+}
+
+h2#chat-room-header.chat-room-header{
+    text-align: center;
+}
+
+
 
 
 

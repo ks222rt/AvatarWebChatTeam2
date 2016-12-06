@@ -11,38 +11,41 @@
   <body>
 
     <div class="col s9 grey lighten-4" layout:fragment="content" >
+      <div>
+        <h4 class="chat-room-header" id="chat-room-header"></h4>
+        <!-- Dropdown Trigger -->
+        <a class='dropdown-button btn' href='#' data-activates='add-friends-chat'
+           onclick="myFunction()">Drop Me!</a>
+
+        <!-- Dropdown Structure -->
+        <ul id='add-friends-chat' class='dropdown-content'>
+          
+        </ul>
         
-        <h4>Chat test</h4>
-            
-            <ul id="messageList">
-            
-           
-            </ul>
-        
-            <div class="conversationDiv">
-                <div class="chatButton">
-               <input type="text" id="inputChat" placeholder="Write a message..."/>
-               <a class="btn-floating btn-small red">
-                    <i id="addToGroup" class=" material-icons">not_interested</i>Leave Group
-               </a>
-               <a class="btn-floating btn-small red">
-                    <i id="addToGroup" class=" material-icons">playlist_add</i>Add Friend To Group
-               </a>
-               <a id="sendMessage" class="btn-floating btn-small red">
-                    <i class=" material-icons">mode_edit</i>Send
-               </a>
-               
+      <!--<a class="btn-floating btn-small red">
+            <i id="addToGroup" class=" material-icons">playlist_add</i>Add Friend To Group
+        </a>-->
+        <a class="btn-floating btn-small red">
+            <i id="addToGroup" class=" material-icons">not_interested</i>Leave Group
+        </a>
+      </div>
+      
+      <div class="message-list-window">
+        <div class="message-list-chat" id="message-list-chat"></div>
+      </div>
+          <div class="conversationDiv">
+            <div class="chatButton">
+              <input type="text" id="inputChat" placeholder="Write a message..."/>
+              <a id="sendMessage" class="btn-floating btn-small red">
+                   <i class=" material-icons">mode_edit</i>Send
+              </a>
             </div>
-            
-            
-            
-            
-    </div>
+          </div>
     </div>
         
     <th:block layout:fragment="script">
        
-       <script type="text/javascript">
+      <script type="text/javascript">
              
             var ws;
             var stompClient;
@@ -54,29 +57,53 @@
             //ws = new SockJS('http://' + window.location.host + '/chat');
             //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
             stompClient = Stomp.over(ws);
-
             stompClient.connect({}, function(frame){
             console.log("Connected to Websocket!");
-
             stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
+                // Parse JSON object
                 var content = JSON.parse(message.body);
-                var li = document.createElement("LI");
-                var span = document.createElement("SPAN");
-                var img = document.createElement("IMG");
-                img.src = "@{/resources/AVATAR/avatar2.png}";
-                var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
-                li.appendChild(textnode);
-                document.getElementById("messageList").appendChild(li);
+                
+                // Create element for the message
+                var messagesContainer = document.createElement("div");
+                var text = document.createElement("p");
+                var time = document.createElement("span");
+                var img = document.createElement("img");
+                var div = document.createElement("div");
+                var chipDiv = document.createElement("div");
+                var chipAtag = document.createElement("a");
+                
+                // Set attributes to the elements
+                img.setAttribute('th:src', "@{/resources/AVATAR/avatar2.png}");
+                img.setAttribute('src', "../../resources/AVATAR/avatar2.png");
+                img.setAttribute('alt', 'Profile picture');
+                chipDiv.className = 'chip';
+                chipDiv.appendChild(img);
+                chipAtag.appendChild(document.createTextNode(content.from));
+                chipAtag.setAttribute('href', "/WebChat/main/user/" + content.from);
+                chipDiv.appendChild(chipAtag);
+                
+                text.appendChild(document.createTextNode(content.text));
+                time.appendChild(document.createTextNode(content.time));
+                text.className = 'message-text';
+                time.className = 'message-time';
+                
+                div.appendChild(chipDiv);
+                div.appendChild(time);
+                div.appendChild(text); 
+                div.className = 'message-div';
+                
+                //var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
+                messagesContainer.appendChild(div);
+                document.getElementById("message-list-chat").appendChild(messagesContainer);
+                $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
             });
-
             stompClient.subscribe("/app/initChat", function(list){ 
-                var node = document.createElement("LI");
-                var textnode = document.createTextNode("You are are in the chat-room:"+"[[${roomId}]]");
-                node.appendChild(textnode);
-                document.getElementById("messageList").appendChild(node);
-
+                //var node = document.createElement("LI");
+                //var textnode = document.createTextNode("You are are in the chat-room:"+"[[${roomId}]]");
+                //node.appendChild(textnode);
+                //document.getElementById("messageList").appendChild(node);
+                document.getElementById("chat-room-header").innerHTML = "Chat room: "+"[[${roomId}]]";
                 var listOfChatRooms = JSON.parse(list.body);
-
                 for (var chatRoom in listOfChatRooms) {
                     if (listOfChatRooms.hasOwnProperty(chatRoom)) {
                         var members = listOfChatRooms[chatRoom].members;
@@ -114,6 +141,29 @@
             }
         });
         
+        $('.dropdown-button').dropdown({
+          inDuration: 300,
+          outDuration: 225,
+          constrain_width: false, // Does not change width of dropdown to that of the activator
+          hover: true, // Activate on hover
+          gutter: 0, // Spacing from edge
+          belowOrigin: false, // Displays dropdown below the button
+          alignment: 'left' // Displays dropdown with edge aligned to the left of button
+          }
+        );
+        
+        function myFunction(){
+          $('#add-friends-chat').empty();
+          for (var i = 0; i < 5; i++) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.setAttribute('href', '#!');
+            a.appendChild(document.createTextNode(i));
+            li.appendChild(a);
+            document.getElementById('add-friends-chat').appendChild(li);
+          }
+        }
+        
         function send(){
             var message = document.getElementById("inputChat").value;
             if(message === ""){
@@ -122,11 +172,11 @@
             var user = "[[${session.user.username}]]";
             stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message} ));
             document.getElementById('inputChat').value='';
-        }      
+        }
+      
     </script>
-    
-        <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
-        <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
+      <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
+      <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
   </th:block>
   </body>
 </html>
