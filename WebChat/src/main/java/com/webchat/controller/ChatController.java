@@ -49,6 +49,7 @@ public class ChatController {
     private SessionUtil sessionUtil;
     @Autowired
     private SimpMessagingTemplate template;
+    
     User currentUser;
     List<ChatRoom> chatRoomAndFriendIds;
     
@@ -73,21 +74,16 @@ public class ChatController {
         return "redirect:/main/chat/none";    
     }
     
-    @RequestMapping(value = "/main/chat/{roomId}/{userIds}/{roomname}", method = RequestMethod.GET)
-    public String createNewGroupChat(@PathVariable int roomId, @PathVariable int[] userIds, HttpServletRequest request){
+    @RequestMapping(value = "/main/chat/{roomId}/{userId}/{newUser}", method = RequestMethod.GET)
+    public String createNewGroupChat(@PathVariable int roomId,@PathVariable int userId,@PathVariable int newUser,
+            HttpServletRequest request){
         
-        if(userIds.length < 3){
-            List<Integer> groupList = new ArrayList<>();
-            for(int i = 0; i < userIds.length; i++){
-                groupList.add(userIds[i]);
-            }
-            if(userService.createGroupChat(groupList))
+            if(userService.createGroupChat(roomId, userId, newUser))
             {
-               sendMessageToRoom(roomId,"Group Was Successfully Created"); 
+               sendMessageToRoom(roomId,"Group Was Successfully Created");
+               return "redirect:/main/chat/"+roomId;
             }
-            
-            return "redirect:/main/chat/"+roomId;
-        }
+        sendMessageToRoom(roomId,"Whoops! We could not create a new Groupchat for you!");
         return "redirect:/main/chat/none";
     }
     
@@ -101,40 +97,55 @@ public class ChatController {
         return messageObject;
     }
     
-    @SubscribeMapping("/initChat")
-    public List<ChatRoom> listFriends (){
+    @SubscribeMapping("/getOnlineFriends")
+    public List<ChatUserHelper> listFriends (){
         return getListOfOnlineFriends();
+    } 
+    
+    @SubscribeMapping("/getGroups")
+    public List<ChatRoom> listGroups (){
+        return getListOfGroups();
     } 
     
     @SubscribeMapping("/{roomId}/getRoomUsers")
     public List<ChatUserHelper> listUsersInRoom (@DestinationVariable int roomId){
-        System.out.println("VI ÄR HÄR, HÄR ÄR RUMMET: " + roomId);
         return userService.getUsersinRoom(roomId, currentUser.getId());
     }
     
-    private List<ChatRoom> getListOfOnlineFriends(){
-         List<User> onlineUsers = sessionUtil.getOnlineUsers();
-         HashSet<String> onlineUsernames = new HashSet<>();
-         for(User u : onlineUsers) { 
-             onlineUsernames.add(u.getUsername());            
-         }
-         System.out.println("Online Users:" + onlineUsers.size());
-         List<ChatRoom> roomsToBeReturned = new ArrayList<>();
-         
-         
+    private List<ChatUserHelper> getListOfOnlineFriends(){
+        HashSet<String> onlineUsernames = getOnlineUsernames();
+        List<ChatUserHelper> friendsOnline = new ArrayList<>();    
         for(ChatRoom room : chatRoomAndFriendIds){
             List<ChatUserHelper> listOfUsersInRoom = room.getMembers();
             if(room.getIsGroupRoom() == 0){
                for(ChatUserHelper user : listOfUsersInRoom){
                     if(onlineUsernames.contains(user.getUsername())){
-                       roomsToBeReturned.add(room);
+                       friendsOnline.add(user);
                     }     
                }
-            }else{
-                roomsToBeReturned.add(room);
             }
         }
-        return roomsToBeReturned;
+        return friendsOnline;
+    }
+    
+    private List<ChatRoom> getListOfGroups(){
+      
+        List<ChatRoom> groups = new ArrayList<>();    
+        for(ChatRoom room : chatRoomAndFriendIds){
+            if(room.getIsGroupRoom() == 1){
+               groups.add(room);
+            }
+        }
+        return groups;
+    }
+    
+    private HashSet<String> getOnlineUsernames(){
+        List<User> onlineUsers = sessionUtil.getOnlineUsers();
+        HashSet<String> onlineUsernames = new HashSet<>();
+        for(User u : onlineUsers) { 
+            onlineUsernames.add(u.getUsername());            
+        }
+        return onlineUsernames;
     }
     
     private boolean hasAccessToRoom(int roomId){

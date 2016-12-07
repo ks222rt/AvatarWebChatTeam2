@@ -57,11 +57,8 @@ public class UserService {
     public boolean respondToFriendRequest(int senderID, int recieverID, boolean accepted){
         
         if(userDAO.respondToFriendRequest(senderID, recieverID, accepted))
-        {
-            List<Integer> userIds = new ArrayList<>();
-            userIds.add(senderID);
-            userIds.add(recieverID);
-            return userDAO.createRoom(userIds, 0); //the zero defines if its group chat or not (0 is false.)
+        {   
+           return userDAO.createPrivateChat(senderID, recieverID);
         }
         return false;
     }
@@ -97,11 +94,8 @@ public class UserService {
         return userDAO.getChatRooms(userId);
     }
     //|-------------CHATSerivce--------------|
-    public boolean createGroupChat(List<Integer> userIds){
-        if(userIds.size() > 2){
-            return userDAO.createRoom(userIds, 1);//1 defines if its group chat or not (1 is true.)
-        }
-        return false;
+    public boolean createGroupChat(int roomId, int userId, int newUser){
+        return userDAO.createGroup(roomId, userId, newUser);
     }
     //|-------------CHATSerivce--------------|
     public boolean addUserToGroup(int userId, int roomId){
@@ -111,7 +105,7 @@ public class UserService {
     public boolean addMessageToRoom(Message message, int roomId){
         return userDAO.addMessageToRoom(message, roomId);
     }
-    
+        //|-------------CHATSerivce--------------|
     public List<ChatUserHelper> getUsersinRoom(int roomId, int userId){
         return userDAO.getUsersInRoom(roomId, userId);
     }

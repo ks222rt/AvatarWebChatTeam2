@@ -357,41 +357,95 @@ public class UserDAO {
         }
          return friendRequests;     
     }
-    //|-------------CHATDAO---------------|
-    public boolean createRoom(final List<Integer> userIds, final int isGroup) {
-       
+    
+    public boolean createPrivateChat(final int userId1,final int userId2){
         final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name, isGroup)\n"
                 + "values(?,?)";
-        String sqlForAddUserToRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id)\n"
-                + "values(?, ?)";
+        final String sqlForAddUserToRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id)\n"
+                + "values(?, ?), (?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
-      
+        try {
+            final Number keyResult;
+           
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlForCreateRoom, Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, "Private Room");
+                    ps.setInt(2, 0);// 0 = Private Chat Room
+                    return ps;
+                }
+            }, keyHolder);
+            keyResult = keyHolder.getKey();
+            
+                
+                if (keyResult != null) {
+                jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlForAddUserToRoom);
+                    ps.setInt(1,keyResult.intValue());
+                    ps.setInt(2, userId1);
+                    ps.setInt(3,keyResult.intValue());
+                    ps.setInt(4, userId2);
+                    return ps;
+                }
+                });                
+               
+                return true;
+                 }
+            return false;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return false;
+        } 
+        
+    }
+    
+    //|-------------CHATDAO---------------|
+    public boolean createGroup(final int roomId, final int userId1, final int newUserInGroup) {
+        List<ChatUserHelper> chatRoom = getUsersInRoom(roomId,userId1);
+        final int userId2 = chatRoom.get(0).getUserId();
+        final String sqlForCreateRoom = "insert into avatar_webchat.chat_room(chat_room_name, isGroup)\n"
+                + "values(?,?)";
+        final String sqlForAddUserToRoom = "insert into avatar_webchat.chat_room_members(chat_room_id, user_id)\n"
+                + "values(?, ?), (?, ?), (?, ?) ";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         
         try {
-            Number keyResult;
+            final Number keyResult;
             int result = 0;
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sqlForCreateRoom, Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1, "testRoom");
-                    ps.setInt(2, isGroup);
-                    
-                    
+                    ps.setString(1, "Group Chat");
+                    ps.setInt(2, 1);
                     return ps;
                 }
 
             }, keyHolder);
             keyResult = keyHolder.getKey();
-            for(Integer userId : userIds){
+            
                 
-                if (keyResult != null) {
-                 result = jdbcTemplate.update(sqlForAddUserToRoom,
-                     new Object[]{(int) keyResult.intValue(),userId});
-                }   
-            }
-            return result != 0; 
+               if (keyResult != null) {
+                jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sqlForAddUserToRoom);
+                    ps.setInt(1,keyResult.intValue());
+                    ps.setInt(2, userId1);
+                    ps.setInt(3,keyResult.intValue());
+                    ps.setInt(4, userId2);
+                    ps.setInt(5,keyResult.intValue());
+                    ps.setInt(6, newUserInGroup);
+                    return ps;
+                }
+                });   
+            
+            return true; 
+               }
+            return false;
         } catch (IncorrectResultSizeDataAccessException e) {
             return false;
         }  

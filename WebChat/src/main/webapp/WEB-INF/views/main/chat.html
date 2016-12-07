@@ -14,8 +14,7 @@
       <div>
         <h5 class="chat-room-header" id="chat-room-header"></h5>
         <!-- Dropdown Trigger -->
-        <a class='dropdown-button btn' href='#' data-activates='add-friends-chat'
-           onclick="myFunction()">Drop Me!</a>
+        <a class='dropdown-button btn' href='#' data-activates='add-friends-chat'>Drop Me!</a>
 
         <!-- Dropdown Structure -->
         <ul id='add-friends-chat' class='dropdown-content'>
@@ -50,6 +49,9 @@
             var ws;
             var stompClient;
             
+            var usersInCurrentRoom;
+            var friends;
+            var groups;
        
         $(document).ready(function(){
             document.querySelector('#sendMessage').addEventListener('click', send);
@@ -97,52 +99,61 @@
                 document.getElementById("message-list-chat").appendChild(messagesContainer);
                 $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
             });
+                       
+            stompClient.subscribe("/app/getOnlineFriends", function(JsonListOfOnlineFriends){ 
+                friends = JSON.parse(JsonListOfOnlineFriends.body);
+                for (var friend in friends) {
+                   if (friends.hasOwnProperty(friend)) {
+                       var aTag = document.createElement('a');
+                       aTag.setAttribute('href',"/WebChat/main/chat/"+friends[friend].roomId);
+                       aTag.setAttribute('id', 'friendStyle');
+                       var textnode = document.createTextNode(friends[friend].username);
+                       aTag.appendChild(textnode);
+                       var mybr = document.createElement('br');
+                       document.getElementById("usersOnline").appendChild(aTag);
+                       document.getElementById("usersOnline").appendChild(mybr);
+                   }
+                }    
+            }); 
+            
+            stompClient.subscribe("/app/getGroups", function(JsonListOfGroups){
+                groups = JSON.parse(JsonListOfGroups.body);
+                
+                for(var group in groups){
+                    if (friends.hasOwnProperty(friend)) {
+                        var aTag = document.createElement('a');
+                        aTag.setAttribute('href',"/WebChat/main/chat/"+groups[group].roomId);
+                        var textnode = document.createTextNode("No Named Group");
+                        aTag.appendChild(textnode);
+                        var mybr = document.createElement('br');
+                        document.getElementById("groupList").appendChild(aTag);
+                        document.getElementById("groupList").appendChild(mybr); 
+                    }
+                }         
+            });
             
             stompClient.subscribe("/app/"+"[[${roomId}]]"+"/getRoomUsers", function(JsonArrayOfUsersInRoom){
-                document.getElementById("chat-room-header").innerHTML = "Chat room with:"
-                var listOfUsers = JSON.parse(JsonArrayOfUsersInRoom.body);
-                for (var user in listOfUsers) {
-                    if (listOfUsers.hasOwnProperty(user)) {
-                       document.getElementById("chat-room-header").innerHTML +=  " " + listOfUsers[user].username;
-                    }
-                }
-                  
-            });
-            
-            stompClient.subscribe("/app/initChat", function(JsonListOfChatRooms){ 
-              
-                var listOfChatRooms = JSON.parse(JsonListOfChatRooms.body);
-                for (var chatRoom in listOfChatRooms) {
-                    if (listOfChatRooms.hasOwnProperty(chatRoom)) {
-                        var members = listOfChatRooms[chatRoom].members;
-                        if(members.length < 2){
-                             for (var member in members) {
-                                if (members.hasOwnProperty(member)) {
-                                    var aTag = document.createElement('a');
-                                    aTag.setAttribute('href',"/WebChat/main/chat/"+members[member].roomId);
-                                    aTag.setAttribute('id', 'friendStyle');
-                                    var textnode = document.createTextNode(members[member].username);
-                                    aTag.appendChild(textnode);
-                                    var mybr = document.createElement('br');
-                                    document.getElementById("usersOnline").appendChild(aTag);
-                                    document.getElementById("usersOnline").appendChild(mybr);
-                                }
-                            }  
-                        }
-                        else {
-                            var aTag = document.createElement('a');
-                            aTag.setAttribute('href',"/WebChat/main/chat/"+listOfChatRooms[chatRoom].roomId);
-                            var textnode = document.createTextNode("Default Group");
-                            aTag.appendChild(textnode);
-                            var mybr = document.createElement('br');
-                            document.getElementById("groupList").appendChild(aTag);
-                            document.getElementById("groupList").appendChild(mybr); 
-                        }
+                document.getElementById("chat-room-header").innerHTML = "Chat room with: ";
+                usersInCurrentRoom = JSON.parse(JsonArrayOfUsersInRoom.body);
+                var possibleAddFriends = friends;
+                for (var user in usersInCurrentRoom) {
+                    if (usersInCurrentRoom.hasOwnProperty(user)) {
+                       document.getElementById("chat-room-header").innerHTML +=  " " + usersInCurrentRoom[user].username;
                     }
                 }    
-                });                 
+                
+                for (var i = 0; i < usersInCurrentRoom.length; i++) {
+                    for (var k = 0; k < possibleAddFriends.length; k++) {
+                        if (usersInCurrentRoom[i].username === possibleAddFriends[k].username) {
+                            var pos = possibleAddFriends.indexOf(possibleAddFriends[k]);
+                            possibleAddFriends.splice(pos, 1);
+                        }
+                    }
+                }
+                fillDropDownList(possibleAddFriends);
             });
-        });
+            });//Connect Socket
+        });//Doc on ready
          $(document).keypress(function (e) {
             if (e.which == 13) {
                 send();
@@ -160,15 +171,17 @@
           }
         );
         
-        function myFunction(){
+        function fillDropDownList(possibleAddFriends){
           $('#add-friends-chat').empty();
-          for (var i = 0; i < 5; i++) {
-            var li = document.createElement('li');
-            var a = document.createElement('a');
-            a.setAttribute('href', '#!');
-            a.appendChild(document.createTextNode(i));
-            li.appendChild(a);
-            document.getElementById('add-friends-chat').appendChild(li);
+          for (var user in possibleAddFriends) {
+            if (possibleAddFriends.hasOwnProperty(user)) {
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                a.setAttribute('href', '/main/chat/[[${roomId}]]/[[${session.user.id}]]/'+possibleAddFriends[user].userId);
+                a.appendChild(document.createTextNode(possibleAddFriends[user].username));
+                li.appendChild(a);
+                document.getElementById('add-friends-chat').appendChild(li);
+            }
           }
         }
         
