@@ -186,7 +186,7 @@
         }
         
         function createGroup(userToBeAdded){
-            stompClient.send("/app/chat/[[${roomId}]]/[[${session.user.id}]]/"+userToBeAdded);
+            stompClient.send("/app/chat/[[${roomId}]]/"+userToBeAdded);
         }
         
         function send(){

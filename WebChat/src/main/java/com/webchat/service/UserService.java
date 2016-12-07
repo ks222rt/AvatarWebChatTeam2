@@ -89,24 +89,5 @@ public class UserService {
     public boolean areWeFriends(int userID, int friendID){
         return userDAO.alreadyFriends(userID, friendID);
     }
-    //|-------------CHATSerivce--------------|
-    public List<ChatRoom> getRoomsForUser(int userId){
-        return userDAO.getChatRooms(userId);
-    }
-    //|-------------CHATSerivce--------------|
-    public boolean createGroupChat(int roomId, int userId, int newUser){
-        return userDAO.createGroup(roomId, userId, newUser);
-    }
-    //|-------------CHATSerivce--------------|
-    public boolean addUserToGroup(int userId, int roomId){
-        return userDAO.insertUserToChatRoom(userId, roomId);
-    }
-       //|-------------CHATSerivce--------------|
-    public boolean addMessageToRoom(Message message, int roomId){
-        return userDAO.addMessageToRoom(message, roomId);
-    }
-        //|-------------CHATSerivce--------------|
-    public List<ChatUserHelper> getUsersinRoom(int roomId, int userId){
-        return userDAO.getUsersInRoom(roomId, userId);
-    }
+   
 }

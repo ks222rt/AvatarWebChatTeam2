@@ -9,18 +9,15 @@ import com.webchat.model.ChatRoom;
 import com.webchat.model.ChatUserHelper;
 import com.webchat.model.Message;
 import com.webchat.model.User;
+import com.webchat.service.ChatService;
 import com.webchat.service.UserService;
 import com.webchat.util.SessionUtil;
 import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.json.JSONArray;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -42,9 +39,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class ChatController {
-
     @Autowired
-    private UserService userService;
+    private ChatService chatService;
+    
+    
     @Autowired
     private SessionUtil sessionUtil;
     @Autowired
@@ -56,7 +54,7 @@ public class ChatController {
     @RequestMapping(value = "/main/chat/none", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         currentUser = (User) request.getSession().getAttribute("user");
-        chatRoomAndFriendIds = userService.getRoomsForUser(currentUser.getId());
+        chatRoomAndFriendIds = chatService.getRoomsForUser(currentUser.getId());
         
         model.addAttribute("username", currentUser.getUsername());
         return "main/chat";
@@ -65,7 +63,7 @@ public class ChatController {
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
     public String RoomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
         currentUser = (User) request.getSession().getAttribute("user");
-        chatRoomAndFriendIds = userService.getRoomsForUser(currentUser.getId());
+        chatRoomAndFriendIds = chatService.getRoomsForUser(currentUser.getId());
        
         if(hasAccessToRoom(roomId)){
             model.addAttribute("roomId", roomId);
@@ -74,35 +72,23 @@ public class ChatController {
         return "redirect:/main/chat/none";    
     }
     
-    @RequestMapping(value = "/main/chat/{roomId}/{userId}/{newUser}", method = RequestMethod.GET)
-    public String createGroup(@PathVariable int roomId,@PathVariable int userId,@PathVariable int newUser,
-            HttpServletRequest request){
-        
-            if(userService.createGroupChat(roomId, userId, newUser))
-            {
-               sendMessageToRoom(roomId,"Group Was Successfully Created");
-               return "redirect:/main/chat/"+roomId;
-            }
-        sendMessageToRoom(roomId,"Whoops! We could not create a new Groupchat for you!");
-        return "redirect:/main/chat/none";
-    }
+  
     
     @MessageMapping("/chat/{roomId}")
     @SendTo("/topic/{roomId}/messages")
     public Message chatMessage(@DestinationVariable int roomId, Message message){
         String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
         Message messageObject = new Message(message.getFrom(),message.getText(),time, message.getUser_id());
-        userService.addMessageToRoom(messageObject, roomId);
+        chatService.addMessageToRoom(messageObject, roomId);
         
         return messageObject;
     }
     
-    @MessageMapping("/chat/{roomId}/{userId}/{newUser}")
+    @MessageMapping("/chat/{roomId}/{newUser}")
     public void createGroup(@DestinationVariable int roomId,
-                            @DestinationVariable int userId,
                             @DestinationVariable int newUser){
       
-        if(userService.createGroupChat(roomId, userId, newUser))
+        if(chatService.createGroupChat("Group", roomId, newUser))
         {
             sendMessageToRoom(roomId,"Group Was Successfully Created");   
         }else{
@@ -123,7 +109,7 @@ public class ChatController {
     
     @SubscribeMapping("/{roomId}/getRoomUsers")
     public List<ChatUserHelper> listUsersInRoom (@DestinationVariable int roomId){
-        return userService.getUsersinRoom(roomId, currentUser.getId());
+        return chatService.getUsersinRoom(roomId, currentUser.getId());
     }
     
     private List<ChatUserHelper> getListOfOnlineFriends(){
