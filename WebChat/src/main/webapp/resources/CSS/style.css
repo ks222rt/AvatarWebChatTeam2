@@ -100,7 +100,12 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
 .conversationDiv{
     position: fixed;
     bottom: 3%;
+    left: 12%;
     display: auto;
+}
+
+input#inputChat{
+    width: 90%;
 }
 
 .message-div{
@@ -116,6 +121,7 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
 .message-list-window{
     width: 100%;
     margin: auto;
+    margin-top: 5%;
     position: relative;
     height: 425px;
 }
@@ -132,7 +138,11 @@ p.message-text{
     padding-bottom: 5px;
 }
 
-h2#chat-room-header.chat-room-header{
+span#chat-room-header.chat-room-header{
+    font-size: 200%;
+}
+
+.header-div-chat{
     text-align: center;
 }
 

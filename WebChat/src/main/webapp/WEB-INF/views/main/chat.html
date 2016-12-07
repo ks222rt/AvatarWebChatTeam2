@@ -11,35 +11,47 @@
   <body>
 
     <div class="col s9 grey lighten-4" layout:fragment="content" >
-      <div>
-        <h5 class="chat-room-header" id="chat-room-header"></h5>
-        <!-- Dropdown Trigger -->
-        <a class='dropdown-button btn' href='#' data-activates='add-friends-chat'>Drop Me!</a>
-
-        <!-- Dropdown Structure -->
-        <ul id='add-friends-chat' class='dropdown-content'>
-          
-        </ul>
-        
-      <!--<a class="btn-floating btn-small red">
-            <i id="addToGroup" class=" material-icons">playlist_add</i>Add Friend To Group
-        </a>-->
-        <a class="btn-floating btn-small red">
-            <i id="addToGroup" class=" material-icons">not_interested</i>Leave Group
-        </a>
+      <div th:if="${roomId == null}">
+        <h4>Jag är fucking null</h4>
       </div>
+      <div th:if="${roomId != null}">
+        <div class="header-div-chat">
+          <span class="chat-room-header" id="chat-room-header"></span>
+        </div>
       
-      <div class="message-list-window">
-        <div class="message-list-chat" id="message-list-chat"></div>
-      </div>
+        <div class="message-list-window">
+          <div class="message-list-chat" id="message-list-chat"></div>
+          
           <div class="conversationDiv">
             <div class="chatButton">
               <input type="text" id="inputChat" placeholder="Write a message..."/>
-              <a id="sendMessage" class="btn-floating btn-small red">
-                   <i class=" material-icons">mode_edit</i>Send
+              
+              <!-- Send button -->
+              <a id="sendMessage" 
+                 class="waves-effect waves-light btn red green darken-1 white-text">
+                  <i class="material-icons left">mode_edit</i>Send
+              </a>
+              <!-- Add friend to chat button -->
+              <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
+                 href='#' data-activates='add-friends-chat'>
+                 Add Friend To Group
+              </a>
+              <!-- Dropdown Structure -->
+              <ul id='add-friends-chat' class='dropdown-content'></ul>
+              
+              <!-- Leave group button -->
+              <a class="waves-effect waves-light btn red accent-4 white-text">
+                <i id="addToGroup" class="material-icons left">not_interested</i>Leave Group
+              </a>
+              
+              <!-- Clear history button -->
+              <a class="waves-effect waves-light btn red accent-4 white-text">
+                <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
               </a>
             </div>
           </div>
+        </div>
+      </div>
     </div>
         
     <th:block layout:fragment="script">
@@ -54,7 +66,9 @@
             var groups;
        
         $(document).ready(function(){
-            document.querySelector('#sendMessage').addEventListener('click', send);
+            if ($("#sendMessage").length) {
+                document.querySelector('#sendMessage').addEventListener('click', send);
+            }
             ws = new SockJS("/WebChat/chat");
             //ws = new SockJS('http://' + window.location.host + '/chat');
             //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
