@@ -75,7 +75,7 @@ public class ChatController {
     }
     
     @RequestMapping(value = "/main/chat/{roomId}/{userId}/{newUser}", method = RequestMethod.GET)
-    public String createNewGroupChat(@PathVariable int roomId,@PathVariable int userId,@PathVariable int newUser,
+    public String createGroup(@PathVariable int roomId,@PathVariable int userId,@PathVariable int newUser,
             HttpServletRequest request){
         
             if(userService.createGroupChat(roomId, userId, newUser))
@@ -96,6 +96,20 @@ public class ChatController {
         
         return messageObject;
     }
+    
+    @MessageMapping("/chat/{roomId}/{userId}/{newUser}")
+    public void createGroup(@DestinationVariable int roomId,
+                            @DestinationVariable int userId,
+                            @DestinationVariable int newUser){
+      
+        if(userService.createGroupChat(roomId, userId, newUser))
+        {
+            sendMessageToRoom(roomId,"Group Was Successfully Created");   
+        }else{
+            sendMessageToRoom(roomId,"Whoops! We could not create a new Groupchat for you!");   
+        } 
+    }
+    
     
     @SubscribeMapping("/getOnlineFriends")
     public List<ChatUserHelper> listFriends (){

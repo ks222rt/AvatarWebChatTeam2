@@ -45,7 +45,7 @@
     <th:block layout:fragment="script">
        
       <script type="text/javascript">
-             
+            
             var ws;
             var stompClient;
             
@@ -120,7 +120,7 @@
                 groups = JSON.parse(JsonListOfGroups.body);
                 
                 for(var group in groups){
-                    if (friends.hasOwnProperty(friend)) {
+                    if (groups.hasOwnProperty(group)) {
                         var aTag = document.createElement('a');
                         aTag.setAttribute('href',"/WebChat/main/chat/"+groups[group].roomId);
                         var textnode = document.createTextNode("No Named Group");
@@ -176,13 +176,17 @@
           for (var user in possibleAddFriends) {
             if (possibleAddFriends.hasOwnProperty(user)) {
                 var li = document.createElement('li');
-                var a = document.createElement('a');
-                a.setAttribute('href', '/main/chat/[[${roomId}]]/[[${session.user.id}]]/'+possibleAddFriends[user].userId);
+                var a = document.createElement('a'); 
+                a.setAttribute('onclick',"createGroup("+possibleAddFriends[user].userId+")");
                 a.appendChild(document.createTextNode(possibleAddFriends[user].username));
                 li.appendChild(a);
                 document.getElementById('add-friends-chat').appendChild(li);
             }
           }
+        }
+        
+        function createGroup(userToBeAdded){
+            stompClient.send("/app/chat/[[${roomId}]]/[[${session.user.id}]]/"+userToBeAdded);
         }
         
         function send(){
