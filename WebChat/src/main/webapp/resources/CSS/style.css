@@ -20,7 +20,7 @@ a.wide {
 }
 
 #row2{
-    overflow-y: scroll;
+    overflow-y: hidden;
     height: 100%;
     padding-bottom: 10%;
 }
@@ -105,7 +105,8 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
 }
 
 input#inputChat{
-    width: 90%;
+    margin-top: 5%;
+    width: 70%;
 }
 
 .message-div{
@@ -121,9 +122,14 @@ input#inputChat{
 .message-list-window{
     width: 100%;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 2%;
+    margin-bottom: 1%;
     position: relative;
-    height: 425px;
+    height: 60vh;
+    width: 60vw;
+    -webkit-box-shadow: 2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+    -moz-box-shadow:    2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+    box-shadow:         2px 1px 11px 4px rgba(50, 50, 50, 0.13);
 }
 
 div#message-list-chat.message-list-chat{
