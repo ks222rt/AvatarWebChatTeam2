@@ -40,12 +40,14 @@
               <ul id='add-friends-chat' class='dropdown-content'></ul>
               
               <!-- Leave group button -->
-              <a class="waves-effect waves-light btn red accent-4 white-text">
+              <a class="waves-effect waves-light btn red accent-4 white-text"
+                 onclick="if(confirm('Do you really want to leave this chat?')) leaveGroup();">
                 <i id="addToGroup" class="material-icons left">not_interested</i>Leave Group
               </a>
               
               <!-- Clear history button -->
-              <a class="waves-effect waves-light btn red accent-4 white-text">
+              <a class="waves-effect waves-light btn red accent-4 white-text"
+                 onclick="return confirm('Do you really want to clear the chat history?')">
                 <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
               </a>
             </div>
@@ -187,20 +189,28 @@
         
         function fillDropDownList(possibleAddFriends){
           $('#add-friends-chat').empty();
-          for (var user in possibleAddFriends) {
-            if (possibleAddFriends.hasOwnProperty(user)) {
-                var li = document.createElement('li');
-                var a = document.createElement('a'); 
-                a.setAttribute('onclick',"createGroup("+possibleAddFriends[user].userId+")");
-                a.appendChild(document.createTextNode(possibleAddFriends[user].username));
-                li.appendChild(a);
-                document.getElementById('add-friends-chat').appendChild(li);
+          if (possibleAddFriends.length > 0) {
+            for (var user in possibleAddFriends) {
+              if (possibleAddFriends.hasOwnProperty(user)) {
+                  var li = document.createElement('li');
+                  var a = document.createElement('a'); 
+                  a.setAttribute('onclick',"createGroup("+possibleAddFriends[user].userId+")");
+                  a.appendChild(document.createTextNode(possibleAddFriends[user].username));
+                  li.appendChild(a);
+                  document.getElementById('add-friends-chat').appendChild(li);
+              }
             }
+          }else{
+            var li = document.createElement('li');
+            var span = document.createElement('span');
+            span.appendChild(document.createTextNode('No other friends online'));
+            li.appendChild(span);
+            document.getElementById('add-friends-chat').appendChild(li);
           }
         }
         
         function createGroup(userToBeAdded){
-            stompClient.send("/app/chat/[[${roomId}]]/"+userToBeAdded);
+            stompClient.send("/app/chat/[[${roomId}]]/"+userToBeAdded+"/createGroup");
         }
         
         function send(){
@@ -212,6 +222,17 @@
             var userId = "[[${session.user.id}]]";
             stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message, 'user_id':userId}));
             document.getElementById('inputChat').value='';
+        }
+        
+        function leaveGroup(){
+          $.post("/WebChat/main/chat/leaveGroup", {
+            roomId : "[[${roomId}]]",
+            userId : "[[${session.user.id}]]",
+            username : "[[${session.user.username}]]"
+          }, function(data){
+            var response = 'http://' + window.location.host + data;
+            window.location.replace(response);
+          });
         }
       
     </script>

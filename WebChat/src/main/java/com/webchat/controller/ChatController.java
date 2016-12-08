@@ -30,6 +30,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
@@ -72,6 +75,26 @@ public class ChatController {
         return "redirect:/main/chat/none";    
     }
     
+    @RequestMapping(value = "/main/chat/leaveGroup", method = RequestMethod.POST)
+    @ResponseBody
+    public String leaveGroup(@RequestParam int roomId,
+                             @RequestParam int userId,
+                             @RequestParam String username,
+                             RedirectAttributes redirectAttributes){
+    
+        //chatService.leaveChatGroup(roomId, userId)
+        if (true) {
+            System.out.println("Tjena Tjena ");
+            sendMessageToRoom(roomId, username + " has left the chat room!");
+            redirectAttributes.addFlashAttribute("success_message", "You left the chat!");
+            return "/WebChat/main/chat/none";
+        }
+        else{
+            redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
+            return "/WebChat/main/chat/" + roomId;
+        }
+    }
+    
   
     
     @MessageMapping("/chat/{roomId}")
@@ -84,7 +107,7 @@ public class ChatController {
         return messageObject;
     }
     
-    @MessageMapping("/chat/{roomId}/{newUser}")
+    @MessageMapping("/chat/{roomId}/{newUser}/createGroup")
     public void createGroup(@DestinationVariable int roomId,
                             @DestinationVariable int newUser){
       
@@ -96,6 +119,19 @@ public class ChatController {
         } 
     }
     
+//    @MessageMapping("/chat/{roomId}/{userId}/{username}/leaveGroup")
+//    public String leaveGroup(@DestinationVariable int roomId,
+//                            @DestinationVariable int userId,
+//                            @DestinationVariable String username){
+//        //chatService.leaveChatGroup(roomId, userId)
+//        if (true) {
+//            System.out.println("Tjena Tjena ");
+//            sendMessageToRoom(roomId, username + " has left the chat room!");
+//            return "/main/chat/none";
+//        }else{
+//            return "/main/chat/" + roomId;
+//        }
+//    }
     
     @SubscribeMapping("/getOnlineFriends")
     public List<ChatUserHelper> listFriends (){
