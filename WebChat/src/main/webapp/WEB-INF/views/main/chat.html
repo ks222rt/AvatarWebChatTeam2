@@ -83,12 +83,13 @@
             
             var ws;
             var stompClient;
-            
+            var roomId = "[[${roomId}]]";
             var usersInCurrentRoom;
             var friends;
             var groups;
-       
+            
         $(document).ready(function(){
+            console.log("Current Chatroom: "+roomId );
             if ($("#sendMessage").length) {
                 document.querySelector('#sendMessage').addEventListener('click', send);
             }
@@ -98,20 +99,53 @@
             stompClient = Stomp.over(ws);
             stompClient.connect({}, function(frame){
             console.log("Connected to Websocket!");
+            if(roomId !== "")
+            {
+              //Socket for realtime messages.
+              stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
+                  // Parse JSON object
+                  var content = JSON.parse(message.body);
+                  renderMessage(content);
+              });
+              //Socket for realtime server commands.
+              stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/roomHandler", function(message){
+                  var response = JSON.parse(message.body);
+                  if (response.command === "clear") {
+                      $('#message-list-chat').empty();
+                  }
+              });
+              //SubscribeMap for -> the specific room
+              stompClient.subscribe("/app/"+"[[${roomId}]]", function(messages){
+                  // Parse JSON object
+                  var content = JSON.parse(messages.body);
+                  for(var i = 0; i < content.length; i++){
+                     renderMessage(content[i]); 
+                  }
+              });
+              //SubscribeMap for -> fetching all room members and invitable friends.
+              stompClient.subscribe("/app/"+"[[${roomId}]]"+"/getRoomUsers", function(JsonArrayOfUsersInRoom){
+              document.getElementById("chat-room-header").innerHTML = "Chat room with: ";
+              usersInCurrentRoom = JSON.parse(JsonArrayOfUsersInRoom.body);
+              var possibleAddFriends = friends;
+              for (var user in usersInCurrentRoom) {
+                  if (usersInCurrentRoom.hasOwnProperty(user)) {
+                     document.getElementById("chat-room-header").innerHTML +=  " " + usersInCurrentRoom[user].username;
+                  }
+              }    
+
+              for (var i = 0; i < usersInCurrentRoom.length; i++) {
+                  for (var k = 0; k < possibleAddFriends.length; k++) {
+                      if (usersInCurrentRoom[i].username === possibleAddFriends[k].username) {
+                          var pos = possibleAddFriends.indexOf(possibleAddFriends[k]);
+                          possibleAddFriends.splice(pos, 1);
+                      }
+                  }
+              }
+              fillDropDownList(possibleAddFriends);
+             });
             
-            stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
-                // Parse JSON object
-                var content = JSON.parse(message.body);
-                renderMessage(content);
-            });
+            }
             
-            stompClient.subscribe("/app/"+"[[${roomId}]]", function(messages){
-                // Parse JSON object
-                var content = JSON.parse(messages.body);
-                for(var i = 0; i < content.length; i++){
-                   renderMessage(content[i]); 
-                }
-            });
                        
             stompClient.subscribe("/app/getOnlineFriends", function(JsonListOfOnlineFriends){ 
                 friends = JSON.parse(JsonListOfOnlineFriends.body);
@@ -145,27 +179,7 @@
                 }         
             });
             
-            stompClient.subscribe("/app/"+"[[${roomId}]]"+"/getRoomUsers", function(JsonArrayOfUsersInRoom){
-                document.getElementById("chat-room-header").innerHTML = "Chat room with: ";
-                usersInCurrentRoom = JSON.parse(JsonArrayOfUsersInRoom.body);
-                var possibleAddFriends = friends;
-                for (var user in usersInCurrentRoom) {
-                    if (usersInCurrentRoom.hasOwnProperty(user)) {
-                       document.getElementById("chat-room-header").innerHTML +=  " " + usersInCurrentRoom[user].username;
-                    }
-                }    
-                
-                for (var i = 0; i < usersInCurrentRoom.length; i++) {
-                    for (var k = 0; k < possibleAddFriends.length; k++) {
-                        if (usersInCurrentRoom[i].username === possibleAddFriends[k].username) {
-                            var pos = possibleAddFriends.indexOf(possibleAddFriends[k]);
-                            possibleAddFriends.splice(pos, 1);
-                        }
-                    }
-                }
-                fillDropDownList(possibleAddFriends);
-            });
-            });//Connect Socket
+        });//Connect Socket
         });//Doc on ready
          $(document).keypress(function (e) {
             if (e.which == 13) {
@@ -200,7 +214,11 @@
                 img.setAttribute('alt', 'Profile picture');
                 chipDiv.className = 'chip';
                 chipDiv.appendChild(img);
-                chipAtag.appendChild(document.createTextNode(message.from));
+                if (message.from === null) {
+                  chipAtag.appendChild(document.createTextNode('SERVER'));
+                }else{
+                  chipAtag.appendChild(document.createTextNode(message.from));
+                }
                 chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
                 chipDiv.appendChild(chipAtag);
                 
@@ -272,10 +290,11 @@
         
         function clearHistory(){
           $.post("/WebChat/main/chat/clearHistory", {
-            roomId: "[[${roomId}]]"
+            roomId: "[[${roomId}]]",
+            username: "[[${session.user.username}]]"
           }, function(data){
-            var response = 'http://' + window.location.host + data;
-            window.location.replace(response);
+           // var response = 'http://' + window.location.host + data;
+           // window.location.replace(response);
           })
         };
       

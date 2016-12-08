@@ -8,6 +8,7 @@ package com.webchat.controller;
 import com.webchat.model.ChatRoom;
 import com.webchat.model.ChatUserHelper;
 import com.webchat.model.Message;
+import com.webchat.model.RoomHandler;
 import com.webchat.model.User;
 import com.webchat.service.ChatService;
 import com.webchat.service.UserService;
@@ -96,12 +97,14 @@ public class ChatController {
         }
     }
     
-    @RequestMapping(value = "/WebChat/main/chat/clearHistory", method = RequestMethod.POST)
+    @RequestMapping(value = "/main/chat/clearHistory", method = RequestMethod.POST)
     @ResponseBody
-    public String clearHistory(@RequestParam int roomId){
+    public String clearHistory(@RequestParam int roomId,
+                               @RequestParam String username){
         
         if (chatService.clearChatHistory(roomId)) {
-            sendMessageToRoom(roomId, "History was cleared for this chat");
+            sendCommandToRoom(roomId, "clear");
+            sendMessageToRoom(roomId, "History was cleared by " + username);
             return "/WebChat/main/chat/" + roomId;
         }else{
             sendMessageToRoom(roomId, "Something went wrong with the clear request!");
@@ -130,20 +133,6 @@ public class ChatController {
             sendMessageToRoom(roomId,"Whoops! We could not create a new Groupchat for you!");   
         } 
     }
-    
-//    @MessageMapping("/chat/{roomId}/{userId}/{username}/leaveGroup")
-//    public String leaveGroup(@DestinationVariable int roomId,
-//                            @DestinationVariable int userId,
-//                            @DestinationVariable String username){
-//        //chatService.leaveChatGroup(roomId, userId)
-//        if (true) {
-//            System.out.println("Tjena Tjena ");
-//            sendMessageToRoom(roomId, username + " has left the chat room!");
-//            return "/main/chat/none";
-//        }else{
-//            return "/main/chat/" + roomId;
-//        }
-//    }
     
     @SubscribeMapping("/getOnlineFriends")
     public List<ChatUserHelper> listFriends (){
@@ -212,7 +201,13 @@ public class ChatController {
     }
     
     private void sendMessageToRoom(int roomId, String text){
-        this.template.convertAndSend("/topic/"+roomId+"/messages", new Message("SERVER", text, "00:00:00"));
+        Message message = new Message("SERVER", text, "00:00:00", 0);
+        chatService.addMessageToRoom(message, roomId);
+        this.template.convertAndSend("/topic/"+roomId+"/messages", message);
+    }
+    
+    private void sendCommandToRoom(int roomId, String command){
+        this.template.convertAndSend("/topic/"+roomId+"/roomHandler", new RoomHandler(command));
     }
     
     private String generateGroupName(){
