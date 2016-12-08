@@ -39,7 +39,9 @@ public class ChatDAO {
     
    @Autowired
    private JdbcTemplate jdbcTemplate;
-
+   
+   
+   
    
    
    public boolean createPrivateChat(final String roomName, final int userId1, final int userId2) {
@@ -61,7 +63,7 @@ public class ChatDAO {
        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
        try {
            jdbcCall.withProcedureName("proc_create_group_room");
-           SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomName",
+           SqlParameterSource in = new MapSqlParameterSource().addValue(roomName,
                         roomName).addValue("newUserId",
                          newUserId).addValue("oldChatRoomId", oldChatRoomId);
            jdbcCall.execute(in);
@@ -86,9 +88,36 @@ public class ChatDAO {
        return true;
    }
    
+   public List<Message> getMessagesInRoom(int roomId){
+     System.out.println("Vi är i METODEN");  
+    final String sqlForFetchingMessages =  "SELECT avatar_webchat.chat_line.user_id, avatar_webchat.chat_user.username, avatar_webchat.chat_line.line_text, avatar_webchat.chat_line.posted_at\n" +
+                                        "FROM avatar_webchat.chat_line\n" +
+                                        "LEFT OUTER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_user.id = avatar_webchat.chat_line.user_id\n" +
+                                        "WHERE avatar_webchat.chat_line.chat_room_id = "+roomId+" AND posted_at BETWEEN NOW() - INTERVAL 30 DAY AND NOW();";
+        try {
+            List<Message> messages = new ArrayList<>();
+            List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingMessages);
+            System.out.println("DEN SKA LOOPA ROWS");  
+            for (Map row : rows) {
+            System.out.println("LOOP ROW"); 
+                String dateString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Date)row.get("posted_at"));
+                System.out.println("DateString:"+ dateString);
+                messages.add(new Message((String)row.get("username"),
+                                        (String)row.get("line_text"),
+                                         dateString,
+                                         (int)row.get("user_id")));
+            }
+            System.out.println("Amount of messages:"+ messages.size());
+            return messages;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+   }
+   
    public List<ChatRoom> getChatRooms(final int userID) {
         
-        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup\n"+
+        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup, avatar_webchat.chat_room.chat_room_name as room_name\n"+
                                             "FROM avatar_webchat.chat_room\n"+
                                             "INNER JOIN avatar_webchat.chat_room_members\n"+
                                             "ON avatar_webchat.chat_room_members.chat_room_id = avatar_webchat.chat_room.id\n"+
@@ -99,7 +128,9 @@ public class ChatDAO {
 
              List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingRooms);
              for (Map row : rows) {
-                 userRoomList.add(new ChatRoom((Integer)row.get("id"),(Integer)row.get("isGroup")));
+                 userRoomList.add(new ChatRoom((Integer)row.get("id"),
+                                               (Integer)row.get("isGroup"),
+                                               (String)row.get("room_name")));
              }
              System.out.println("Amount of rooms user has access to: " + userRoomList.size());
              if(userRoomList.size() > 0 ) {

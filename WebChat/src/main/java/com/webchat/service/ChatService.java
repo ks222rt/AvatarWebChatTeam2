@@ -42,4 +42,8 @@ public class ChatService {
     public List<ChatUserHelper> getUsersinRoom(int roomId, int userId){
         return chatDAO.getUsersInRoom(roomId, userId);
     }
+    
+    public List<Message> getMessagesByRoomId(int roomId){
+        return chatDAO.getMessagesInRoom(roomId);
+    }
 }

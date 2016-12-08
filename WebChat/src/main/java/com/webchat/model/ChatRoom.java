@@ -28,9 +28,10 @@ public class ChatRoom {
         this.roomId = roomId;
     }
     
-    public ChatRoom(int roomId, int isGroup) {
+    public ChatRoom(int roomId, int isGroup, String groupname) {
         this.roomId = roomId;
         this.isGroupRoom = isGroup;
+        this.groupname = groupname;
     }
      
     public int getIsGroupRoom() {

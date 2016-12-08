@@ -13,10 +13,12 @@ import com.webchat.service.ChatService;
 import com.webchat.service.UserService;
 import com.webchat.util.SessionUtil;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +69,9 @@ public class ChatController {
     public String RoomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
         currentUser = (User) request.getSession().getAttribute("user");
         chatRoomAndFriendIds = chatService.getRoomsForUser(currentUser.getId());
-       
+        
         if(hasAccessToRoom(roomId)){
+           
             model.addAttribute("roomId", roomId);
             return "main/chat";
         }
@@ -111,7 +114,7 @@ public class ChatController {
     public void createGroup(@DestinationVariable int roomId,
                             @DestinationVariable int newUser){
       
-        if(chatService.createGroupChat("Group", roomId, newUser))
+        if(chatService.createGroupChat(generateGroupName(), roomId, newUser))
         {
             sendMessageToRoom(roomId,"Group Was Successfully Created");   
         }else{
@@ -146,6 +149,11 @@ public class ChatController {
     @SubscribeMapping("/{roomId}/getRoomUsers")
     public List<ChatUserHelper> listUsersInRoom (@DestinationVariable int roomId){
         return chatService.getUsersinRoom(roomId, currentUser.getId());
+    }
+    
+    @SubscribeMapping("/{roomId}")
+    public List<Message> listMessages (@DestinationVariable int roomId){
+        return chatService.getMessagesByRoomId(roomId);
     }
     
     private List<ChatUserHelper> getListOfOnlineFriends(){
@@ -196,6 +204,24 @@ public class ChatController {
     
     private void sendMessageToRoom(int roomId, String text){
         this.template.convertAndSend("/topic/"+roomId+"/messages", new Message("SERVER", text, "00:00:00"));
+    }
+    
+    private String generateGroupName(){
+           
+            String[] adjectives = {"Angry", "Fat", "Tiny", "Cute", "Scary", "Adorable", "Autistic",
+                             "Mad", "Sleepy", "Hungry", "Annoyed", "Sarcastic", "Spiny"};
+                             
+            String[] animals = {"Harambes", "Turtles", "Hippos", "Dobbys", "Elephants", "Monkeys",
+                            "Kittens", "Spiders", "Chickens", "Whales", "Snakes", "Phasmatidaes",
+                            "Tigers", "Crabs", "Pumas", "Cougars", "Eagles", "Carl Von Linnés",
+                            "Raptors"};
+            
+            Random rn = new Random();
+            int rAdjectives = rn.nextInt(adjectives.length);
+            int rAnimals = rn.nextInt(animals.length);;
+            
+            return adjectives[rAdjectives] + " " + animals[rAnimals];
+        
     }
     
     

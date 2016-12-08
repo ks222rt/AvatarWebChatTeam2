@@ -11,6 +11,8 @@
   <body>
 
     <div class="col s9 grey lighten-4" layout:fragment="content" >
+       
+      
       <div th:if="${error_message}">
           <blockquote class="card-panel chip red white-text">
               Error: <span th:text="${error_message}"></span>
@@ -28,12 +30,17 @@
         <h4>Welcome to the chat page!</h4>
       </div>
       <div th:if="${roomId != null}">
+          
         <div class="header-div-chat">
           <span class="chat-room-header" id="chat-room-header"></span>
         </div>
-      
+         
         <div class="message-list-window">
-          <div class="message-list-chat" id="message-list-chat"></div>
+          
+            <div class="message-list-chat" id="message-list-chat">
+                
+            </div>
+           
         </div>
           
           <div class="conversationDiv">
@@ -91,43 +98,19 @@
             stompClient = Stomp.over(ws);
             stompClient.connect({}, function(frame){
             console.log("Connected to Websocket!");
+            
             stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
                 // Parse JSON object
                 var content = JSON.parse(message.body);
-                
-                // Create element for the message
-                var messagesContainer = document.createElement("div");
-                var text = document.createElement("p");
-                var time = document.createElement("span");
-                var img = document.createElement("img");
-                var div = document.createElement("div");
-                var chipDiv = document.createElement("div");
-                var chipAtag = document.createElement("a");
-                
-                // Set attributes to the elements
-                img.setAttribute('th:src', "@{/resources/AVATAR/avatar2.png}");
-                img.setAttribute('src', "../../resources/AVATAR/avatar2.png");
-                img.setAttribute('alt', 'Profile picture');
-                chipDiv.className = 'chip';
-                chipDiv.appendChild(img);
-                chipAtag.appendChild(document.createTextNode(content.from));
-                chipAtag.setAttribute('href', "/WebChat/main/user/" + content.from);
-                chipDiv.appendChild(chipAtag);
-                
-                text.appendChild(document.createTextNode(content.text));
-                time.appendChild(document.createTextNode(content.time));
-                text.className = 'message-text';
-                time.className = 'message-time';
-                
-                div.appendChild(chipDiv);
-                div.appendChild(time);
-                div.appendChild(text); 
-                div.className = 'message-div';
-                
-                //var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
-                messagesContainer.appendChild(div);
-                document.getElementById("message-list-chat").appendChild(messagesContainer);
-                $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
+                renderMessage(content);
+            });
+            
+            stompClient.subscribe("/app/"+"[[${roomId}]]", function(messages){
+                // Parse JSON object
+                var content = JSON.parse(messages.body);
+                for(var i = 0; i < content.length; i++){
+                   renderMessage(content[i]); 
+                }
             });
                        
             stompClient.subscribe("/app/getOnlineFriends", function(JsonListOfOnlineFriends){ 
@@ -153,7 +136,7 @@
                     if (groups.hasOwnProperty(group)) {
                         var aTag = document.createElement('a');
                         aTag.setAttribute('href',"/WebChat/main/chat/"+groups[group].roomId);
-                        var textnode = document.createTextNode("No Named Group");
+                        var textnode = document.createTextNode(groups[group].groupname);
                         aTag.appendChild(textnode);
                         var mybr = document.createElement('br');
                         document.getElementById("groupList").appendChild(aTag);
@@ -200,6 +183,44 @@
           alignment: 'left' // Displays dropdown with edge aligned to the left of button
           }
         );
+        
+        function renderMessage(message){
+             // Create element for the message
+                var messagesContainer = document.createElement("div");
+                var text = document.createElement("p");
+                var time = document.createElement("span");
+                var img = document.createElement("img");
+                var div = document.createElement("div");
+                var chipDiv = document.createElement("div");
+                var chipAtag = document.createElement("a");
+                
+                // Set attributes to the elements
+                img.setAttribute('th:src', "@{/resources/AVATAR/avatar2.png}");
+                img.setAttribute('src', "../../resources/AVATAR/avatar2.png");
+                img.setAttribute('alt', 'Profile picture');
+                chipDiv.className = 'chip';
+                chipDiv.appendChild(img);
+                chipAtag.appendChild(document.createTextNode(message.from));
+                chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
+                chipDiv.appendChild(chipAtag);
+                
+                text.appendChild(document.createTextNode(message.text));
+                time.appendChild(document.createTextNode(message.time));
+                text.className = 'message-text';
+                time.className = 'message-time';
+                
+                div.appendChild(chipDiv);
+                div.appendChild(time);
+                div.appendChild(text); 
+                div.className = 'message-div';
+                
+                //var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
+                messagesContainer.appendChild(div);
+                document.getElementById("message-list-chat").appendChild(messagesContainer);
+                $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
+        }
+        
+     
         
         function fillDropDownList(possibleAddFriends){
           $('#add-friends-chat').empty();
