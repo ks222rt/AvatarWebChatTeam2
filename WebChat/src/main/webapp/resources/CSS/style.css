@@ -13,16 +13,28 @@ html {
 }
 body {
   min-height: 100vh;
-  overflow: scroll-y;
+  overflow-y: hidden;
 }
 a.wide {
     display:block;
 }
 
+.col.s3.grey.lighten-3{
+    overflow-y: visible;
+}
+
+.col.s9.grey.lighten-4{
+    overflow-y: visible;
+}
+
 #row2{
-    overflow-y: hidden;
+    overflow-y: visible;
     height: 100%;
     padding-bottom: 10%;
+}
+
+.col.s3.grey.lighten-3{
+    overflow-y: visible;
 }
 
 .col.s3.grey.lighten-3{
@@ -127,9 +139,6 @@ input#inputChat{
     position: relative;
     height: 60vh;
     width: 60vw;
-    -webkit-box-shadow: 2px 1px 11px 4px rgba(50, 50, 50, 0.13);
-    -moz-box-shadow:    2px 1px 11px 4px rgba(50, 50, 50, 0.13);
-    box-shadow:         2px 1px 11px 4px rgba(50, 50, 50, 0.13);
 }
 
 div#message-list-chat.message-list-chat{
@@ -152,7 +161,19 @@ span#chat-room-header.chat-room-header{
     text-align: center;
 }
 
+::-webkit-scrollbar {
+    width: 12px;
+    color: red;
+}
 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 20px;
+    background:  white;
+}
 
-
-
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    background: LightGrey;
+}
