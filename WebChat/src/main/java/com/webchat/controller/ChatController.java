@@ -88,11 +88,13 @@ public class ChatController {
         if (chatService.leaveChatGroup(roomId, userId)) {
             sendMessageToRoom(roomId, username + " has left the chat room!");
             redirectAttributes.addFlashAttribute("success_message", "You left the chat!");
-            return "/WebChat/main/chat/none";
+            //return "/WebChat/main/chat/none";
+            return "/main/chat/none";
         }
         else{
             redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
-            return "/WebChat/main/chat/" + roomId;
+            //return "/WebChat/main/chat/" + roomId;
+            return "/main/chat/" + roomId;
         }
     }
     
@@ -104,10 +106,12 @@ public class ChatController {
         if (chatService.clearChatHistory(roomId)) {
             sendCommandToRoom(roomId, "clear");
             sendMessageToRoom(roomId, "History was cleared by " + username);
-            return "/WebChat/main/chat/" + roomId;
+            //return "/WebChat/main/chat/" + roomId;
+            return "/main/chat/" + roomId;
         }else{
             sendMessageToRoom(roomId, "Something went wrong with the clear request!");
-            return "/WebChat/main/chat/" + roomId;
+            //return "/WebChat/main/chat/" + roomId;
+            return "/main/chat/" + roomId;
         }
     }
     
