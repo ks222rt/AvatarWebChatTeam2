@@ -59,18 +59,20 @@ public class ChatDAO {
        return true; 
    }
    
-   public boolean createGroup(final String roomName, final int newUserId, final int oldChatRoomId) {
+   public boolean createGroup(final String room_name, final int newUserId, final int oldChatRoomId) {
        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
        try {
            jdbcCall.withProcedureName("proc_create_group_room");
-           SqlParameterSource in = new MapSqlParameterSource().addValue(roomName,
-                        roomName).addValue("newUserId",
+           SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomName",
+                        room_name).addValue("newUserId",
                          newUserId).addValue("oldChatRoomId", oldChatRoomId);
            jdbcCall.execute(in);
+           
+            return true;
        } catch (Exception e) {
+           System.out.print(e.getMessage());
            return false;
        }
-       return true;
    }
    
    public boolean addMessageToRoom(final Message message, final int roomId) {

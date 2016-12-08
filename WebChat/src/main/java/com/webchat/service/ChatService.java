@@ -23,7 +23,7 @@ public class ChatService {
     @Autowired
     private ChatDAO chatDAO;
 
-    public boolean createGroupChat(String roomName, int roomId, int newUser){
+    public boolean createGroupChat(String roomName, int newUser, int roomId){
         return chatDAO.createGroup(roomName, roomId, newUser);
     }
 
