@@ -91,7 +91,7 @@ public class ChatDAO {
    }
    
    public List<Message> getMessagesInRoom(int roomId){
-     System.out.println("Vi är i METODEN");  
+     
     final String sqlForFetchingMessages =  "SELECT avatar_webchat.chat_line.user_id, avatar_webchat.chat_user.username, avatar_webchat.chat_line.line_text, avatar_webchat.chat_line.posted_at\n" +
                                         "FROM avatar_webchat.chat_line\n" +
                                         "LEFT OUTER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_user.id = avatar_webchat.chat_line.user_id\n" +
@@ -99,9 +99,9 @@ public class ChatDAO {
         try {
             List<Message> messages = new ArrayList<>();
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingMessages);
-            System.out.println("DEN SKA LOOPA ROWS");  
+    
             for (Map row : rows) {
-            System.out.println("LOOP ROW"); 
+            
                 String dateString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Date)row.get("posted_at"));
                 System.out.println("DateString:"+ dateString);
                 messages.add(new Message((String)row.get("username"),
@@ -225,16 +225,17 @@ public class ChatDAO {
     }
     
     public boolean isGroupRoom(final int chatRoomId) {
-        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        final String sqlCheckIfGroup =  "SELECT avatar_webchat.chat_room.isGroup as isGroup\n" +
+                                        "FROM avatar_webchat.chat_room\n" +
+                                        "WHERE avatar_webchat.chat_room.id = "+chatRoomId+";";
        try {
-           jdbcCall.withProcedureName("proc_check_if_group_room");
-           SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomId",
-                   chatRoomId);                
-           Map<String, Object> out = jdbcCall.execute(in);
-           
-           int result = (Integer)out.get("isGroup");
-           
-           return result == 1;
+            List<Map<String, Object>> rowsForUser = jdbcTemplate.queryForList(sqlCheckIfGroup);
+            for (Map row : rowsForUser) {
+                if((int)row.get("isGroup") == 1){
+                    return true;
+                }
+            }
+            return false;
 
        } catch (Exception e) {
            System.out.println(e.getMessage());

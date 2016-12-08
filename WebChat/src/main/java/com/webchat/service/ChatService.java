@@ -58,4 +58,8 @@ public class ChatService {
     public boolean clearChatHistory(int roomId) {
         return chatDAO.clearChatHistory(roomId);
     }
+    
+    public boolean addUserToExistingGroup(int userId, int roomId){
+        return chatDAO.insertUserToChatRoom(userId, roomId);
+    }
 }

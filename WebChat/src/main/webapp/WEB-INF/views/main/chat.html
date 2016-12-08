@@ -84,6 +84,7 @@
             var ws;
             var stompClient;
             var roomId = "[[${roomId}]]";
+     
             var usersInCurrentRoom;
             var friends;
             var groups;
@@ -252,7 +253,7 @@
               if (possibleAddFriends.hasOwnProperty(user)) {
                   var li = document.createElement('li');
                   var a = document.createElement('a'); 
-                  a.setAttribute('onclick',"createGroup("+possibleAddFriends[user].userId+")");
+                  a.setAttribute('onclick',"createGroup("+possibleAddFriends[user].userId+")");                    
                   a.appendChild(document.createTextNode(possibleAddFriends[user].username));
                   li.appendChild(a);
                   document.getElementById('add-friends-chat').appendChild(li);
@@ -283,7 +284,7 @@
         }
         
         function leaveGroup(){
-          var herokuClearHistory = 'https://'. window.location.host + '/main/chat/leaveGroup';
+          var herokuClearHistory = 'https://'+ window.location.host + '/main/chat/leaveGroup';
           var localCleanHistory = "/WebChat/main/chat/leaveGroup";
     
           $.post("/WebChat/main/chat/leaveGroup", {
@@ -291,13 +292,13 @@
             userId : "[[${session.user.id}]]",
             username : "[[${session.user.username}]]"
           }, function(data){
-            var response = 'https://' + window.location.host + data;
+            var response = 'http://' + window.location.host + data;
             window.location.replace(response);
           });
         }
         
         function clearHistory(){
-          var herokuClearHistory = 'https://'. window.location.host + '/main/chat/clearHistory';
+          var herokuClearHistory = 'https://'+ window.location.host + '/main/chat/clearHistory';
           var localCleanHistory = "/WebChat/main/chat/clearHistory";
           
           $.post("/WebChat/main/chat/clearHistory", {

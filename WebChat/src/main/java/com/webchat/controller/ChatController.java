@@ -67,12 +67,11 @@ public class ChatController {
     }
     
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
-    public String RoomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
+    public String roomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
         currentUser = (User) request.getSession().getAttribute("user");
         chatRoomAndFriendIds = chatService.getRoomsForUser(currentUser.getId());
         
         if(hasAccessToRoom(roomId)){
-           
             model.addAttribute("roomId", roomId);
             return "main/chat";
         }
@@ -125,14 +124,24 @@ public class ChatController {
     @MessageMapping("/chat/{roomId}/{newUser}/createGroup")
     public void createGroup(@DestinationVariable int roomId,
                             @DestinationVariable int newUser){
-      
-        if(chatService.createGroupChat(generateGroupName(), roomId, newUser))
-        {
-            sendMessageToRoom(roomId,"Group Was Successfully Created");   
-        }else{
-            sendMessageToRoom(roomId,"Whoops! We could not create a new Groupchat for you!");   
+        if(chatService.isGroupRoom(roomId)){
+            if(chatService.addUserToExistingGroup(newUser, roomId)){
+                sendMessageToRoom(roomId,"A new user was added to the room!");  
+            }else{
+                sendMessageToRoom(roomId,"Whoops! We could not add the user to the room!"); 
+            }
+        }
+        else{
+            if(chatService.createGroupChat(generateGroupName(), roomId, newUser))
+            {
+                sendMessageToRoom(roomId,"Group Was Successfully Created");   
+            }else{
+                sendMessageToRoom(roomId,"Whoops! We could not create a new Groupchat for you!");   
+            }  
         } 
     }
+    
+    
     
     @SubscribeMapping("/getOnlineFriends")
     public List<ChatUserHelper> listFriends (){
