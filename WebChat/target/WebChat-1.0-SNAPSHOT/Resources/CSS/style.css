@@ -13,16 +13,28 @@ html {
 }
 body {
   min-height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden;
 }
 a.wide {
     display:block;
 }
 
+.col.s3.grey.lighten-3{
+    overflow-y: visible;
+}
+
+.col.s9.grey.lighten-4{
+    overflow-y: visible;
+}
+
 #row2{
-    overflow-y: scroll;
+    overflow-y: visible;
     height: 100%;
     padding-bottom: 10%;
+}
+
+.col.s3.grey.lighten-3{
+    overflow-y: visible;
 }
 
 .col.s3.grey.lighten-3{
@@ -100,9 +112,68 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
 .conversationDiv{
     position: fixed;
     bottom: 3%;
+    left: 12%;
     display: auto;
 }
 
+input#inputChat{
+    margin-top: 5%;
+    width: 70%;
+}
 
+.message-div{
+    width: 70%;
+    margin: auto;
+    padding-left: 5px;
+    padding-top: 5px;
+    -webkit-box-shadow: 2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+    -moz-box-shadow:    2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+    box-shadow:         2px 1px 11px 4px rgba(50, 50, 50, 0.13);
+}
 
+.message-list-window{
+    width: 100%;
+    margin: auto;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    position: relative;
+    height: 60vh;
+    width: 60vw;
+}
 
+div#message-list-chat.message-list-chat{
+    overflow: auto;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+p.message-text{
+    padding-bottom: 5px;
+}
+
+span#chat-room-header.chat-room-header{
+    font-size: 200%;
+}
+
+.header-div-chat{
+    text-align: center;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    color: red;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 20px;
+    background:  white;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    background: LightGrey;
+}

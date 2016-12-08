@@ -1,7 +1,9 @@
 com\webchat\dao\UserDAO$1.class
 com\webchat\model\ChatRoom.class
 com\webchat\controller\RedirectController.class
+com\webchat\service\ChatService.class
 com\webchat\dao\UserDAO$8.class
+com\webchat\dao\ChatDAO.class
 com\webchat\model\ChatUserHelper.class
 com\webchat\dao\UserDAO$6.class
 com\webchat\util\HashUtil.class
@@ -17,11 +19,12 @@ com\webchat\config\WebSocketConfig.class
 com\webchat\dao\UserDAO$7.class
 com\webchat\dao\UserDAO$11.class
 com\webchat\model\ChatMessage.class
+com\webchat\model\RoomHandler.class
 com\webchat\controller\LoginController.class
 com\webchat\dao\UserDAO$9.class
 com\webchat\validator\UserValidator.class
 com\webchat\dao\UserDAO$5.class
-com\webchat\dao\UserDAO$14.class
+com\webchat\dao\ChatDAO$1.class
 com\webchat\dao\UserDAO$4.class
 com\webchat\config\AppContext.class
 com\webchat\controller\MainController.class
