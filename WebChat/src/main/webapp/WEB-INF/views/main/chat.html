@@ -271,7 +271,12 @@
         }
         
         function clearHistory(){
-          console.log('clearhistory');
+          $.post("/WebChat/main/chat/clearHistory", {
+            roomId: "[[${roomId}]]"
+          }, function(data){
+            var response = 'http://' + window.location.host + data;
+            window.location.replace(response);
+          })
         };
       
     </script>

@@ -85,9 +85,7 @@ public class ChatController {
                              @RequestParam String username,
                              RedirectAttributes redirectAttributes){
     
-        //chatService.leaveChatGroup(roomId, userId)
-        if (true) {
-            System.out.println("Tjena Tjena ");
+        if (chatService.leaveChatGroup(roomId, userId)) {
             sendMessageToRoom(roomId, username + " has left the chat room!");
             redirectAttributes.addFlashAttribute("success_message", "You left the chat!");
             return "/WebChat/main/chat/none";
@@ -98,7 +96,18 @@ public class ChatController {
         }
     }
     
-  
+    @RequestMapping(value = "/WebChat/main/chat/clearHistory", method = RequestMethod.POST)
+    @ResponseBody
+    public String clearHistory(@RequestParam int roomId){
+        
+        if (chatService.clearChatHistory(roomId)) {
+            sendMessageToRoom(roomId, "History was cleared for this chat");
+            return "/WebChat/main/chat/" + roomId;
+        }else{
+            sendMessageToRoom(roomId, "Something went wrong with the clear request!");
+            return "/WebChat/main/chat/" + roomId;
+        }
+    }
     
     @MessageMapping("/chat/{roomId}")
     @SendTo("/topic/{roomId}/messages")

@@ -193,5 +193,35 @@ public class ChatDAO {
              return false;
          }
     }
+    
+    public boolean clearChatHistory(int roomId) {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        try {
+            jdbcCall.withProcedureName("proc_clear_chat_history");
+            SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomId",
+                    roomId);
+            jdbcCall.execute(in);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }      
+        return true;
+    }
+
+    public boolean leaveChatGroup(int roomId, int userId) {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        try {
+            jdbcCall.withProcedureName("proc_remove_user_from_chat_room");
+            SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomId",
+                    roomId).addValue("userId", userId);
+            jdbcCall.execute(in);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }      
+        return true;    
+    }
    
 }

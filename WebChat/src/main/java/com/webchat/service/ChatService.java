@@ -46,4 +46,12 @@ public class ChatService {
     public List<Message> getMessagesByRoomId(int roomId){
         return chatDAO.getMessagesInRoom(roomId);
     }
+    
+    public boolean leaveChatGroup(int roomId, int userId) {
+        return chatDAO.leaveChatGroup(roomId, userId);
+    }
+
+    public boolean clearChatHistory(int roomId) {
+        return chatDAO.clearChatHistory(roomId);
+    }
 }
