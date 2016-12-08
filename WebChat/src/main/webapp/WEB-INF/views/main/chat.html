@@ -11,8 +11,21 @@
   <body>
 
     <div class="col s9 grey lighten-4" layout:fragment="content" >
+      <div th:if="${error_message}">
+          <blockquote class="card-panel chip red white-text">
+              Error: <span th:text="${error_message}"></span>
+              <i class="close material-icons">close</i>
+          </blockquote>
+      </div>
+      <div th:if="${success_message}">
+          <blockquote class="card-panel chip green white-text">
+              Success: <span th:text="${success_message}"></span>
+              <i class="close material-icons">close</i>
+          </blockquote>
+      </div>
+      
       <div th:if="${roomId == null}">
-        <h4>Jag är fucking null</h4>
+        <h4>Welcome to the chat page!</h4>
       </div>
       <div th:if="${roomId != null}">
         <div class="header-div-chat">
@@ -47,7 +60,7 @@
               
               <!-- Clear history button -->
               <a class="waves-effect waves-light btn red accent-4 white-text"
-                 onclick="return confirm('Do you really want to clear the chat history?')">
+                 onclick="if(confirm('Do you really want to clear the chat history?')) clearHistory();">
                 <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
               </a>
             </div>
@@ -234,6 +247,10 @@
             window.location.replace(response);
           });
         }
+        
+        function clearHistory(){
+          console.log('clearhistory');
+        };
       
     </script>
       <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
