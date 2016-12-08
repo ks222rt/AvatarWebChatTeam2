@@ -223,5 +223,23 @@ public class ChatDAO {
         }      
         return true;    
     }
+    
+    public boolean isGroupRoom(final int chatRoomId) {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+       try {
+           jdbcCall.withProcedureName("proc_check_if_group_room");
+           SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomId",
+                   chatRoomId);                
+           Map<String, Object> out = jdbcCall.execute(in);
+           
+           int result = (Integer)out.get("isGroup");
+           
+           return result == 1;
+
+       } catch (Exception e) {
+           System.out.println(e.getMessage());
+           return false;
+       }      
+    }
    
 }
