@@ -292,8 +292,9 @@
             userId : "[[${session.user.id}]]",
             username : "[[${session.user.username}]]"
           }, function(data){
-            var response = 'http://' + window.location.host + data;
-            window.location.replace(response);
+            var herokuResponse = 'https://' + window.location.host + data;
+            //var response = 'http://' + window.location.host + data;
+            window.location.replace(herokuResponse);
           });
         }
         
