@@ -29,6 +29,9 @@ import java.util.Map;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -529,42 +532,19 @@ public class UserDAO {
     }
 
     public boolean deleteAccount(final User user) {
-        CallableStatement cs = null;
-        
-        return false;
-
+         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+       try {
+           jdbcCall.withProcedureName("proc_delete_account");
+           SqlParameterSource in = new MapSqlParameterSource().addValue("userID",
+                        user.getId());
+           jdbcCall.execute(in);
+       } catch (Exception e) {
+           System.out.println(e.getMessage());
+           return false;
+       }
+       return true;
     }
-    
-            /*final String sql = "SET FOREIGN_KEY_CHECKS = 0\n"+
-                           "DELETE avatar_webchat.chat_room_members, avatar_webchat.chat_line, avatar_webchat.friend, avatar_webchat.friend_requests, avatar_webchat.chat_user, avatar_webchat.chat_user_info, avatar_webchat.chat_room\n" +
-                           "FROM avatar_webchat.chat_room_members\n"+
-                           "LEFT OUTER JOIN avatar_webchat.chat_line\n"+
-                           "ON avatar_webchat.chat_line.user_id = avatar_webchat.chat_room_members.user_id\n" +
-                           "LEFT OUTER JOIN avatar_webchat.friend\n"+
-                           "ON (avatar_webchat.friend.id1 = avatar_webchat.chat_room_members.user_id) OR (avatar_webchat.friend.id2 = avatar_webchat.chat_room_members.user_id)\n" +
-                           "LEFT OUTER JOIN avatar_webchat.friend_requests\n"+
-                           "ON (avatar_webchat.friend_requests.sender = avatar_webchat.chat_room_members.user_id) OR (avatar_webchat.friend_requests.reciever = avatar_webchat.chat_room_members.user_id)\n" +
-                           "LEFT OUTER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_user.id = avatar_webchat.chat_room_members.user_id\n" +
-                           "LEFT OUTER JOIN avatar_webchat.chat_user_info ON avatar_webchat.chat_user.info_id = avatar_webchat.chat_user_info.id\n" +
-                           "LEFT OUTER JOIN avatar_webchat.chat_room ON avatar_webchat.chat_room.id = avatar_webchat.chat_room_members.chat_room_id\n" +
-                           "WHERE avatar_webchat.chat_room_members.user_id = "+user.getId()+ " AND avatar_webchat.chat_room.isGroup = 0";
-        final String anotherSql = "SET FOREIGN_KEY_CHECKS = 0\n"+
-                           "DELETE avatar_webchat.chat_room_members\n" +
-                           "FROM avatar_webchat.chat_room_members\n" +
-                           "WHERE avatar_webchat.chat_room_members.user_id = "+user.getId();
-                          
-        
-         try {
-            jdbcTemplate.execute(sql);
-            jdbcTemplate.execute(anotherSql);
- 
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-                           
-        return true;*/
-    
+
     public boolean deleteFriendRequestsAndFriends(final User user)
     {
          final int userID = user.getId();
