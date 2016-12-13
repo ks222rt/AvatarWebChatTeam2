@@ -571,6 +571,12 @@ public class UserDAO {
         return true;
     }
     
+    
+    // Not yet implemented, ADAMS job
+    public boolean reportUser(int id, int userId, String answer) {
+        return false;
+    }
+    
     /*public boolean deleteAllFriends(final User user)
     {
         final int userID = user.getId();
@@ -594,4 +600,5 @@ public class UserDAO {
         return true;
     }
     */
+
 }

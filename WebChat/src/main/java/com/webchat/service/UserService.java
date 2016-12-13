@@ -89,5 +89,9 @@ public class UserService {
     public boolean areWeFriends(int userID, int friendID){
         return userDAO.alreadyFriends(userID, friendID);
     }
+
+    public boolean reportUser(int id, int userId, String answer) {
+        return userDAO.reportUser(id, userId, answer);
+    }
    
 }

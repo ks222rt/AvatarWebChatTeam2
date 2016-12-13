@@ -12,6 +12,14 @@ and open the template in the editor.
     </head>
     <body>
       <div layout:fragment="content">
+        
+        <div id="message-box" style="visibility: hidden">
+          <blockquote class="card-panel chip  amber darken-4 white-text">
+              Server message: <span id="test"></span>
+              <i class="close material-icons">close</i>
+          </blockquote>
+        </div>
+        
         <div class="row">
           <div class="col s4 userpage-info-card">
               <div class="card">
@@ -30,19 +38,49 @@ and open the template in the editor.
                 </div>
                 
                 <div class="card-action">
-                  <div th:if="${#bools.isTrue(isFriend)}">
+                  <div th:if="${#bools.isTrue(isFriend)}" class="profile-page-float-me">
                     <a class="waves-effect waves-light btn red" 
                        th:href="@{/main/removeFriend/{id}(id=${user.id})}"
                        onclick="return confirm('Are you sure you want to remove this friend?')">Remove me</a>
                   </div>
-                  <div th:if="${#bools.isFalse(isFriend)}">
-                    <a class="waves-effect waves-light btn green"th:href="@{/main/friendRequest/{id}(id=${user.id})}">Add me</a>
+                  <div th:if="${#bools.isFalse(isFriend)}" class="profile-page-float-me">
+                    <a class="waves-effect waves-light btn green"
+                       th:href="@{/main/friendRequest/{id}(id=${user.id})}">Add me</a>
+                  </div>
+                  <div>
+                    <a id="reportThatUser"
+                       class="waves-effect waves-light btn amber darken-4"
+                       onclick="reportUserFunction()">Report user</a>
                   </div>
                 </div>
               </div>
           </div>
         </div>
       </div>
+      
+    <th:block layout:fragment="script">
+      <script>
+          function reportUserFunction(){
+            var herokuReportUser = 'https://'+ window.location.host + '/main/reportUser';
+            var localReportUser = "/WebChat/main/reportUser";
+            var answer = prompt('Why do you want to report this user?', 'Enter reason here...');
+            console.log(answer);
+            
+            if (answer != null) {
+              $.post(localReportUser, {
+                userId: "[[${user.id}]]",
+                username: "[[${user.username}]]",
+                answer: answer
+              }, function (data){
+                  //$("#test").attr("innerHTML", data);
+                  document.getElementById("test").innerHTML = data;
+                  $("#message-box").css("visibility", "visible");
+              });
+            }
+            
+          }
+      </script>
+    </th:block>
        
     </body>
 </html>

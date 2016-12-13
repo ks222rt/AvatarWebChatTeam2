@@ -161,6 +161,11 @@ span#chat-room-header.chat-room-header{
     text-align: center;
 }
 
+/* float add me and remove me button */
+div.profile-page-float-me{
+    float: right;
+}
+
 ::-webkit-scrollbar {
     width: 12px;
     color: red;

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -91,6 +92,22 @@ public class MainController {
             return "main/welcome";
         }
         return "main/welcome";
+    }
+    
+    @RequestMapping(value = "/reportUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Object reportUser(HttpServletRequest request,
+                                RedirectAttributes redirectAttributes,
+                                @RequestParam int userId,
+                                @RequestParam String username,
+                                @RequestParam String answer){
+        
+        User user = (User) request.getSession().getAttribute("user");
+        if (userService.reportUser(user.getId(), userId, answer)) {
+             return "Report has been sent to the admin!";
+        }else{
+            return "Something happend with the request";
+        }
     }
     
     @RequestMapping(value="/friendResponse/{response}/{id}", method = RequestMethod.GET)
