@@ -27,13 +27,19 @@ public class AdminController {
                                  RedirectAttributes redirectAttributes){
         User user = (User) request.getSession().getAttribute("user");
         
-        if (!user.getUsername().equalsIgnoreCase("admin")) {
+        if (user.getIsAdmin() == 0) {
             redirectAttributes.addFlashAttribute("error_message", "You dont have permission to this!!");
             return "redirect:/main/welcome";
         }
         
+        // Next to do is to get all reported users
         
+        // Add them to the model
+        
+        //Return the report page with the list of users        
         return "admin/userReports";
     }
+    
+    
     
 }
