@@ -571,11 +571,31 @@ public class UserDAO {
         return true;
     }
     
-    
-    // Not yet implemented, ADAMS job
-    public boolean reportUser(int id, int userId, String answer) {
-        return false;
+    public boolean reportUser(final int senderId, final int reportedUserId, final String reason) {
+       final String sqlForInsertReport = "insert into avatar_webchat.chat_report(senderId, reportedUserId, reason)\n"
+               + "values(?, ?, ?)";
+
+       try{
+           jdbcTemplate.update(new PreparedStatementCreator() {
+               @Override
+               public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                   PreparedStatement ps = connection.prepareStatement(sqlForInsertReport);
+                   ps.setInt(1, senderId);
+                   ps.setInt(2, reportedUserId);
+                   ps.setString(3, reason);
+                   return ps;
+               }
+           });
+           return true;
+       }catch(Exception e){
+           System.out.println("Report user DAO:"+ e.getMessage());
+           return false;
+       }
     }
+    
+    
+
+   
     
     /*public boolean deleteAllFriends(final User user)
     {
