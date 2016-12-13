@@ -15,7 +15,10 @@ and open the template in the editor.
   <nav th:fragment="header" class="red lighten-2">
     <!-- Dropdown Structure -->
     <ul id="dropdown1" class="dropdown-content">
-            <li><a href="/main/settings" th:href="@{/main/settings}">Settings</a></li>
+      <li th:if="${session.user.username} == admin">
+        <a href="/admin/reports" th:href="@{/admin/reports}">Reports</a>
+      </li>
+      <li><a href="/main/settings" th:href="@{/main/settings}">Settings</a></li>
       <li class="divider"></li>
       <li><a href="/main/logout" th:href="@{/main/logout}">Logout</a></li>
     </ul>
