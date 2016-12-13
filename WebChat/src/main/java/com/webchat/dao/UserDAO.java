@@ -572,7 +572,7 @@ public class UserDAO {
     }
     
     public boolean reportUser(final int senderId, final int reportedUserId, final String reason) {
-       final String sqlForInsertReport = "insert into avatar_webchat.chat_report(senderId, reportedUserId, reason)\n"
+       final String sqlForInsertReport = "insert into avatar_webchat.chat_reports(senderId, reportedUserId, reason)\n"
                + "values(?, ?, ?)";
 
        try{

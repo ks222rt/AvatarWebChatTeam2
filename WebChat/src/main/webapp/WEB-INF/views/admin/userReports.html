@@ -13,8 +13,58 @@ and open the template in the editor.
   <body>
     <div layout:fragment="content">
       <div class="col s12 grey lighten-4">
-        <h1 class="h1-header-welcome-page">Welcome to</h1>
-        <h3 class="h3-header-welcome-page">Report page</h3>
+        <h2>Incoming reports on users</h2>
+        
+        <!-- blockquote for error messages -->
+        <div th:if="${error_message}">
+            <blockquote class="card-panel chip red white-text">
+                Error: <span th:text="${error_message}"></span>
+                <i class="close material-icons">close</i>
+            </blockquote>
+        </div>
+        <div th:if="${success_message}">
+            <blockquote class="card-panel chip green white-text">
+                Success: <span th:text="${success_message}"></span>
+                <i class="close material-icons">close</i>
+            </blockquote>
+        </div>
+        
+        <!-- if list is empty do this -->
+        <div th:if="${#lists.isEmpty(reportedUsers)}">
+          <h4>No reports available, users have been good to each other!</h4>
+        </div>
+        
+        <!-- if list is not empty -->
+        <div th:if="${not #lists.isEmpty(reportedUsers)}">
+          <table class="striped">
+            <thead>
+              <tr>
+                <th>Victim:</th>
+                <th>Accused:</th>
+                <th>Reason:</th>
+                <th>Judgement:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="case : ${reportedUsers}">
+                <td><a th:text="${case.senderName}" th:href="@{/main/user/{username}(username=${case.senderName})}"></a></td>
+                <td><a th:text="${case.reportedName}" th:href="@{/main/user/{username}(username=${case.reportedName})}"></a></td>
+                <td th:text="${case.reportContent}"></td>
+                <td>
+                  <a class="waves-effect waves-light btn red" 
+                     alt="Disable user account"
+                     th:href="@{/admin/disableUser/{id}(id=${case.reportedId})}">
+                    <i class="small material-icons left">thumb_down</i>Disable user</a>
+                  <a class="waves-effect waves-light btn green" 
+                     alt="Remove report from user"
+                     th:href="@{/admin/removeReport/{id}(id=${case.reportedId})}">
+                    <i class="small material-icons left">thumb_up</i>Remove report</a>
+                </td>
+              </tr>              
+            </tbody>
+          </table>
+        </div>
+        </div>
       </div>
     </div>
   </body>

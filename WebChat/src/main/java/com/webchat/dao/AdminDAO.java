@@ -16,11 +16,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author filip
  */
+@Component
 public class AdminDAO {
     
     @Autowired
@@ -29,7 +31,7 @@ public class AdminDAO {
     
     
     public List<UserReportHelper> getAllReportedUsers() {
-       final String sqlForInsertReport = "SELECT avatar_webchat.senderName.username as sender, avatar_webchat.reportedName.username as reported, avatar_webchat.chat_reports.senderId as sender, avatar_webchat.reportedUserId as reported, avatar_webchat.reason\n"+
+       final String sqlForInsertReport = "SELECT senderName.username as sender, reportedName.username as reported, avatar_webchat.chat_reports.senderId as senderId, avatar_webchat.chat_reports.reportedUserId as reportedId, avatar_webchat.chat_reports.reason\n"+
                                          "FROM avatar_webchat.chat_reports\n"+
                                          "LEFT OUTER JOIN avatar_webchat.chat_user as senderName ON senderName.id = senderId\n"+
                                          "LEFT OUTER JOIN avatar_webchat.chat_user as reportedName ON reportedName.id = reportedUserId";
@@ -41,7 +43,9 @@ public class AdminDAO {
              for (Map row : rows) {
                  UserReportHelper urh = new UserReportHelper();
                      urh.setSenderName((String) row.get("sender"));
+                     urh.setSenderId((int) row.get("senderId"));
                      urh.setReportedName((String)row.get("reported"));
+                     urh.setReportedId((int) row.get("reportedId"));
                      urh.setReportContent((String) row.get("reason"));
                  listOfReports.add(urh);
              }
@@ -52,6 +56,19 @@ public class AdminDAO {
             return null;
         }
              
+    }
+    
+    /* This method will disable a useraccount on the ID. It will also remove 
+        the account from the table with ALL reports */
+    public boolean disableUser(int id) {
+        // returnerar false so I can test it on the client, Kristoffer
+        return false;
+    }
+
+    /* This method will remove the report from the user */
+    public boolean removeReportFromUser(int id) {
+        // returnerar false so I can test it on the client, Kristoffer
+        return false;
     }
 
 }

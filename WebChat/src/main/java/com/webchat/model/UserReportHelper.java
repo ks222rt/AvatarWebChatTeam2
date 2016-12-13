@@ -10,5 +10,50 @@ package com.webchat.model;
  * @author filip
  */
 public class UserReportHelper {
+
+    private String senderName;
+    private int senderId;
+    private String reportedName;
+    private int reportedId;
+    private String reportContent;
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
     
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+    public int getReportedId() {
+        return reportedId;
+    }
+
+    public void setReportedId(int reportedId) {
+        this.reportedId = reportedId;
+    }
+
+    public String getReportedName() {
+        return reportedName;
+    }
+
+    public void setReportedName(String reportedName) {
+        this.reportedName = reportedName;
+    }
+
+    public String getReportContent() {
+        return reportContent;
+    }
+
+    public void setReportContent(String reportContent) {
+        this.reportContent = reportContent;
+    }
 }
