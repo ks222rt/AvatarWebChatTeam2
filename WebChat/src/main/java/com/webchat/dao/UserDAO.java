@@ -11,6 +11,7 @@ import com.webchat.model.Message;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.webchat.model.User;
+import com.webchat.model.UserReportHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -596,8 +597,31 @@ public class UserDAO {
     /* Implement execution of sql query to see if account is disabled.
         Return true if the account IS disabled and false if not */
     public boolean isMyAccountDisabled(int id) {
-        return false;
+         final String sqlForInsertReport = "SELECT avatar_webchat.chat_blacklist.userId FROM chat_blacklist\n"+
+                                           "WHERE avatar_webchat.chat_blacklist.userId ="+id+";";
+               
+ 
+        try{
+
+             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForInsertReport);
+             for (Map row : rows) {
+                 int uid = (int)row.get("userId");
+                 
+                 if(uid != 0){
+                     System.out.println("hittade idet:"+uid);
+                     return true;
+                 }
+                 System.out.println("hittade inte idet:"+uid);
+             }
+             return true;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }  
     }
+    
+  
 
    
     

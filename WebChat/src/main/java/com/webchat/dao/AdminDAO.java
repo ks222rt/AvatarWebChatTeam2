@@ -54,15 +54,29 @@ public class AdminDAO {
         catch(Exception e){
             System.out.println(e.getMessage());
             return null;
-        }
-             
+        }     
     }
     
     /* This method will disable a useraccount on the ID. It will also remove 
         the account from the table with ALL reports */
-    public boolean disableUser(int id) {
-        // returnerar false so I can test it on the client, Kristoffer
-        return false;
+    public boolean disableUser(final int userId) {
+        final String sqlForDisableUser = "insert into avatar_webchat.chat_blacklist(userId)\n"
+               + "values(?)";
+        
+           try{
+           jdbcTemplate.update(new PreparedStatementCreator() {
+               @Override
+               public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                   PreparedStatement ps = connection.prepareStatement(sqlForDisableUser);
+                   ps.setInt(1, userId);
+                   return ps;
+               }
+           });
+           return true;
+       }catch(Exception e){
+           System.out.println("disableUserDAO:"+ e.getMessage());
+           return false;
+       }
     }
 
     /* This method will remove the report from the user */
