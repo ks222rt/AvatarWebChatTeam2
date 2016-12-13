@@ -16,6 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,7 +34,7 @@ public class AdminDAO {
     
     
     public List<UserReportHelper> getAllReportedUsers() {
-       final String sqlForInsertReport = "SELECT senderName.username as sender, reportedName.username as reported, avatar_webchat.chat_reports.senderId as senderId, avatar_webchat.chat_reports.reportedUserId as reportedId, avatar_webchat.chat_reports.reason\n"+
+       final String sqlForInsertReport = "SELECT avatar_webchat.chat_reports.id, senderName.username as sender, reportedName.username as reported, avatar_webchat.chat_reports.senderId as senderId, avatar_webchat.chat_reports.reportedUserId as reportedId, avatar_webchat.chat_reports.reason\n"+
                                          "FROM avatar_webchat.chat_reports\n"+
                                          "LEFT OUTER JOIN avatar_webchat.chat_user as senderName ON senderName.id = senderId\n"+
                                          "LEFT OUTER JOIN avatar_webchat.chat_user as reportedName ON reportedName.id = reportedUserId";
@@ -47,6 +50,7 @@ public class AdminDAO {
                      urh.setReportedName((String)row.get("reported"));
                      urh.setReportedId((int) row.get("reportedId"));
                      urh.setReportContent((String) row.get("reason"));
+                     urh.setPrimaryKey((int) row.get("id"));
                  listOfReports.add(urh);
              }
              return listOfReports;
@@ -60,29 +64,36 @@ public class AdminDAO {
     /* This method will disable a useraccount on the ID. It will also remove 
         the account from the table with ALL reports */
     public boolean disableUser(final int userId) {
-        final String sqlForDisableUser = "insert into avatar_webchat.chat_blacklist(userId)\n"
-               + "values(?)";
-        
-           try{
-           jdbcTemplate.update(new PreparedStatementCreator() {
-               @Override
-               public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                   PreparedStatement ps = connection.prepareStatement(sqlForDisableUser);
-                   ps.setInt(1, userId);
-                   return ps;
-               }
-           });
-           return true;
-       }catch(Exception e){
-           System.out.println("disableUserDAO:"+ e.getMessage());
-           return false;
-       }
+         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        try {
+           
+            jdbcCall.withProcedureName("proc_disable_user");
+            SqlParameterSource in = new MapSqlParameterSource().addValue("userId",userId);
+               
+           jdbcCall.execute(in); 
+           
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+       return true; 
     }
 
     /* This method will remove the report from the user */
     public boolean removeReportFromUser(int id) {
-        // returnerar false so I can test it on the client, Kristoffer
-        return false;
+            SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        try {
+           
+            jdbcCall.withProcedureName("proc_delete_report_by_id");
+            SqlParameterSource in = new MapSqlParameterSource().addValue("report_id",id);
+               
+           jdbcCall.execute(in); 
+           
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+       return true; 
     }
 
 }

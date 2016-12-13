@@ -32,4 +32,6 @@ public class AdminService {
     public boolean removeReportFromUser(int id) {
         return adminDAO.removeReportFromUser(id);
     }
+    
+    
 }

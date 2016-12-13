@@ -57,7 +57,7 @@ and open the template in the editor.
                     <i class="small material-icons left">thumb_down</i>Disable user</a>
                   <a class="waves-effect waves-light btn green" 
                      alt="Remove report from user"
-                     th:href="@{/admin/removeReport/{id}(id=${case.reportedId})}">
+                     th:href="@{/admin/removeReport/{id}(id=${case.primaryKey})}">
                     <i class="small material-icons left">thumb_up</i>Remove report</a>
                 </td>
               </tr>              

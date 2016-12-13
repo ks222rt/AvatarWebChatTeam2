@@ -11,12 +11,23 @@ package com.webchat.model;
  */
 public class UserReportHelper {
 
+  
+
     private String senderName;
     private int senderId;
     private String reportedName;
     private int reportedId;
     private String reportContent;
+    private int primaryKey;
+    
+    public int getPrimaryKey() {
+        return primaryKey;
+    }
 
+    public void setPrimaryKey(int primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+    
     public String getSenderName() {
         return senderName;
     }

@@ -606,14 +606,11 @@ public class UserDAO {
              List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForInsertReport);
              for (Map row : rows) {
                  int uid = (int)row.get("userId");
-                 
-                 if(uid != 0){
-                     System.out.println("hittade idet:"+uid);
+                 if(uid == id){
                      return true;
-                 }
-                 System.out.println("hittade inte idet:"+uid);
+                 } 
              }
-             return true;
+             return false;
         }
         catch(Exception e){
             System.out.println(e.getMessage());
