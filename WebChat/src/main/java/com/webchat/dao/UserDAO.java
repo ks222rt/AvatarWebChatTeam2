@@ -593,7 +593,11 @@ public class UserDAO {
        }
     }
     
-    
+    /* Implement execution of sql query to see if account is disabled.
+        Return true if the account IS disabled and false if not */
+    public boolean isMyAccountDisabled(int id) {
+        return false;
+    }
 
    
     

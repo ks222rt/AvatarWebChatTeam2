@@ -93,5 +93,9 @@ public class UserService {
     public boolean reportUser(int id, int userId, String answer) {
         return userDAO.reportUser(id, userId, answer);
     }
+
+    public boolean isMyAccountDisabled(int id) {
+        return userDAO.isMyAccountDisabled(id);
+    }
    
 }

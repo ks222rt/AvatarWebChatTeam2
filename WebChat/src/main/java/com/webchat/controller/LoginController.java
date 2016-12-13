@@ -37,7 +37,7 @@ public class LoginController {
     
     @Autowired
     private SessionUtil sessionUtil;
-    
+        
     public LoginController() {
         validator = new UserValidator();
     }
@@ -64,6 +64,11 @@ public class LoginController {
         User user = userService.loginUser(username, password);
         
         if(user != null){
+            if (userService.isMyAccountDisabled(user.getId())) {
+                redirectAttributes.addFlashAttribute("error_message", "Your account is disabled");
+                return "redirect:/login";
+            }
+            
             sessionUtil.registerNewSession(user);
             model.addAttribute("user", user);
             return "redirect:/main/welcome";
