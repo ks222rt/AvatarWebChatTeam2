@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -70,6 +72,12 @@ public class ServletConfig extends WebMvcConfigurerAdapter implements ServletCon
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine(servletContext));
         return resolver;
+    }
+    
+    @Bean
+    public MultipartResolver multipartResolver()
+    {
+        return new StandardServletMultipartResolver();
     }
     
     @Override

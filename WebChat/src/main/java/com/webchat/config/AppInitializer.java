@@ -6,10 +6,10 @@
 package com.webchat.config;
 
 import static com.webchat.config.SecurityConfig.httpSessionEventPublisher;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -46,6 +46,10 @@ public class AppInitializer implements WebApplicationInitializer{
                 context.addServlet("dispatcher", new DispatcherServlet(servletContext));
         dispatcher.setAsyncSupported(true);
         dispatcher.setLoadOnStartup(1);
+        
+        /* this is where maximum file size for uploaded files is set */
+        dispatcher.setMultipartConfig(new MultipartConfigElement(
+            null, 409600, 409600, 0));
         dispatcher.addMapping("/");
     }
     

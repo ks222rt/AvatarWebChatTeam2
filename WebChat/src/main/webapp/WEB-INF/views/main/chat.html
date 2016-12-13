@@ -1,316 +1,324 @@
 <!DOCTYPE html>
 
 <html layout:decorator="main/layout">
-  <head>
-    <title>Avatar - WebChat</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
+    <head>
+        <title>Avatar - WebChat</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  </head>
-  <body>
 
-    <div class="col s9 grey lighten-4" layout:fragment="content" >
-       
-      
-      <div th:if="${error_message}">
-          <blockquote class="card-panel chip red white-text">
-              Error: <span th:text="${error_message}"></span>
-              <i class="close material-icons">close</i>
-          </blockquote>
-      </div>
-      <div th:if="${success_message}">
-          <blockquote class="card-panel chip green white-text">
-              Success: <span th:text="${success_message}"></span>
-              <i class="close material-icons">close</i>
-          </blockquote>
-      </div>
-      
-      <div th:if="${roomId == null}">
-        <h4>Welcome to the chat page!</h4>
-      </div>
-      <div th:if="${roomId != null}">
-          
-        <div class="header-div-chat">
-          <span class="chat-room-header" id="chat-room-header"></span>
-        </div>
-         
-        <div class="message-list-window">
-          
-            <div class="message-list-chat" id="message-list-chat">
-                
+    </head>
+    <body>
+
+        <div class="col s9 grey lighten-4" layout:fragment="content" >
+
+
+            <div th:if="${error_message}">
+                <blockquote class="card-panel chip red white-text">
+                    Error: <span th:text="${error_message}"></span>
+                    <i class="close material-icons">close</i>
+                </blockquote>
             </div>
-           
-        </div>
-          
-          <div class="conversationDiv">
-            <div class="chatButton">
-              <input type="text" id="inputChat" placeholder="Write a message..."/>
-              
-              <!-- Send button -->
-              <a id="sendMessage" 
-                 class="waves-effect waves-light btn red green darken-1 white-text">
-                  <i class="material-icons left">mode_edit</i>Send
-              </a>
-              <!-- Add friend to chat button -->
-              <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
-                 href='#' data-activates='add-friends-chat'>
-                 Add Friend To Group
-              </a>
-              <!-- Dropdown Structure -->
-              <ul id='add-friends-chat' class='dropdown-content'></ul>
-              
-              <!-- Leave group button -->
-              <a class="waves-effect waves-light btn red accent-4 white-text"
-                 onclick="if(confirm('Do you really want to leave this chat?')) leaveGroup();">
-                <i id="addToGroup" class="material-icons left">not_interested</i>Leave Group
-              </a>
-              
-              <!-- Clear history button -->
-              <a class="waves-effect waves-light btn red accent-4 white-text"
-                 onclick="if(confirm('Do you really want to clear the chat history?')) clearHistory();">
-                <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
-              </a>
+            <div th:if="${success_message}">
+                <blockquote class="card-panel chip green white-text">
+                    Success: <span th:text="${success_message}"></span>
+                    <i class="close material-icons">close</i>
+                </blockquote>
             </div>
-          </div>
-        
-      </div>
-    </div>
-        
+
+            <div th:if="${roomId == null}">
+                <h4>Welcome to the chat page!</h4>
+            </div>
+            <div th:if="${roomId != null}">
+
+                <div class="header-div-chat">
+                    <span class="chat-room-header" id="chat-room-header"></span>
+                </div>
+
+                <div class="message-list-window">
+
+                    <div class="message-list-chat" id="message-list-chat">
+
+                    </div>
+
+                </div>
+
+                <div class="conversationDiv">
+                    <div class="chatButton">
+                        <input type="text" id="inputChat" placeholder="Write a message..."/>
+
+                        <!-- Send button -->
+                        <a id="sendMessage" 
+                           class="waves-effect waves-light btn red green darken-1 white-text">
+                            <i class="material-icons left">mode_edit</i>Send
+                        </a>
+                        <!-- Add friend to chat button -->
+                        <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
+                           href='#' data-activates='add-friends-chat'>
+                            Add Friend To Group
+                        </a>
+                        <!-- Dropdown Structure -->
+                        <ul id='add-friends-chat' class='dropdown-content'></ul>
+
+                        <!-- Leave group button -->
+                        <a class="waves-effect waves-light btn red accent-4 white-text"
+                           onclick="if (confirm('Do you really want to leave this chat?'))
+                                       leaveGroup();">
+                            <i id="addToGroup" class="material-icons left">not_interested</i>Leave Group
+                        </a>
+
+                        <!-- Clear history button -->
+                        <a class="waves-effect waves-light btn red accent-4 white-text"
+                           onclick="if (confirm('Do you really want to clear the chat history?'))
+                                       clearHistory();">
+                            <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
+                        </a>
+                    </div>
+                </div>
+                <!-- File upload -->
+                <form method="POST" action="uloadFile" enctype="multipart/form-data">
+                    Choose a file to upload: 
+                    <input type="file" name="file">
+                    <input type="submit" value="Upload">
+                </form>	
+            </div>
+        </div>
+
     <th:block layout:fragment="script">
-       
-      <script type="text/javascript">
-            
+
+        <script type="text/javascript">
+
             var ws;
             var stompClient;
             var roomId = "[[${roomId}]]";
-     
+
             var usersInCurrentRoom;
             var friends;
             var groups;
             var wsLinkForHeroku = 'https://' + window.location.host;
-            
-            
-        $(document).ready(function(){
-            console.log("Current Chatroom: "+roomId );
-            if ($("#sendMessage").length) {
-                document.querySelector('#sendMessage').addEventListener('click', send);
-            }
-            ws = new SockJS("/WebChat/chat");
-            //ws = new SockJS(wsLinkForHeroku + '/chat');
-            //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
-            stompClient = Stomp.over(ws);
-            stompClient.connect({}, function(frame){
-            console.log("Connected to Websocket!");
-            if(roomId !== "")
-            {
-              //Socket for realtime messages.
-              stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/messages", function(message){
-                  // Parse JSON object
-                  var content = JSON.parse(message.body);
-                  renderMessage(content);
-              });
-              //Socket for realtime server commands.
-              stompClient.subscribe("/topic/"+"[[${roomId}]]"+"/roomHandler", function(message){
-                  var response = JSON.parse(message.body);
-                  if (response.command === "clear") {
-                      $('#message-list-chat').empty();
-                  }
-              });
-              //SubscribeMap for -> the specific room
-              stompClient.subscribe("/app/"+"[[${roomId}]]", function(messages){
-                  // Parse JSON object
-                  var content = JSON.parse(messages.body);
-                  for(var i = 0; i < content.length; i++){
-                     renderMessage(content[i]); 
-                  }
-              });
-              //SubscribeMap for -> fetching all room members and invitable friends.
-              stompClient.subscribe("/app/"+"[[${roomId}]]"+"/getRoomUsers", function(JsonArrayOfUsersInRoom){
-                document.getElementById("chat-room-header").innerHTML = "Chat room with: ";
-                usersInCurrentRoom = JSON.parse(JsonArrayOfUsersInRoom.body);
-                var possibleAddFriends = friends;
-                for (var user in usersInCurrentRoom) {
-                    if (usersInCurrentRoom.hasOwnProperty(user)) {
-                       document.getElementById("chat-room-header").innerHTML +=  " " + usersInCurrentRoom[user].username;
-                    }
-                }    
 
-                for (var i = 0; i < usersInCurrentRoom.length; i++) {
-                    for (var k = 0; k < possibleAddFriends.length; k++) {
-                        if (usersInCurrentRoom[i].username === possibleAddFriends[k].username) {
-                            var pos = possibleAddFriends.indexOf(possibleAddFriends[k]);
-                            possibleAddFriends.splice(pos, 1);
+
+            $(document).ready(function () {
+                console.log("Current Chatroom: " + roomId);
+                if ($("#sendMessage").length) {
+                    document.querySelector('#sendMessage').addEventListener('click', send);
+                }
+                ws = new SockJS("/WebChat/chat");
+                //ws = new SockJS(wsLinkForHeroku + '/chat');
+                //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
+                stompClient = Stomp.over(ws);
+                stompClient.connect({}, function (frame) {
+                    console.log("Connected to Websocket!");
+                    if (roomId !== "")
+                    {
+                        //Socket for realtime messages.
+                        stompClient.subscribe("/topic/" + "[[${roomId}]]" + "/messages", function (message) {
+                            // Parse JSON object
+                            var content = JSON.parse(message.body);
+                            renderMessage(content);
+                        });
+                        //Socket for realtime server commands.
+                        stompClient.subscribe("/topic/" + "[[${roomId}]]" + "/roomHandler", function (message) {
+                            var response = JSON.parse(message.body);
+                            if (response.command === "clear") {
+                                $('#message-list-chat').empty();
+                            }
+                        });
+                        //SubscribeMap for -> the specific room
+                        stompClient.subscribe("/app/" + "[[${roomId}]]", function (messages) {
+                            // Parse JSON object
+                            var content = JSON.parse(messages.body);
+                            for (var i = 0; i < content.length; i++) {
+                                renderMessage(content[i]);
+                            }
+                        });
+                        //SubscribeMap for -> fetching all room members and invitable friends.
+                        stompClient.subscribe("/app/" + "[[${roomId}]]" + "/getRoomUsers", function (JsonArrayOfUsersInRoom) {
+                            document.getElementById("chat-room-header").innerHTML = "Chat room with: ";
+                            usersInCurrentRoom = JSON.parse(JsonArrayOfUsersInRoom.body);
+                            var possibleAddFriends = friends;
+                            for (var user in usersInCurrentRoom) {
+                                if (usersInCurrentRoom.hasOwnProperty(user)) {
+                                    document.getElementById("chat-room-header").innerHTML += " " + usersInCurrentRoom[user].username;
+                                }
+                            }
+
+                            for (var i = 0; i < usersInCurrentRoom.length; i++) {
+                                for (var k = 0; k < possibleAddFriends.length; k++) {
+                                    if (usersInCurrentRoom[i].username === possibleAddFriends[k].username) {
+                                        var pos = possibleAddFriends.indexOf(possibleAddFriends[k]);
+                                        possibleAddFriends.splice(pos, 1);
+                                    }
+                                }
+                            }
+                            fillDropDownList(possibleAddFriends);
+                        });
+
+                    }
+
+
+                    stompClient.subscribe("/app/getOnlineFriends", function (JsonListOfOnlineFriends) {
+                        friends = JSON.parse(JsonListOfOnlineFriends.body);
+                        for (var friend in friends) {
+                            if (friends.hasOwnProperty(friend)) {
+                                var aTag = document.createElement('a');
+                                //aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
+                                aTag.setAttribute('href', "/WebChat/main/chat/" + friends[friend].roomId);
+                                aTag.setAttribute('id', 'friendStyle');
+                                var textnode = document.createTextNode(friends[friend].username);
+                                aTag.appendChild(textnode);
+                                var mybr = document.createElement('br');
+                                document.getElementById("usersOnline").appendChild(aTag);
+                                document.getElementById("usersOnline").appendChild(mybr);
+                            }
+                        }
+                    });
+
+                    stompClient.subscribe("/app/getGroups", function (JsonListOfGroups) {
+                        groups = JSON.parse(JsonListOfGroups.body);
+
+                        for (var group in groups) {
+                            if (groups.hasOwnProperty(group)) {
+                                var aTag = document.createElement('a');
+                                //aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
+                                aTag.setAttribute('href', "/WebChat/main/chat/" + groups[group].roomId);
+                                var textnode = document.createTextNode(groups[group].groupname);
+                                aTag.appendChild(textnode);
+                                var mybr = document.createElement('br');
+                                document.getElementById("groupList").appendChild(aTag);
+                                document.getElementById("groupList").appendChild(mybr);
+                            }
+                        }
+                    });
+
+                });//Connect Socket
+            });//Doc on ready
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    send();
+                }
+            });
+
+            $('.dropdown-button').dropdown({
+                inDuration: 300,
+                outDuration: 225,
+                constrain_width: false, // Does not change width of dropdown to that of the activator
+                hover: true, // Activate on hover
+                gutter: 0, // Spacing from edge
+                belowOrigin: false, // Displays dropdown below the button
+                alignment: 'left' // Displays dropdown with edge aligned to the left of button
+            }
+            );
+
+            function renderMessage(message) {
+                // Create element for the message
+                var messagesContainer = document.createElement("div");
+                var text = document.createElement("p");
+                var time = document.createElement("span");
+                var img = document.createElement("img");
+                var div = document.createElement("div");
+                var chipDiv = document.createElement("div");
+                var chipAtag = document.createElement("a");
+
+                // Set attributes to the elements
+                img.setAttribute('th:src', "@{/resources/AVATAR/avatar2.png}");
+                img.setAttribute('src', "../../resources/AVATAR/avatar2.png");
+                img.setAttribute('alt', 'Profile picture');
+                chipDiv.className = 'chip';
+                chipDiv.appendChild(img);
+                if (message.from === null) {
+                    chipAtag.appendChild(document.createTextNode('SERVER'));
+                } else {
+                    chipAtag.appendChild(document.createTextNode(message.from));
+                }
+                //chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
+                chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
+                chipDiv.appendChild(chipAtag);
+
+                text.appendChild(document.createTextNode(message.text));
+                time.appendChild(document.createTextNode(message.time));
+                text.className = 'message-text';
+                time.className = 'message-time';
+
+                div.appendChild(chipDiv);
+                div.appendChild(time);
+                div.appendChild(text);
+                div.className = 'message-div';
+
+                //var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
+                messagesContainer.appendChild(div);
+                document.getElementById("message-list-chat").appendChild(messagesContainer);
+                $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
+            }
+
+
+
+            function fillDropDownList(possibleAddFriends) {
+                $('#add-friends-chat').empty();
+                if (possibleAddFriends.length > 0) {
+                    for (var user in possibleAddFriends) {
+                        if (possibleAddFriends.hasOwnProperty(user)) {
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.setAttribute('onclick', "createGroup(" + possibleAddFriends[user].userId + ")");
+                            a.appendChild(document.createTextNode(possibleAddFriends[user].username));
+                            li.appendChild(a);
+                            document.getElementById('add-friends-chat').appendChild(li);
                         }
                     }
+                } else {
+                    var li = document.createElement('li');
+                    var span = document.createElement('span');
+                    span.appendChild(document.createTextNode('No other friends online'));
+                    li.appendChild(span);
+                    document.getElementById('add-friends-chat').appendChild(li);
                 }
-                fillDropDownList(possibleAddFriends);
-             });
-            
             }
-            
-                       
-            stompClient.subscribe("/app/getOnlineFriends", function(JsonListOfOnlineFriends){ 
-                friends = JSON.parse(JsonListOfOnlineFriends.body);
-                for (var friend in friends) {
-                   if (friends.hasOwnProperty(friend)) {
-                       var aTag = document.createElement('a');
-                       //aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
-                       aTag.setAttribute('href',"/WebChat/main/chat/"+friends[friend].roomId);
-                       aTag.setAttribute('id', 'friendStyle');
-                       var textnode = document.createTextNode(friends[friend].username);
-                       aTag.appendChild(textnode);
-                       var mybr = document.createElement('br');
-                       document.getElementById("usersOnline").appendChild(aTag);
-                       document.getElementById("usersOnline").appendChild(mybr);
-                   }
-                }    
-            }); 
-            
-            stompClient.subscribe("/app/getGroups", function(JsonListOfGroups){
-                groups = JSON.parse(JsonListOfGroups.body);
-                
-                for(var group in groups){
-                    if (groups.hasOwnProperty(group)) {
-                        var aTag = document.createElement('a');
-                        //aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
-                        aTag.setAttribute('href',"/WebChat/main/chat/"+groups[group].roomId);
-                        var textnode = document.createTextNode(groups[group].groupname);
-                        aTag.appendChild(textnode);
-                        var mybr = document.createElement('br');
-                        document.getElementById("groupList").appendChild(aTag);
-                        document.getElementById("groupList").appendChild(mybr); 
-                    }
-                }         
-            });
-            
-        });//Connect Socket
-        });//Doc on ready
-         $(document).keypress(function (e) {
-            if (e.which == 13) {
-                send();
+
+            function createGroup(userToBeAdded) {
+                stompClient.send("/app/chat/[[${roomId}]]/" + userToBeAdded + "/createGroup");
             }
-        });
-        
-        $('.dropdown-button').dropdown({
-          inDuration: 300,
-          outDuration: 225,
-          constrain_width: false, // Does not change width of dropdown to that of the activator
-          hover: true, // Activate on hover
-          gutter: 0, // Spacing from edge
-          belowOrigin: false, // Displays dropdown below the button
-          alignment: 'left' // Displays dropdown with edge aligned to the left of button
-          }
-        );
-        
-        function renderMessage(message){
-          // Create element for the message
-          var messagesContainer = document.createElement("div");
-          var text = document.createElement("p");
-          var time = document.createElement("span");
-          var img = document.createElement("img");
-          var div = document.createElement("div");
-          var chipDiv = document.createElement("div");
-          var chipAtag = document.createElement("a");
 
-          // Set attributes to the elements
-          img.setAttribute('th:src', "@{/resources/AVATAR/avatar2.png}");
-          img.setAttribute('src', "../../resources/AVATAR/avatar2.png");
-          img.setAttribute('alt', 'Profile picture');
-          chipDiv.className = 'chip';
-          chipDiv.appendChild(img);
-          if (message.from === null) {
-            chipAtag.appendChild(document.createTextNode('SERVER'));
-          }else{
-            chipAtag.appendChild(document.createTextNode(message.from));
-          }
-          //chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
-          chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
-          chipDiv.appendChild(chipAtag);
-
-          text.appendChild(document.createTextNode(message.text));
-          time.appendChild(document.createTextNode(message.time));
-          text.className = 'message-text';
-          time.className = 'message-time';
-
-          div.appendChild(chipDiv);
-          div.appendChild(time);
-          div.appendChild(text); 
-          div.className = 'message-div';
-
-          //var textnode = document.createTextNode(content.time +"| "+ img +content.from + " says " + content.text);
-          messagesContainer.appendChild(div);
-          document.getElementById("message-list-chat").appendChild(messagesContainer);
-          $('#message-list-chat').scrollTop($('#message-list-chat')[0].scrollHeight);
-        }
-        
-     
-        
-        function fillDropDownList(possibleAddFriends){
-          $('#add-friends-chat').empty();
-          if (possibleAddFriends.length > 0) {
-            for (var user in possibleAddFriends) {
-              if (possibleAddFriends.hasOwnProperty(user)) {
-                  var li = document.createElement('li');
-                  var a = document.createElement('a'); 
-                  a.setAttribute('onclick',"createGroup("+possibleAddFriends[user].userId+")");                    
-                  a.appendChild(document.createTextNode(possibleAddFriends[user].username));
-                  li.appendChild(a);
-                  document.getElementById('add-friends-chat').appendChild(li);
-              }
+            function send() {
+                var message = document.getElementById("inputChat").value;
+                if (message === "") {
+                    return;
+                }
+                var user = "[[${session.user.username}]]";
+                var userId = "[[${session.user.id}]]";
+                stompClient.send("/app/chat/[[${roomId}]]", {}, JSON.stringify({'from': user, 'text': message, 'user_id': userId}));
+                document.getElementById('inputChat').value = '';
             }
-          }else{
-            var li = document.createElement('li');
-            var span = document.createElement('span');
-            span.appendChild(document.createTextNode('No other friends online'));
-            li.appendChild(span);
-            document.getElementById('add-friends-chat').appendChild(li);
-          }
-        }
-        
-        function createGroup(userToBeAdded){
-            stompClient.send("/app/chat/[[${roomId}]]/"+userToBeAdded+"/createGroup");
-        }
-        
-        function send(){
-            var message = document.getElementById("inputChat").value;
-            if(message === ""){
-                return;
+
+            function leaveGroup() {
+                var herokuClearHistory = 'https://' + window.location.host + '/main/chat/leaveGroup';
+                var localCleanHistory = "/WebChat/main/chat/leaveGroup";
+
+                $.post(localCleanHistory, {
+                    roomId: "[[${roomId}]]",
+                    userId: "[[${session.user.id}]]",
+                    username: "[[${session.user.username}]]"
+                }, function (data) {
+                    //var herokuResponse = 'https://' + window.location.host + data;
+                    var response = 'http://' + window.location.host + data;
+                    window.location.replace(response);
+                });
             }
-            var user = "[[${session.user.username}]]";
-            var userId = "[[${session.user.id}]]";
-            stompClient.send("/app/chat/[[${roomId}]]",{}, JSON.stringify({'from':user, 'text':message, 'user_id':userId}));
-            document.getElementById('inputChat').value='';
-        }
-        
-        function leaveGroup(){
-          var herokuClearHistory = 'https://'+ window.location.host + '/main/chat/leaveGroup';
-          var localCleanHistory = "/WebChat/main/chat/leaveGroup";
-    
-          $.post(localCleanHistory, {
-            roomId : "[[${roomId}]]",
-            userId : "[[${session.user.id}]]",
-            username : "[[${session.user.username}]]"
-          }, function(data){
-            //var herokuResponse = 'https://' + window.location.host + data;
-            var response = 'http://' + window.location.host + data;
-            window.location.replace(response);
-          });
-        }
-        
-        function clearHistory(){
-          var herokuClearHistory = 'https://'+ window.location.host + '/main/chat/clearHistory';
-          var localCleanHistory = "/WebChat/main/chat/clearHistory";
-          
-          $.post(localCleanHistory, {
-            roomId: "[[${roomId}]]",
-            username: "[[${session.user.username}]]"
-          });
-        };
-      
-    </script>
-      <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
-      <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
-  </th:block>
-  </body>
+
+            function clearHistory() {
+                var herokuClearHistory = 'https://' + window.location.host + '/main/chat/clearHistory';
+                var localCleanHistory = "/WebChat/main/chat/clearHistory";
+
+                $.post(localCleanHistory, {
+                    roomId: "[[${roomId}]]",
+                    username: "[[${session.user.username}]]"
+                });
+            }
+            ;
+
+        </script>
+        <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
+        <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
+    </th:block>
+</body>
 </html>
