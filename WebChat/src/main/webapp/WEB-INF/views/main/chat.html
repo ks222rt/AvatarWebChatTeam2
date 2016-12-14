@@ -45,42 +45,69 @@
 
                 <div class="conversationDiv">
                     <div class="chatButton">
-                        <input type="text" id="inputChat" placeholder="Write a message..."/>
+                                 
+                <ul class="collapsible" data-collapsible="accordion" id="">
 
-                        <!-- Send button -->
-                        <a id="sendMessage" 
-                           class="waves-effect waves-light btn red green darken-1 white-text">
-                            <i class="material-icons left">mode_edit</i>Send
-                        </a>
-                        <!-- Add friend to chat button -->
-                        <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
-                           href='#' data-activates='add-friends-chat'>
-                            Add Friend To Group
-                        </a>
-                        <!-- Dropdown Structure -->
-                        <ul id='add-friends-chat' class='dropdown-content'></ul>
+                    <li>
+                <div class="collapsible-header"><i class="material-icons">mode_edit</i>Chat</div>
+                <div class="collapsible-body">
+                <!-- Send button -->
+                <input type="text" id="inputChat" placeholder="Write a message..."/>
+                <a id="sendMessage" 
+                   class="waves-effect waves-light btn red green darken-1 white-text">
+                    <i class="material-icons left">mode_edit</i>Send
+                </a>
+                </div>
+                </li>
 
-                        <!-- Leave group button -->
-                        <a class="waves-effect waves-light btn red accent-4 white-text"
-                           onclick="if (confirm('Do you really want to leave this chat?'))
-                                       leaveGroup();">
-                            <i id="addToGroup" class="material-icons left">not_interested</i>Leave Group
-                        </a>
+                <li>
+                <div class="collapsible-header"><i class="material-icons">turned_in_not</i>Util-Desk</div>
+                <div class="collapsible-body">
+                <!-- Add friend to chat button -->
+                <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
+                   href='#' data-activates='add-friends-chat'>
+                    Add Friend To Group
+                </a>
+                <!-- Dropdown Structure -->
+                <ul id='add-friends-chat' class='dropdown-content'></ul>
 
-                        <!-- Clear history button -->
-                        <a class="waves-effect waves-light btn red accent-4 white-text"
-                           onclick="if (confirm('Do you really want to clear the chat history?'))
-                                       clearHistory();">
-                            <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
-                        </a>
+                <!-- Leave group button -->
+                <a class="waves-effect waves-light btn red accent-4 white-text"
+                   onclick="if (confirm('Do you really want to leave this chat?'))
+                               leaveGroup();">
+                    <i id="addToGroup" class="material-icons left">not_interested</i>Leave Group
+                </a>
+
+                <!-- Clear history button -->
+                <a class="waves-effect waves-light btn red accent-4 white-text"
+                   onclick="if (confirm('Do you really want to clear the chat history?'))
+                               clearHistory();">
+                    <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
+                </a>
+                <!-- File upload -->
+                <form method="POST" action="uloadFile" enctype="multipart/form-data" id="uploadFile">
+
+                <div class="file-field input-field">
+                    <div class="waves-effect waves-light btn teal accent-4 white-text">
+                        <span>File</span>
+                        <input type="file">
+                        </div>
+                        <div class="file-path-wrapper" >
+                        <input class="file-path validate" type="text" id="pathWrapper">
+                        <input type="submit" value="Upload" class="waves-effect waves-light btn teal accent-4 white-text">
+                    </div>
+
+                </div>
+
+
+                </form>	
+                </div>
+                </li>
+
+                </ul>
                     </div>
                 </div>
-                <!-- File upload -->
-                <form method="POST" action="uloadFile" enctype="multipart/form-data">
-                    Choose a file to upload: 
-                    <input type="file" name="file">
-                    <input type="submit" value="Upload">
-                </form>	
+                
             </div>
         </div>
 
@@ -99,6 +126,7 @@
 
 
             $(document).ready(function () {
+                $('.collapsible').collapsible();
                 console.log("Current Chatroom: " + roomId);
                 if ($("#sendMessage").length) {
                     document.querySelector('#sendMessage').addEventListener('click', send);
