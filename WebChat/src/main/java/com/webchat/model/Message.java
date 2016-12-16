@@ -14,6 +14,9 @@ public class Message {
     private String text;
     private String time;
     private int user_id;
+    private int isFile;
+
+   
     
     public Message() {
      
@@ -30,6 +33,14 @@ public class Message {
         this.text = text;
         this.time = time;
         this.user_id = user_id;
+    }
+    
+    public Message(String from, String text, String time, int user_id, int isFile) {
+        this.from = from;
+        this.text = text;
+        this.time = time;
+        this.user_id = user_id;
+        this.isFile = isFile;
     }
     
     
@@ -64,7 +75,14 @@ public class Message {
     public void setTime(String time) {
         this.time = time;
     }
+    
+    public int getIsFile() {
+        return isFile;
+    }
 
+    public void setIsFile(int isFile) {
+        this.isFile = isFile;
+    }
    
 
 }

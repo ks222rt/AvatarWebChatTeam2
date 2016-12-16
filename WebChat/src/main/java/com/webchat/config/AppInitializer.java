@@ -49,7 +49,7 @@ public class AppInitializer implements WebApplicationInitializer{
         
         /* this is where maximum file size for uploaded files is set */
         dispatcher.setMultipartConfig(new MultipartConfigElement(
-            null, 409600, 409600, 0));
+            null, 512000, 512000, 0));
         dispatcher.addMapping("/");
     }
     

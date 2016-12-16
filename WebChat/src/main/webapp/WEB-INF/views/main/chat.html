@@ -85,16 +85,18 @@
                     <i id="addToGroup" class="material-icons left">clear_all</i>Clear history
                 </a>
                 <!-- File upload -->
-                <form method="POST" action="uloadFile" enctype="multipart/form-data" id="uploadFile">
-
+                <form  method="post" id="uploadForm" enctype="multipart/form-data" th:action="@{/main/chat/{roomId}/{userId}/{username}/uploadFile(roomId=${roomId},userId=${session.user.id},username=${session.user.username})}">
+                        
                 <div class="file-field input-field">
                     <div class="waves-effect waves-light btn teal accent-4 white-text">
                         <span>File</span>
-                        <input type="file">
+                        <input type="file" name="file" data-max-size="512000">
                         </div>
                         <div class="file-path-wrapper" >
                         <input class="file-path validate" type="text" id="pathWrapper">
-                        <input type="submit" value="Upload" class="waves-effect waves-light btn teal accent-4 white-text">
+                        
+                        <input type="submit" value="Upload" id="submitButton" class="waves-effect waves-light btn teal accent-4 white-text">
+                       
                     </div>
 
                 </div>
@@ -226,7 +228,29 @@
                     send();
                 }
             });
+            
+            $('#uploadForm').submit(function(evt) {
+                evt.preventDefault();
 
+                var formData = new FormData(this);
+
+                $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data:formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    console.log("SUCCESS:"+data);
+                },
+                error: function(data) {
+                    console.log("ERROR:"+data);
+                }
+                });
+            });
+            
+       
             $('.dropdown-button').dropdown({
                 inDuration: 300,
                 outDuration: 225,
@@ -241,7 +265,7 @@
             function renderMessage(message) {
                 // Create element for the message
                 var messagesContainer = document.createElement("div");
-                var text = document.createElement("p");
+              
                 var time = document.createElement("span");
                 var img = document.createElement("img");
                 var div = document.createElement("div");
@@ -262,8 +286,24 @@
                 //chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
                 chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
                 chipDiv.appendChild(chipAtag);
-
-                text.appendChild(document.createTextNode(message.text));
+                    
+                if(message.isFile === 1){
+                    var text = document.createElement("p");
+                    var fileTag = document.createElement("a");
+                    fileTag.setAttribute('href', "file://" + message.text);
+                    var string = message.text.split("/").pop();
+                    var newString = string.split("#&$").pop();
+                    
+                    fileTag.appendChild(document.createTextNode("I uploaded this file: " + newString));
+                    fileTag.setAttribute('download', newString);
+                  
+                    text.appendChild(fileTag);
+                }
+                else{
+                    var text = document.createElement("p");
+                    text.appendChild(document.createTextNode(message.text));
+                }
+                
                 time.appendChild(document.createTextNode(message.time));
                 text.className = 'message-text';
                 time.className = 'message-time';

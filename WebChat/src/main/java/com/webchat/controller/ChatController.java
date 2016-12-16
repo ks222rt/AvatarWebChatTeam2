@@ -13,6 +13,12 @@ import com.webchat.model.User;
 import com.webchat.service.ChatService;
 import com.webchat.service.UserService;
 import com.webchat.util.SessionUtil;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.ArrayList;
@@ -20,7 +26,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.filechooser.FileSystemView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -35,7 +43,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.awt.X11.XConstants;
 
 
 /**
@@ -45,6 +55,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ChatController {
+    @Autowired
+    private ServletContext context;
+    
     @Autowired
     private ChatService chatService;
     
@@ -97,6 +110,58 @@ public class ChatController {
             return "/main/chat/" + roomId;
         }
     }
+    
+    @RequestMapping(value = "/main/chat/{roomId}/{userId}/{username}/uploadFile", method = RequestMethod.POST)
+    public @ResponseBody
+    String uploadFileHandler(@RequestParam("file") MultipartFile file, @PathVariable int roomId,
+                                                                       @PathVariable int userId,
+                                                                       @PathVariable String username) {
+        System.out.println("Kommer till upload i alla fall.....");
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+
+                /* The following code creates a directory named "tmpFiles" in 
+                the tomcat directory where uploaded files will be saved.
+                TODO: Create a separate directory under this directory when a 
+                file is uploaded that represents the chat room that the file 
+                was uploaded to. */
+                System.out.println("We are in uploadFileHandler");
+                String relativePath = "/resources/chat_rooms";
+                String absolutePath = context.getRealPath(relativePath);
+                File dir = new File(absolutePath + File.separator + "Room-"+roomId);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                System.out.println("ABS: " + absolutePath);
+                
+                String fileName = file.getOriginalFilename();
+                
+                Random rand = new Random();
+                int uid = rand.nextInt(100000) + 1;
+                System.out.println("Filename:"+fileName );
+                fileName = uid + "#&$" + fileName;
+                
+                /* Create the file on server */
+                File serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + fileName);
+         
+                try (BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile))) {
+                    stream.write(bytes);
+                    sendFileToRoom(roomId,username,serverFile.getAbsolutePath(),userId);
+                }
+                return "Uploaded file:" + file.getOriginalFilename();
+            } catch (IOException e) {
+                System.out.println("ERROR: IOEXCETION");
+                return "Failed to upload " + file.getOriginalFilename() + ": " + e.getMessage();
+            }
+        } else {
+             System.out.println("ERROR: ELSE");
+            return "Failed to upload " + file.getOriginalFilename() + ". File was empty.";
+        }
+    }
+    
     
     @RequestMapping(value = "/main/chat/clearHistory", method = RequestMethod.POST)
     @ResponseBody
@@ -217,6 +282,17 @@ public class ChatController {
         Message message = new Message("SERVER", text, "00:00:00", 0);
         chatService.addMessageToRoom(message, roomId);
         this.template.convertAndSend("/topic/"+roomId+"/messages", message);
+    }
+    
+    private void sendFileToRoom(int roomId, String username, String path, int userId){
+    Message message = new Message(username,
+                                  path,
+                                 "Now",
+                                userId,
+                                1);
+    
+    chatService.addMessageToRoom(message, roomId);
+    this.template.convertAndSend("/topic/"+roomId+"/messages", message);
     }
     
     private void sendCommandToRoom(int roomId, String command){

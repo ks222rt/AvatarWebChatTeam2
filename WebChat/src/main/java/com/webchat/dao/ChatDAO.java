@@ -79,9 +79,11 @@ public class ChatDAO {
        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
        try {
            jdbcCall.withProcedureName("proc_add_message_to_room");
-           SqlParameterSource in = new MapSqlParameterSource().addValue("lineText",
-                   message.getText()).addValue("userId",
-                           message.getUser_id()).addValue("chatRoomId", roomId);
+           SqlParameterSource in = new MapSqlParameterSource()
+                   .addValue("lineText", message.getText())
+                   .addValue("userId", message.getUser_id())
+                   .addValue("chatRoomId", roomId)
+                   .addValue("isFile",message.getIsFile());
            jdbcCall.execute(in);
 
        } catch (Exception e) {
@@ -92,7 +94,7 @@ public class ChatDAO {
    
    public List<Message> getMessagesInRoom(int roomId){
      
-    final String sqlForFetchingMessages =  "SELECT avatar_webchat.chat_line.user_id, avatar_webchat.chat_user.username, avatar_webchat.chat_line.line_text, avatar_webchat.chat_line.posted_at\n" +
+    final String sqlForFetchingMessages =  "SELECT avatar_webchat.chat_line.user_id, avatar_webchat.chat_user.username, avatar_webchat.chat_line.line_text, avatar_webchat.chat_line.posted_at,avatar_webchat.chat_line.isFile\n" +
                                         "FROM avatar_webchat.chat_line\n" +
                                         "LEFT OUTER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_user.id = avatar_webchat.chat_line.user_id\n" +
                                         "WHERE avatar_webchat.chat_line.chat_room_id = "+roomId+" AND posted_at BETWEEN NOW() - INTERVAL 30 DAY AND NOW();";
@@ -107,7 +109,8 @@ public class ChatDAO {
                 messages.add(new Message((String)row.get("username"),
                                         (String)row.get("line_text"),
                                          dateString,
-                                         (int)row.get("user_id")));
+                                         (int)row.get("user_id"),
+                                         (int)row.get("isFile")));
             }
             System.out.println("Amount of messages:"+ messages.size());
             return messages;
