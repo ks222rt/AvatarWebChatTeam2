@@ -90,7 +90,7 @@
                 <div class="file-field input-field">
                     <div class="waves-effect waves-light btn teal accent-4 white-text">
                         <span>File</span>
-                        <input type="file" name="file" data-max-size="512000">
+                        <input id="fileInput" type="file" name="file" data-max-size="512000">
                         </div>
                         <div class="file-path-wrapper" >
                         <input class="file-path validate" type="text" id="pathWrapper">
@@ -231,23 +231,28 @@
             
             $('#uploadForm').submit(function(evt) {
                 evt.preventDefault();
-
+                var fileInput = $('#fileInput');
+                var maxSize = fileInput.data('max-size');
                 var formData = new FormData(this);
-
-                $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data:formData,
-                cache:false,
-                contentType: false,
-                processData: false,
-                success: function(data) {
-                    console.log("SUCCESS:"+data);
-                },
-                error: function(data) {
-                    console.log("ERROR:"+data);
+                
+                if (fileInput.get(0).files[0].size > maxSize) {
+                  alert('File to big');
+                }else{
+                  $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data:formData,
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        console.log("SUCCESS:"+data);
+                    },
+                    error: function(data) {
+                        console.log("ERROR:"+data);
+                    }
+                  });
                 }
-                });
             });
             
        
@@ -292,7 +297,7 @@
                     var fileTag = document.createElement("a");
                     fileTag.setAttribute('href', "file://" + message.text);
                     var string = message.text.split("/").pop();
-                    var newString = string.split("#&$").pop();
+                    var newString = string.split("!&$").pop();
                     
                     fileTag.appendChild(document.createTextNode("I uploaded this file: " + newString));
                     fileTag.setAttribute('download', newString);

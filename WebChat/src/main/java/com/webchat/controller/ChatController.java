@@ -38,14 +38,16 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sun.awt.X11.XConstants;
+
 
 
 /**
@@ -115,7 +117,7 @@ public class ChatController {
     public @ResponseBody
     String uploadFileHandler(@RequestParam("file") MultipartFile file, @PathVariable int roomId,
                                                                        @PathVariable int userId,
-                                                                       @PathVariable String username) {
+                                                                       @PathVariable String username){
         System.out.println("Kommer till upload i alla fall.....");
         if (!file.isEmpty()) {
             try {
@@ -140,7 +142,7 @@ public class ChatController {
                 Random rand = new Random();
                 int uid = rand.nextInt(100000) + 1;
                 System.out.println("Filename:"+fileName );
-                fileName = uid + "#&$" + fileName;
+                fileName = uid + "!&$" + fileName;
                 
                 /* Create the file on server */
                 File serverFile = new File(dir.getAbsolutePath()
@@ -161,7 +163,6 @@ public class ChatController {
             return "Failed to upload " + file.getOriginalFilename() + ". File was empty.";
         }
     }
-    
     
     @RequestMapping(value = "/main/chat/clearHistory", method = RequestMethod.POST)
     @ResponseBody
