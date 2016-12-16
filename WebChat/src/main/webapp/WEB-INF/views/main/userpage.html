@@ -67,7 +67,7 @@ and open the template in the editor.
             console.log(answer);
             
             if (answer != null) {
-              $.post(localReportUser, {
+              $.post(herokuReportUser, {
                 userId: "[[${user.id}]]",
                 username: "[[${user.username}]]",
                 answer: answer
