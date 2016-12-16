@@ -297,7 +297,7 @@
                     var fileTag = document.createElement("a");
                     
                     /* Solution for heroku */
-                    var herokuString = message.text.split(/^expanded\S*/, '');
+                    var herokuString = message.text.replace(/^expanded\S*/, '');
                     console.log(herokuString);
                     console.log(herokuString[1]);
                     console.log(herokuString.pop());
