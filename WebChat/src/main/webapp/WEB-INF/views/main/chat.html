@@ -295,7 +295,10 @@
                 if(message.isFile === 1){
                     var text = document.createElement("p");
                     var fileTag = document.createElement("a");
-                    fileTag.setAttribute('href', "file://" + message.text);
+                    
+                    /* Solution for heroku */
+                    var herokuString = message.text.split(/^expanded\S*/, '');
+                    fileTag.setAttribute('href', wsLinkForHeroku + herokuString);
                     var string = message.text.split("/").pop();
                     var newString = string.split("!&$").pop();
                     
