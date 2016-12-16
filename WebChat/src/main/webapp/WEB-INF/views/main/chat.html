@@ -133,8 +133,8 @@
                 if ($("#sendMessage").length) {
                     document.querySelector('#sendMessage').addEventListener('click', send);
                 }
-                ws = new SockJS("/WebChat/chat");
-                //ws = new SockJS(wsLinkForHeroku + '/chat');
+                //ws = new SockJS("/WebChat/chat");
+                ws = new SockJS(wsLinkForHeroku + '/chat');
                 //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
                 stompClient = Stomp.over(ws);
                 stompClient.connect({}, function (frame) {
@@ -192,8 +192,8 @@
                         for (var friend in friends) {
                             if (friends.hasOwnProperty(friend)) {
                                 var aTag = document.createElement('a');
-                                //aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
-                                aTag.setAttribute('href', "/WebChat/main/chat/" + friends[friend].roomId);
+                                aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
+                                //aTag.setAttribute('href', "/WebChat/main/chat/" + friends[friend].roomId);
                                 aTag.setAttribute('id', 'friendStyle');
                                 var textnode = document.createTextNode(friends[friend].username);
                                 aTag.appendChild(textnode);
@@ -210,8 +210,8 @@
                         for (var group in groups) {
                             if (groups.hasOwnProperty(group)) {
                                 var aTag = document.createElement('a');
-                                //aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
-                                aTag.setAttribute('href', "/WebChat/main/chat/" + groups[group].roomId);
+                                aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
+                                //aTag.setAttribute('href', "/WebChat/main/chat/" + groups[group].roomId);
                                 var textnode = document.createTextNode(groups[group].groupname);
                                 aTag.appendChild(textnode);
                                 var mybr = document.createElement('br');
@@ -288,8 +288,8 @@
                 } else {
                     chipAtag.appendChild(document.createTextNode(message.from));
                 }
-                //chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
-                chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
+                chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
+                //chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
                 chipDiv.appendChild(chipAtag);
                     
                 if(message.isFile === 1){
@@ -367,14 +367,14 @@
                 var herokuClearHistory = 'https://' + window.location.host + '/main/chat/leaveGroup';
                 var localCleanHistory = "/WebChat/main/chat/leaveGroup";
 
-                $.post(localCleanHistory, {
+                $.post(herokuClearHistory, {
                     roomId: "[[${roomId}]]",
                     userId: "[[${session.user.id}]]",
                     username: "[[${session.user.username}]]"
                 }, function (data) {
-                    //var herokuResponse = 'https://' + window.location.host + data;
-                    var response = 'http://' + window.location.host + data;
-                    window.location.replace(response);
+                    var herokuResponse = 'https://' + window.location.host + data;
+                    //var response = 'http://' + window.location.host + data;
+                    window.location.replace(herokuResponse);
                 });
             }
 
@@ -382,7 +382,7 @@
                 var herokuClearHistory = 'https://' + window.location.host + '/main/chat/clearHistory';
                 var localCleanHistory = "/WebChat/main/chat/clearHistory";
 
-                $.post(localCleanHistory, {
+                $.post(herokuClearHistory, {
                     roomId: "[[${roomId}]]",
                     username: "[[${session.user.username}]]"
                 });
