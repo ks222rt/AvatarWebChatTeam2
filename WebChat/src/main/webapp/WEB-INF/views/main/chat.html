@@ -297,12 +297,8 @@
                     var fileTag = document.createElement("a");
                     
                     /* Solution for heroku */
-                    console.log(message.text);
-                    console.log(message.text.split(/^expanded\S*/));
-                    var herokuString = message.text.split(/^expanded\S*/);
+                    var herokuString = message.text.substring(message.text.indexOf("/resources"));
                     console.log(herokuString);
-                    console.log(herokuString[1]);
-                    console.log(herokuString.pop());
                     fileTag.setAttribute('href', wsLinkForHeroku + herokuString);
                     var string = message.text.split("/").pop();
                     var newString = string.split("!&$").pop();
