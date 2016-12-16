@@ -109,20 +109,39 @@ a.waves-effect.waves-light.btn.amber.accent-3.white-text.col.s2.go-back{
     margin-left: 1%;
 }
 
+.waves-effect.waves-light.btn.teal.accent-4.white-text{
+   border: solid 1px black;
+}
+
 .conversationDiv{
     position: fixed;
-    bottom: 3%;
-    left: 12%;
+    bottom: 0%;
+    left: 16%;
     display: auto;
+}
+.collapsible{
+    width: 85vh;
 }
 
 input#inputChat{
-    margin-top: 5%;
-    width: 70%;
+    margin-top: 3%;
+    width: 65%;
+}
+
+#uploadFile{
+    margin-top: 1%;
+    width: 80vh;
+}
+#choose{
+    color: red;
+    display: none;
+}
+#pathWrapper{
+    width: 40vh;
 }
 
 .message-div{
-    width: 70%;
+    width: 72%;
     margin: auto;
     padding-left: 5px;
     padding-top: 5px;
@@ -137,7 +156,7 @@ input#inputChat{
     margin-top: 2%;
     margin-bottom: 1%;
     position: relative;
-    height: 60vh;
+    height: 55vh;
     width: 60vw;
 }
 
@@ -160,6 +179,12 @@ span#chat-room-header.chat-room-header{
 .header-div-chat{
     text-align: center;
 }
+
+/* float add me and remove me button */
+div.profile-page-float-me{
+    float: right;
+}
+
 
 ::-webkit-scrollbar {
     width: 12px;
