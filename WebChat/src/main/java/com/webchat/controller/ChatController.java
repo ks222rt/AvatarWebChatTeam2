@@ -113,6 +113,24 @@ public class ChatController {
         }
     }
     
+    @RequestMapping(value = "/main/chat/createNewGroup", method = RequestMethod.POST)
+    @ResponseBody
+    public String createNewGroup(@RequestParam String groupname,
+                                 @RequestParam String username,
+                                 @RequestParam int userId,
+                                 RedirectAttributes redirectAttributes){
+        int newChatRoomId = chatService.createNewGroupChat(groupname, userId);
+        System.out.println("ChatRoomId (NEW) :" + newChatRoomId);
+        if(newChatRoomId != 0){
+            redirectAttributes.addFlashAttribute("success_message", "Group: " + groupname + " was created!" );
+            return "/main/chat/"+newChatRoomId;
+        }
+            
+         return "/main/chat/none";
+            //redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
+        
+    }
+    
     @RequestMapping(value = "/main/chat/{roomId}/{userId}/{username}/uploadFile", method = RequestMethod.POST)
     public @ResponseBody
     String uploadFileHandler(@RequestParam("file") MultipartFile file, @PathVariable int roomId,
@@ -211,6 +229,7 @@ public class ChatController {
         } 
     }
     
+   
     
     
     @SubscribeMapping("/getOnlineFriends")

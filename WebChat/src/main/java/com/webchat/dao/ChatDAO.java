@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -72,6 +74,25 @@ public class ChatDAO {
        } catch (Exception e) {
            System.out.print(e.getMessage());
            return false;
+       }
+   }
+   // Returns the new id of the created group.
+   public int createNewGroup(final String room_name, final int userId){
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+       try {
+           jdbcCall.withProcedureName("proc_create_new_group");
+           SqlParameterSource in = new MapSqlParameterSource().addValue("chatRoomName", room_name)
+                                                              .addValue("userId",userId);
+           
+           jdbcCall.declareParameters(new SqlOutParameter("newRoomId", Types.INTEGER));
+           Map<String, Object> out = jdbcCall.execute(in);
+            
+            int myInt = (int)out.get("newRoomId");
+            System.out.println("MYINT:" + myInt);
+            return myInt;
+       } catch (Exception e) {
+           System.out.print(e.getMessage());
+           return 0;
        }
    }
    

@@ -30,6 +30,10 @@ public class ChatService {
     public boolean createGroupChat(String roomName, int newUser, int roomId){
         return chatDAO.createGroup(roomName, roomId, newUser);
     }
+    
+    public int createNewGroupChat(String roomName, int userId){
+        return chatDAO.createNewGroup(roomName, userId);
+    }
 
     public boolean createPrivateChat(String roomName, int userId1, int userId2) {         
         return chatDAO.createPrivateChat(roomName, userId1, userId2);

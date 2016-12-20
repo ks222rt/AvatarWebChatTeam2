@@ -28,6 +28,11 @@
 
             <div th:if="${roomId == null}">
                 <h4>Welcome to the chat page!</h4>
+                 <a  class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
+                    onclick="newGroup()">
+                    Create a new group chat
+                </a>
+                
             </div>
             <div th:if="${roomId != null}">
 
@@ -64,7 +69,7 @@
                 <div class="collapsible-header"><i class="material-icons">turned_in_not</i>Util-Desk</div>
                 <div class="collapsible-body">
                 <!-- Add friend to chat button -->
-                <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
+               <a class='dropdown-button btn waves-effect waves-light amber accent-3 white-text'
                    href='#' data-activates='add-friends-chat'>
                     Add Friend To Group
                 </a>
@@ -391,6 +396,24 @@
                     username: "[[${session.user.username}]]"
                 });
             }
+            
+            function newGroup(){
+                var herokuCreateGroup = 'https://' + window.location.host + '/main/chat/createNewGroup';
+                var localCreateGroup = "/WebChat/main/chat/createNewGroup";
+                var groupname = prompt('Enter the groupname!', 'groupname');
+                console.log(groupname)
+                  $.post(localCreateGroup, {
+                    groupname: groupname,
+                    username: "[[${session.user.username}]]",
+                    userId: "[[${session.user.id}]]"
+                }, function (data) {
+                    //var herokuResponse = 'https://' + window.location.host + data;
+                    var response = 'http://' + window.location.host + data;
+                    window.location.replace(response);
+                });
+            }
+            
+            
             ;
 
         </script>
