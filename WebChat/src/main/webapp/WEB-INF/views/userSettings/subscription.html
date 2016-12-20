@@ -97,11 +97,23 @@ and open the template in the editor.
     </style>
     
     <script type="text/javascript">
+      $(document).ready(function(){
+        var subscribtion = "[[${session.user.isSubscriber}]]";
+       
+        if (subscribtion > 0) {
+          $("#checkbox_sub").prop('checked', true);
+        }else{
+          $("#checkbox_sub").prop('checked', false);
+        }
+        
+      });
+      
       $("#sub_form").submit(function(evt){
         evt.preventDefault();
         var herokuSub = 'https://' + window.location.host + '/main/settings/changeSubscription';
         var localSub = "/WebChat/main/settings/changeSubscription";
-         
+        
+        
         var sub = $("#checkbox_sub").is(':checked');
         var password = $("#your_password").val();
     
@@ -116,9 +128,9 @@ and open the template in the editor.
       
       $("#close_message").click(function(evt){
         evt.preventDefault();
-        console.log("tja");
         $("#message-box").css("visibility", "hidden");
       })
+      
     </script>
   </th:block>
   </body>

@@ -70,13 +70,10 @@ and open the template in the editor.
               <tr>
                 <td class="col s4 tablerow"><span class="table-title">Subscription:</span></td>
                 <div th:switch="${user.isSubscriber}"> 
-                    <td th:case="'1'" class="col s2"><span class="table-text" th:text="Premium"></span></td>
-                    <td th:case="'0'" class="col s2"><span class="table-text" th:text="Freemium"></span></td>
+                    <td th:case="'1'" class="col s3"><span class="table-text" th:text="Premium" style="color:blue;"></span></td>
+                    <td th:case="'0'" class="col s3"><span class="table-text" th:text="Freemium" style="color:red;"></span></td>
                 </div>
-                
-                
-               
-                <td class="col s6">
+                <td class="col s5 right">
                   <a class="waves-effect waves-light btn teal lighten-4 black-text"
                     th:href="@{/main/settings/changeSubscription}">
                   <i class="material-icons left">settings</i>Change sub</a>

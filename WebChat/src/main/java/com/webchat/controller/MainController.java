@@ -197,7 +197,6 @@ public class MainController {
             
             if (userService.updateUserSubscription(user)) {
                 request.getSession().setAttribute("user", user);
-                model.addAttribute("user", user);
                 return "Your subscription has been changed";
             }
         }
