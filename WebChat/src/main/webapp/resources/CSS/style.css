@@ -185,6 +185,26 @@ div.profile-page-float-me{
     float: right;
 }
 
+/* Css for right panel (online.html). 
+div.friends-online-box{
+    height: 33vh;
+}
+
+div.chat-groups-box{
+    height: 33vh;
+}
+
+div.add_box{
+    height: 33vh;
+}
+
+img.add_img{
+    height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+*/
 
 ::-webkit-scrollbar {
     width: 12px;
