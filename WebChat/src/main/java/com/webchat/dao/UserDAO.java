@@ -646,4 +646,8 @@ public class UserDAO {
     }
     */
 
+    public boolean updateUserSubscription(User user) {
+        return false;
+    }
+
 }

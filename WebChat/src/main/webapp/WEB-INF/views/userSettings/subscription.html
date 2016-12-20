@@ -6,12 +6,22 @@ and open the template in the editor.
 -->
 <html layout:decorator="main/layout">
   <head>
+    <link rel="stylesheet" href="../../../resources/autoComplete/awesomplete.base.css" type="text/css"/>
+
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <div layout:fragment="content">
+      
+      <div id="message-box" style="visibility: hidden">
+        <blockquote class="card-panel chip  amber darken-4 white-text" id="close_message">
+          Server message: <span id="message-span"></span>
+          <i class="closeButton material-icons" >close</i>
+        </blockquote>
+      </div>
+      
       <div class="row">
         <div class="col s4 userpage-info-card">
             <div class="card">
@@ -28,10 +38,10 @@ and open the template in the editor.
         </div>
         <div class="col s8 change-password-container">
           <div class="row">
-            <form class="col s12" action="#" th:action="@{/main/settings/changePassword.htm}" th:object="${user}" method="post">
+            <form class="col s12" id="sub_form">
               <div class="row">
                 <h3 class="col s12">
-                  Change password
+                  Change subscription
                 </h3>
                <a class="waves-effect waves-light btn amber accent-3 white-text col s2 go-back"
                 th:href="@{/main/settings}">
@@ -47,27 +57,21 @@ and open the template in the editor.
                   </div>
               </div>
               
-              <!-- Div for new password label and input field -->
-              <div class="row">
-                <div class="input-field col s8">
-                  <input class='validate' type='password' name='first_password' id='first_password' required minlength="8"/>
-                  <label>New password</label>
-                </div>
-              </div>
+              <!-- Switch -->
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" name="checkbox_sub" id="checkbox_sub">
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div> 
               
-              <!-- Div for new password again label and input field -->
+              <!-- Div for your password label and input field -->
               <div class="row">
                 <div class="input-field col s8">
-                  <input class='validate' type='password' name='second_password' id='second_password' required minlength="8"/>
-                          <label>New password again</label>
-                </div>
-              </div>
-              
-              <!-- Div for old password label and input field -->
-              <div class="row">
-                <div class="input-field col s8">
-                  <input class='validate ' type='password' name='old_password' id='old_password' required minlength="8"/>
-                  <label for='old_password'>Old password</label>
+                  <input class='validate ' type='password' name='your_password' id='your_password' required minlength="8"/>
+                  <label for='your_password'>Your password</label>
                 </div>
               </div>
               
@@ -75,7 +79,7 @@ and open the template in the editor.
               <center>
                   <div class='row'>
                       <a href='#'> 
-                        <button type='submit' name='btn_login' class='col s6 btn btn-large waves-effect teal '>Change password</button>
+                        <button type='submit' name='btn_login' class='col s6 btn btn-large waves-effect teal '>Change subscription</button>
                       </a>
                   </div>
               </center>
@@ -84,5 +88,38 @@ and open the template in the editor.
         </div>
       </div>
     </div>
+    
+  <th:block layout:fragment="script">
+    <style type="text/css">
+      i.closeButton.material-icons:hover {
+       cursor:pointer;
+      }
+    </style>
+    
+    <script type="text/javascript">
+      $("#sub_form").submit(function(evt){
+        evt.preventDefault();
+        var herokuSub = 'https://' + window.location.host + '/main/settings/changeSubscription';
+        var localSub = "/WebChat/main/settings/changeSubscription";
+         
+        var sub = $("#checkbox_sub").is(':checked');
+        var password = $("#your_password").val();
+    
+        $.post(localSub,{
+          your_password: password,
+          range_sub: sub
+        }, function(response){
+          document.getElementById("message-span").innerHTML = response;
+          $("#message-box").css("visibility", "visible");
+        });
+      });
+      
+      $("#close_message").click(function(evt){
+        evt.preventDefault();
+        console.log("tja");
+        $("#message-box").css("visibility", "hidden");
+      })
+    </script>
+  </th:block>
   </body>
 </html>

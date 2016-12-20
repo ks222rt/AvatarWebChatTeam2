@@ -97,5 +97,9 @@ public class UserService {
     public boolean isMyAccountDisabled(int id) {
         return userDAO.isMyAccountDisabled(id);
     }
+
+    public boolean updateUserSubscription(User user) {
+        return userDAO.updateUserSubscription(user);
+    }
    
 }

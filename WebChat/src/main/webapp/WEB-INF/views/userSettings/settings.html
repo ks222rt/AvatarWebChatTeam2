@@ -40,12 +40,12 @@ and open the template in the editor.
               <tr>
                 <td>
                   <a class="waves-effect waves-light btn amber accent-3 white-text"
-                     th:href="@{/main/settings/changePassword.htm}">
+                     th:href="@{/main/settings/changePassword}">
                     <i class="material-icons left">vpn_key</i>Change password</a>
                 </td>
                 <td>
                   <a class="waves-effect waves-light btn red accent-4 white-text"
-                     th:href="@{/main/settings/deleteAccount.htm}">
+                     th:href="@{/main/settings/deleteAccount}">
                     <i class="material-icons left">not_interested</i>Delete account</a>
                 </td>
               </tr>
@@ -66,6 +66,15 @@ and open the template in the editor.
               <tr>
                 <td class="col s4 tablerow"><span class="table-title">Created:</span></td>
                 <td class="col s8"><span class="table-text" th:text="${user.created}"></span></td>
+              </tr>
+              <tr>
+                <td class="col s4 tablerow"><span class="table-title">Subscription:</span></td>
+                <td class="col s2"><span class="table-text" th:text="TODO"></span></td>
+                <td class="col s6">
+                  <a class="waves-effect waves-light btn teal lighten-4 black-text"
+                    th:href="@{/main/settings/changeSubscription}">
+                  <i class="material-icons left">settings</i>Change sub</a>
+                </td>
               </tr>
             </tbody>
           </table>

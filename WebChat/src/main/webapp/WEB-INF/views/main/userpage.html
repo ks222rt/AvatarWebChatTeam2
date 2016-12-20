@@ -15,7 +15,7 @@ and open the template in the editor.
         
         <div id="message-box" style="visibility: hidden">
           <blockquote class="card-panel chip  amber darken-4 white-text">
-              Server message: <span id="test"></span>
+              Server message: <span id="message-span"></span>
               <i class="close material-icons">close</i>
           </blockquote>
         </div>
@@ -66,13 +66,13 @@ and open the template in the editor.
             var answer = prompt('Why do you want to report this user?', 'Enter reason here...');
             console.log(answer);
             
-            if (answer != null) {
+            if (answer !== null) {
               $.post(localReportUser, {
                 userId: "[[${user.id}]]",
                 username: "[[${user.username}]]",
                 answer: answer
               }, function (data){
-                  document.getElementById("test").innerHTML = data;
+                  document.getElementById("message-span").innerHTML = data;
                   $("#message-box").css("visibility", "visible");
               });
             }

@@ -28,14 +28,14 @@ and open the template in the editor.
         </div>
         <div class="col s8 change-password-container">
           <div class="row">
-            <form class="col s12" action="#" th:action="@{/main/settings/deleteAccount.htm}" th:object="${user}" method="post" 
+            <form class="col s12" action="#" th:action="@{/main/settings/deleteAccount}" th:object="${user}" method="post" 
                   onsubmit="return confirm('Are you sure you want to delete your account? This is a final warning!!')">
               <div class="row">
                 <h3 class="col s12">
                   Delete account
                 </h3>
                <a class="waves-effect waves-light btn amber accent-3 white-text col s2 go-back"
-                th:href="@{/main/settings.htm}">
+                th:href="@{/main/settings}">
                   <i class="material-icons left">replay</i>Go back</a>
               </div>
               <div class="row">

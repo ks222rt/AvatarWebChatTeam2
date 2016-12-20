@@ -170,6 +170,35 @@ public class MainController {
         return "userSettings/settings";
     }
     
+    @RequestMapping(value = "/settings/changeSubscription", method = RequestMethod.GET)
+    public String changeSubscriptionPage(HttpServletRequest request, ModelMap model){
+        User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user", user);
+        
+        return "userSettings/subscription";
+    }
+    
+    @RequestMapping(value = "/settings/changeSubscription", method = RequestMethod.POST)
+    @ResponseBody
+    public String changeSubscription(HttpServletRequest request, ModelMap model,
+                                        @RequestParam String your_password,
+                                        @RequestParam boolean range_sub){
+        
+        User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user", user);
+        
+        if (validator.validateOldPassword(user, your_password)) {
+            // Set user sub in model
+            
+            if (userService.updateUserSubscription(user)) {
+                request.getSession().setAttribute("user", user);
+                model.addAttribute("user", user);
+                return "Your subscription has been changed";
+            }
+        }
+        return "Something went wrong with your request";
+    }
+    
     @RequestMapping(value="/settings/changePassword", method = RequestMethod.GET)
     public String changePasswordPage(HttpServletRequest request, ModelMap model){
         User user = (User) request.getSession().getAttribute("user");
