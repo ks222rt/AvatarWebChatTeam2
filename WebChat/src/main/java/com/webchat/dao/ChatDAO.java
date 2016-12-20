@@ -5,32 +5,28 @@
 // */
 package com.webchat.dao;
 
-import com.webchat.model.ChatMessage;
 import com.webchat.model.ChatRoom;
 import com.webchat.model.ChatUserHelper;
 import com.webchat.model.Message;
-import com.webchat.model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 
@@ -141,37 +137,85 @@ public class ChatDAO {
         }
    }
    
-   public List<ChatRoom> getChatRooms(final int userID) {
+   public ArrayDeque<ChatRoom> getChatRooms(final int currentUserId) {
+         System.out.println("GET CHAT ROOMS");
         
-        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup, avatar_webchat.chat_room.chat_room_name as room_name\n"+
-                                            "FROM avatar_webchat.chat_room\n"+
-                                            "INNER JOIN avatar_webchat.chat_room_members\n"+
-                                            "ON avatar_webchat.chat_room_members.chat_room_id = avatar_webchat.chat_room.id\n"+
-                                            "WHERE avatar_webchat.chat_room_members.user_id = "+userID;
+        final String sqlForFetchingRooms =   "SELECT avatar_webchat.chat_room.isGroup as isGroup,\n"+
+                                                    "avatar_webchat.chat_room.chat_room_name as roomName,\n"+
+                                                    "avatar_webchat.chat_room.id as roomId,\n"+
+                                                    "avatar_webchat.chat_room_members.user_id as userId,\n"+
+                                                    "avatar_webchat.chat_user.username as username\n"+
+                                                  "FROM avatar_webchat.chat_room_members\n" +
+                                                 "INNER JOIN avatar_webchat.chat_room ON avatar_webchat.chat_room.id = avatar_webchat.chat_room_members.chat_room_id\n" +
+                                                 "INNER JOIN avatar_webchat.chat_user ON avatar_webchat.chat_user.id = avatar_webchat.chat_room_members.user_id\n" +
+                                                 "WHERE avatar_webchat.chat_room_members.chat_room_id IN (SELECT avatar_webchat.chat_room_members.chat_room_id FROM avatar_webchat.chat_room_members\n" +
+                                                 "WHERE avatar_webchat.chat_room_members.user_id ="+currentUserId+") ORDER BY roomId;";
 
-        List<ChatRoom> userRoomList = new ArrayList<>();
+        //HashSet<ChatRoom> userRoomList = new HashSet<>();
+        int previousRoomId = 0;
+        ArrayDeque<ChatRoom> userRoomList = new ArrayDeque<>();
+        
+        
         try{
-
+            System.out.println("TRY TRY TRY");
              List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingRooms);
              for (Map row : rows) {
-                 userRoomList.add(new ChatRoom((Integer)row.get("id"),
-                                               (Integer)row.get("isGroup"),
-                                               (String)row.get("room_name")));
-             }
-             System.out.println("Amount of rooms user has access to: " + userRoomList.size());
-             if(userRoomList.size() > 0 ) {
+                 int roomId = (Integer)row.get("roomId");
+                 int userId = (int)row.get("userId");
+                 int isGroup = (Integer)row.get("isGroup");
+                 String roomName = (String)row.get("roomName");
+                 String userName = (String)row.get("username");
+                 ChatRoom room;
                  
-                 for(ChatRoom room : userRoomList) { 
-                    List<ChatUserHelper> usersInRoom = getUsersInRoom(room.getRoomId(), userID);
-                    room.setMembers(usersInRoom);
-                 } 
-                 return userRoomList;
+                 //Create new room
+                 if(previousRoomId != roomId){
+                    room = new ChatRoom(roomId,//Get Room
+                                         isGroup,
+                                         roomName);
+                    LinkedList<ChatUserHelper> members = new LinkedList();
+                    members.add(new ChatUserHelper(room.getRoomId(), //Set new member
+                                                    userId, 
+                                                userName));
+                           
+                    if(userId == currentUserId){
+                        if(isGroup == 1){
+                            room.setMembers(members);
+                        }
+
+                    }
+                    else{
+                        room.setMembers(members);
+                    }
+                    
+                    userRoomList.add(room);                  
+                 }else if(userId != currentUserId){
+                    LinkedList<ChatUserHelper> members;
+                    room = userRoomList.getLast();
+
+                    if(room.getMembers() != null){
+                  
+                       members = room.getMembers();//Get members
+                    }
+                    else{
+                       members = new LinkedList<>();
+                    }
+                     
+                    members.add(new ChatUserHelper(room.getRoomId(), //Set new member
+                                                    userId, 
+                                                    userName));             
+                
+                    userRoomList.getLast().setMembers(members);
+                 }
+                 previousRoomId = roomId;         
+                 System.out.println("HashSet size:" + userRoomList.size());   
              }
+             return userRoomList;
         }
         catch(Exception e){
+            e.printStackTrace();
+            System.out.println("CATCH CATCH CATCH");
             return null;
-        }
-         return null;     
+        }   
     }
    
    
@@ -193,6 +237,7 @@ public class ChatDAO {
                                                  (String)row.get("username")));
             } 
         }catch(Exception e){
+            System.out.println(e.getMessage());
             return null;
         }
         return usersInRoom;
@@ -268,3 +313,73 @@ public class ChatDAO {
     }
    
 }
+
+
+  
+//        final String sqlForFetchingRooms = "SELECT avatar_webchat.chat_room.id as id, avatar_webchat.chat_room.isGroup as isGroup, avatar_webchat.chat_room.chat_room_name as room_name\n"+
+//                                            "FROM avatar_webchat.chat_room\n"+
+//                                            "INNER JOIN avatar_webchat.chat_room_members\n"+
+//                                            "ON avatar_webchat.chat_room_members.chat_room_id = avatar_webchat.chat_room.id\n"+
+//                                            "WHERE avatar_webchat.chat_room_members.user_id = "+userID;
+//
+//        List<ChatRoom> userRoomList = new ArrayList<>();
+//        try{
+//
+//             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingRooms);
+//             for (Map row : rows) {
+//                 userRoomList.add(new ChatRoom((Integer)row.get("id"),
+//                                               (Integer)row.get("isGroup"),
+//                                               (String)row.get("room_name")));
+//             }
+//             System.out.println("Amount of rooms user has access to: " + userRoomList.size());
+//             if(userRoomList.size() > 0 ) {
+//                 
+//                 for(ChatRoom room : userRoomList) { 
+//                    List<ChatUserHelper> usersInRoom = getUsersInRoom(room.getRoomId(), userID);
+//                    room.setMembers(usersInRoom);
+//                 } 
+//                 return userRoomList;
+//             }
+//        }
+//        catch(Exception e){
+//            return null;
+//        }
+//         return nul
+
+
+
+//      if(userId == currentUserId) {
+//                        if(isGroup == 1){
+//                            System.out.print("Added: " + members.getLast().getUsername());
+//                            room.setMembers(members); 
+//                            userRoomList.add(room); 
+//                        }else{
+//                            System.out.print("Added: " + members.getLast().getUsername());
+//                            userRoomList.add(room);   
+//                        }
+//                    }
+//                    else {
+//                        room.setMembers(members); 
+//                        userRoomList.add(room); 
+//                    }
+//                   
+//                 }else{
+//                    LinkedList<ChatUserHelper> members;
+//                    room = userRoomList.getLast();
+//
+//                    if(room.getMembers() != null){
+//                       members = room.getMembers();//Get members
+//                    }
+//                    else{
+//                       members = new LinkedList<>();
+//                    }
+//                     
+//                    members.add(new ChatUserHelper(room.getRoomId(), //Set new member
+//                                                    userId, 
+//                                                    userName));
+//                    if(userId != currentUserId) {
+//                       if(room.getIsGroupRoom() == 0){
+//                           System.out.print("Added: " + members.getLast().getUsername());
+//                       }
+//                       userRoomList.getLast().setMembers(members);
+//                    }

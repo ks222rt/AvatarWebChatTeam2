@@ -10,7 +10,10 @@ import com.webchat.model.ChatRoom;
 import com.webchat.model.ChatUserHelper;
 import com.webchat.model.Message;
 import com.webchat.model.User;
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
@@ -43,7 +46,7 @@ public class ChatService {
         return chatDAO.addMessageToRoom(message, roomId);
     }
     
-    public List<ChatRoom> getRoomsForUser(int userId){
+    public ArrayDeque<ChatRoom> getRoomsForUser(int userId){
         return chatDAO.getChatRooms(userId);
     }
     

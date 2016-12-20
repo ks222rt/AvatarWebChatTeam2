@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,7 +71,7 @@ public class ChatController {
     private SimpMessagingTemplate template;
     
     User currentUser;
-    List<ChatRoom> chatRoomAndFriendIds;
+    ArrayDeque<ChatRoom> chatRoomAndFriendIds;
     
     @RequestMapping(value = "/main/chat/none", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){

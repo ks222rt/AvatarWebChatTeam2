@@ -6,6 +6,7 @@
  */
 package com.webchat.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class ChatRoom {
   
     private int roomId;
     private List<ChatMessage> messages;
-    private List<ChatUserHelper> members;
+    private LinkedList<ChatUserHelper> members;
     
     public ChatRoom(int roomId) {
         this.roomId = roomId;
@@ -58,11 +59,11 @@ public class ChatRoom {
         this.messages = messages;
     }
 
-    public List<ChatUserHelper> getMembers() {
+    public LinkedList<ChatUserHelper> getMembers() {
         return members;
     }
 
-    public void setMembers(List<ChatUserHelper> members) {
+    public void setMembers(LinkedList<ChatUserHelper> members) {
         this.members = members;
     }
     
