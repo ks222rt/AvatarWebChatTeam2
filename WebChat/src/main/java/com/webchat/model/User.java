@@ -53,6 +53,9 @@ public class User implements Serializable{
     private byte[] salt;
     private Timestamp created;
     private int isAdmin;
+    private int isSubscriber;
+
+ 
     
     public int getId() {
         return id;
@@ -125,6 +128,14 @@ public class User implements Serializable{
     
     public byte[] getSalt(){
         return salt;
+    }
+    
+    public int getIsSubscriber() {
+        return isSubscriber;
+    }
+
+    public void setIsSubscriber(int isSubscriber) {
+        this.isSubscriber = isSubscriber;
     }
   
 }

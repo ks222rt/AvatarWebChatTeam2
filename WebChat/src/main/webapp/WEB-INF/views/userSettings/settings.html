@@ -69,7 +69,13 @@ and open the template in the editor.
               </tr>
               <tr>
                 <td class="col s4 tablerow"><span class="table-title">Subscription:</span></td>
-                <td class="col s2"><span class="table-text" th:text="TODO"></span></td>
+                <div th:switch="${user.isSubscriber}"> 
+                    <td th:case="'1'" class="col s2"><span class="table-text" th:text="Premium"></span></td>
+                    <td th:case="'0'" class="col s2"><span class="table-text" th:text="Freemium"></span></td>
+                </div>
+                
+                
+               
                 <td class="col s6">
                   <a class="waves-effect waves-light btn teal lighten-4 black-text"
                     th:href="@{/main/settings/changeSubscription}">

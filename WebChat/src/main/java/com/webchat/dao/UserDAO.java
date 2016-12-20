@@ -218,7 +218,8 @@ public class UserDAO {
                 + "avatar_webchat.chat_user_info.firstname as firstname,\n"
                 + "avatar_webchat.chat_user_info.lastname as lastname,\n"
                 + "avatar_webchat.chat_user_info.isAdmin as isAdmin,\n"
-                + "avatar_webchat.chat_user_info.created as created\n"
+                + "avatar_webchat.chat_user_info.created as created,\n"
+                    + "avatar_webchat.chat_user_info.isSubscriber as isSubscriber\n"
                 + "FROM\n"
                 + "avatar_webchat.chat_user_info, avatar_webchat.chat_user\n"
                 + "WHERE \n"
@@ -241,6 +242,7 @@ public class UserDAO {
                     user.setId(rs.getInt("id"));
                     user.setCreated(rs.getTimestamp("created"));
                     user.setIsAdmin(rs.getInt("isAdmin"));
+                    user.setIsSubscriber(rs.getInt("isSubscriber"));
                     return user;
                 }
             });
@@ -646,8 +648,22 @@ public class UserDAO {
     }
     */
 
-    public boolean updateUserSubscription(User user) {
-        return false;
-    }
+    public boolean updateUserSubscription(final User user) {
+        
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        try {
+           jdbcCall.withProcedureName("proc_set_subscriber_status");
+           SqlParameterSource in = new MapSqlParameterSource()
+                                   .addValue("userId",user.getId())
+                                   .addValue("subscriberStatus", user.getIsSubscriber());
+           jdbcCall.execute(in);
+        } catch (Exception e) {
+           System.out.println(e.getMessage());
+           return false;
+        }
+        return true;
+    }        
+        
+    
 
 }

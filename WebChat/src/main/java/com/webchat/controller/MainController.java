@@ -188,7 +188,12 @@ public class MainController {
         model.addAttribute("user", user);
         
         if (validator.validateOldPassword(user, your_password)) {
-            // Set user sub in model
+            
+            if(range_sub){
+                user.setIsSubscriber(1);  
+            }else{
+                user.setIsSubscriber(0);    
+            }
             
             if (userService.updateUserSubscription(user)) {
                 request.getSession().setAttribute("user", user);
