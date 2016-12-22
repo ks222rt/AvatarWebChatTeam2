@@ -401,6 +401,9 @@
                 var herokuCreateGroup = 'https://' + window.location.host + '/main/chat/createNewGroup';
                 var localCreateGroup = "/WebChat/main/chat/createNewGroup";
                 var groupname = prompt('Enter the groupname!', 'groupname');
+                if(groupname == null){
+                    return;
+                }
                 console.log(groupname)
                   $.post(localCreateGroup, {
                     groupname: groupname,
@@ -408,8 +411,11 @@
                     userId: "[[${session.user.id}]]"
                 }, function (data) {
                     //var herokuResponse = 'https://' + window.location.host + data;
-                    var response = 'http://' + window.location.host + data;
-                    window.location.replace(response);
+                    
+                        var response = 'http://' + window.location.host + data;
+                        window.location.replace(response); 
+                    
+                   
                 });
             }
             

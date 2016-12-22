@@ -124,10 +124,10 @@ public class ChatController {
         System.out.println("ChatRoomId (NEW) :" + newChatRoomId);
         if(newChatRoomId != 0){
             redirectAttributes.addFlashAttribute("success_message", "Group: " + groupname + " was created!" );
-            return "/main/chat/"+newChatRoomId;
+            return "/WebChat/main/chat/"+newChatRoomId;
         }
             
-         return "/main/chat/none";
+         return "/WebChat/main/chat/none";
             //redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
         
     }
