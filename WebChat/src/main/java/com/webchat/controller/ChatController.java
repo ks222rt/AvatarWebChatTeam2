@@ -73,21 +73,23 @@ public class ChatController {
     
     User currentUser;
     ArrayDeque<ChatRoom> chatRoomAndFriendIds;
-    
+    @RequestMapping("/main/**") 
+     public String updateRooms(HttpServletRequest request, ModelMap model){
+        System.out.println("UPDATEROOMS");
+      
+        return "main/chat";
+    }
+           
     @RequestMapping(value = "/main/chat/none", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         currentUser = (User) request.getSession().getAttribute("user");
-        chatRoomAndFriendIds = chatService.getRoomsForUser(currentUser.getId());
-        
         model.addAttribute("username", currentUser.getUsername());
         return "main/chat";
     }
     
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
     public String roomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
-        currentUser = (User) request.getSession().getAttribute("user");
-        chatRoomAndFriendIds = chatService.getRoomsForUser(currentUser.getId());
-        
+               
         if(hasAccessToRoom(roomId)){
             model.addAttribute("roomId", roomId);
             return "main/chat";
@@ -105,12 +107,12 @@ public class ChatController {
         if (chatService.leaveChatGroup(roomId, userId)) {
             sendMessageToRoom(roomId, username + " has left the chat room!");
             redirectAttributes.addFlashAttribute("success_message", "You left the chat!");
-            //return "/WebChat/main/chat/none";
+            
             return "/main/chat/none";
         }
         else{
             redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
-            //return "/WebChat/main/chat/" + roomId;
+           
             return "/main/chat/" + roomId;
         }
     }
@@ -125,10 +127,10 @@ public class ChatController {
         System.out.println("ChatRoomId (NEW) :" + newChatRoomId);
         if(newChatRoomId != 0){
             redirectAttributes.addFlashAttribute("success_message", "Group: " + groupname + " was created!" );
-            return "/WebChat/main/chat/"+newChatRoomId;
+            return "/main/chat/"+newChatRoomId;
         }
             
-         return "/WebChat/main/chat/none";
+         return "/main/chat/none";
             //redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
         
     }
@@ -138,7 +140,7 @@ public class ChatController {
     String uploadFileHandler(@RequestParam("file") MultipartFile file, @PathVariable int roomId,
                                                                        @PathVariable int userId,
                                                                        @PathVariable String username){
-        System.out.println("Kommer till upload i alla fall.....");
+      
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -196,11 +198,11 @@ public class ChatController {
             FileUtils.cleanDirectory(fileDir);
             sendCommandToRoom(roomId, "clear");
             sendMessageToRoom(roomId, "History was cleared by " + username);
-            //return "/WebChat/main/chat/" + roomId;
+        
             return "/main/chat/" + roomId;
         }else{
             sendMessageToRoom(roomId, "Something went wrong with the clear request!");
-            //return "/WebChat/main/chat/" + roomId;
+            
             return "/main/chat/" + roomId;
         }
     }
@@ -238,15 +240,24 @@ public class ChatController {
    
     
     
-    @SubscribeMapping("/getOnlineFriends")
-    public List<ChatUserHelper> listFriends (){
+    @SubscribeMapping("/getOnlineFriends/{userId}")
+    public List<ChatUserHelper> listFriends (@DestinationVariable int userId){
+        updateChatRooms(userId);
         return getListOfOnlineFriends();
     } 
     
-    @SubscribeMapping("/getGroups")
-    public List<ChatRoom> listGroups (){
+    @SubscribeMapping("/getGroups/{userId}")
+    public List<ChatRoom> listGroups (@DestinationVariable int userId){
+        updateChatRooms(userId);
         return getListOfGroups();
     } 
+    
+    private void updateChatRooms(int userId){
+        if(chatRoomAndFriendIds == null){
+            System.out.println("Chatrooms were null,");
+            chatRoomAndFriendIds = chatService.getRoomsForUser(userId);
+        }
+    }
     
     @SubscribeMapping("/{roomId}/getRoomUsers")
     public List<ChatUserHelper> listUsersInRoom (@DestinationVariable int roomId){

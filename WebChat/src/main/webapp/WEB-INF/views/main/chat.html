@@ -138,7 +138,7 @@
                 if ($("#sendMessage").length) {
                     document.querySelector('#sendMessage').addEventListener('click', send);
                 }
-                ws = new SockJS("/WebChat/chat");
+                ws = new SockJS("/chat");
                 //ws = new SockJS(wsLinkForHeroku + '/chat');
                 //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
                 stompClient = Stomp.over(ws);
@@ -192,13 +192,13 @@
                     }
 
 
-                    stompClient.subscribe("/app/getOnlineFriends", function (JsonListOfOnlineFriends) {
+                    stompClient.subscribe("/app/getOnlineFriends/[[${session.user.id}]]", function (JsonListOfOnlineFriends) {
                         friends = JSON.parse(JsonListOfOnlineFriends.body);
                         for (var friend in friends) {
                             if (friends.hasOwnProperty(friend)) {
                                 var aTag = document.createElement('a');
                                 //aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
-                                aTag.setAttribute('href', "/WebChat/main/chat/" + friends[friend].roomId);
+                                aTag.setAttribute('href', "/main/chat/" + friends[friend].roomId);
                                 aTag.setAttribute('id', 'friendStyle');
                                 var textnode = document.createTextNode(friends[friend].username);
                                 aTag.appendChild(textnode);
@@ -209,14 +209,14 @@
                         }
                     });
 
-                    stompClient.subscribe("/app/getGroups", function (JsonListOfGroups) {
+                    stompClient.subscribe("/app/getGroups/[[${session.user.id}]]", function (JsonListOfGroups) {
                         groups = JSON.parse(JsonListOfGroups.body);
 
                         for (var group in groups) {
                             if (groups.hasOwnProperty(group)) {
                                 var aTag = document.createElement('a');
                                 //aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
-                                aTag.setAttribute('href', "/WebChat/main/chat/" + groups[group].roomId);
+                                aTag.setAttribute('href', "/main/chat/" + groups[group].roomId);
                                 var textnode = document.createTextNode(groups[group].groupname);
                                 aTag.appendChild(textnode);
                                 var mybr = document.createElement('br');
@@ -294,7 +294,7 @@
                     chipAtag.appendChild(document.createTextNode(message.from));
                 }
                //chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
-                chipAtag.setAttribute('href', "/WebChat/main/user/" + message.from);
+                chipAtag.setAttribute('href', "/main/user/" + message.from);
                 chipDiv.appendChild(chipAtag);
                     
                 if(message.isFile === 1){
@@ -374,7 +374,7 @@
 
             function leaveGroup() {
                 var herokuClearHistory = 'https://' + window.location.host + '/main/chat/leaveGroup';
-                var localCleanHistory = "/WebChat/main/chat/leaveGroup";
+                var localCleanHistory = "/main/chat/leaveGroup";
 
                 $.post(localCleanHistory, {
                     roomId: "[[${roomId}]]",
@@ -389,7 +389,7 @@
 
             function clearHistory() {
                 var herokuClearHistory = 'https://' + window.location.host + '/main/chat/clearHistory';
-                var localCleanHistory = "/WebChat/main/chat/clearHistory";
+                var localCleanHistory = "/main/chat/clearHistory";
 
                 $.post(localCleanHistory, {
                     roomId: "[[${roomId}]]",
@@ -399,7 +399,7 @@
             
             function newGroup(){
                 var herokuCreateGroup = 'https://' + window.location.host + '/main/chat/createNewGroup';
-                var localCreateGroup = "/WebChat/main/chat/createNewGroup";
+                var localCreateGroup = "/main/chat/createNewGroup";
                 var groupname = prompt('Enter the groupname!', 'groupname');
                 if(groupname == null){
                     return;

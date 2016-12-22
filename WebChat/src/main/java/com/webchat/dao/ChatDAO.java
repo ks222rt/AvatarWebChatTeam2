@@ -157,7 +157,6 @@ public class ChatDAO {
         
         
         try{
-            System.out.println("TRY TRY TRY");
              List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForFetchingRooms);
              for (Map row : rows) {
                  int roomId = (Integer)row.get("roomId");
@@ -181,19 +180,16 @@ public class ChatDAO {
                         if(isGroup == 1){
                             room.setMembers(members);
                         }
-
                     }
                     else{
                         room.setMembers(members);
-                    }
-                    
+                    }                    
                     userRoomList.add(room);                  
                  }else if(userId != currentUserId){
                     LinkedList<ChatUserHelper> members;
                     room = userRoomList.getLast();
 
-                    if(room.getMembers() != null){
-                  
+                    if(room.getMembers() != null){     
                        members = room.getMembers();//Get members
                     }
                     else{
@@ -206,14 +202,12 @@ public class ChatDAO {
                 
                     userRoomList.getLast().setMembers(members);
                  }
-                 previousRoomId = roomId;         
-                 System.out.println("HashSet size:" + userRoomList.size());   
+                 previousRoomId = roomId;          
              }
              return userRoomList;
         }
         catch(Exception e){
             e.printStackTrace();
-            System.out.println("CATCH CATCH CATCH");
             return null;
         }   
     }
