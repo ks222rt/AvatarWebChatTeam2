@@ -30,6 +30,7 @@ import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.filechooser.FileSystemView;
+import org.apache.commons.io.FileUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -186,9 +187,13 @@ public class ChatController {
     @RequestMapping(value = "/main/chat/clearHistory", method = RequestMethod.POST)
     @ResponseBody
     public String clearHistory(@RequestParam int roomId,
-                               @RequestParam String username){
+                               @RequestParam String username) throws IOException{
+        String relativePath = "/resources/chat_rooms";
+        String absolutePath = context.getRealPath(relativePath);
+        File fileDir = new File(absolutePath + File.separator + "Room-" + roomId);
         
         if (chatService.clearChatHistory(roomId)) {
+            FileUtils.cleanDirectory(fileDir);
             sendCommandToRoom(roomId, "clear");
             sendMessageToRoom(roomId, "History was cleared by " + username);
             //return "/WebChat/main/chat/" + roomId;
