@@ -6,6 +6,7 @@
 package com.webchat.service;
 
 import com.webchat.dao.AdminDAO;
+import com.webchat.model.DisabledUserAccountHelper;
 import com.webchat.model.UserReportHelper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,14 @@ public class AdminService {
 
     public boolean removeReportFromUser(int id) {
         return adminDAO.removeReportFromUser(id);
+    }
+
+    public List<DisabledUserAccountHelper> getListOfDisabledAccounts() {
+        return adminDAO.getAllDisabledAccounts();
+    }
+
+    public boolean removeDisabledAccount(int id) {
+        return adminDAO.removeDisabledAccount(id);
     }
     
     

@@ -5,6 +5,7 @@
  */
 package com.webchat.controller;
 
+import com.webchat.model.DisabledUserAccountHelper;
 import com.webchat.model.User;
 import com.webchat.model.UserReportHelper;
 import com.webchat.service.AdminService;
@@ -48,6 +49,25 @@ public class AdminController {
         
         //Return the report page with the list of users       
         return "admin/userReports";
+    }
+    
+    @RequestMapping(value = "/disabledAccounts", method = RequestMethod.GET)
+    public String disabledAccountsPage(HttpServletRequest request, ModelMap model, RedirectAttributes redirectAttributes){
+        User user = (User) request.getSession().getAttribute("user");
+        
+        if (user.getIsAdmin() == 0) {
+            redirectAttributes.addFlashAttribute("error_message", "You dont have permission to that!!");
+            return "redirect:/main/welcome";
+        }
+        
+        // Next to do is to get all reported users
+        List<DisabledUserAccountHelper> allDisabledAccounts = adminService.getListOfDisabledAccounts();
+        
+        // Add them to the model
+        model.addAttribute("disabledAccounts", allDisabledAccounts);
+        
+        //Return the report page with the list of users       
+        return "admin/disabledAccounts";
     }
     
     @RequestMapping(value = "/disableUser/{id}", method = RequestMethod.GET)
@@ -95,6 +115,28 @@ public class AdminController {
             // return to admin page with suitable message
             redirectAttributes.addFlashAttribute("error_message", "Something went wrong with the request");
             return "redirect:/admin/reports";
+        }
+    }
+    
+    @RequestMapping(value = "/removeDisabledAccount/{id}", method = RequestMethod.GET)
+    public String removeDisabledAccount(HttpServletRequest request, RedirectAttributes redirectAttributes,
+                                        @PathVariable int id){
+        User user = (User) request.getSession().getAttribute("user");
+        
+        if (user.getIsAdmin() == 0) {
+            redirectAttributes.addFlashAttribute("error_message", "You dont have permission to that!!");
+            return "redirect:/main/welcome";
+        }
+        
+        // Send request to DAO class to remove ban on user account
+        if (adminService.removeDisabledAccount(id)) {
+            // return to admin page with suitable message
+            redirectAttributes.addFlashAttribute("success_message", "Account was un-disabled");
+            return "redirect:/admin/disabledAccounts";
+        }else{
+            // return to admin page with suitable message
+            redirectAttributes.addFlashAttribute("error_message", "Something went wrong with the request");
+            return "redirect:/admin/disabledAccounts";
         }
     }
     

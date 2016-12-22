@@ -5,6 +5,7 @@
  */
 package com.webchat.dao;
 
+import com.webchat.model.DisabledUserAccountHelper;
 import java.sql.SQLException;
 import com.webchat.model.User;
 import com.webchat.model.UserReportHelper;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +97,47 @@ public class AdminDAO {
             return false;
         }
        return true; 
+    }
+
+    public List<DisabledUserAccountHelper> getAllDisabledAccounts() {
+        final String sqlForInsertReport = "SELECT avatar_webchat.chat_blacklist.id, avatar_webchat.chat_blacklist.userId, avatar_webchat.chat_blacklist.time_of_ban, reported.username\n"+
+                                          "FROM avatar_webchat.chat_blacklist\n" +
+                                          "LEFT OUTER JOIN avatar_webchat.chat_user as reported ON reported.id = avatar_webchat.chat_blacklist.userId\n";
+               
+        
+        List<DisabledUserAccountHelper> listOfDisabledAccounts = new LinkedList<DisabledUserAccountHelper>();
+        try{
+
+             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sqlForInsertReport);
+             for (Map row : rows) {
+                 DisabledUserAccountHelper urh = new DisabledUserAccountHelper();
+                     urh.setId((int) row.get("id"));
+                     urh.setTimestamp((Timestamp) row.get("time_of_ban"));
+                     urh.setUserId((int) row.get("userId"));
+                     urh.setUsername((String) row.get("username"));
+                 listOfDisabledAccounts.add(urh);
+             }
+             return listOfDisabledAccounts;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        } 
+    }
+
+    public boolean removeDisabledAccount(int id) {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        
+        try{
+            jdbcCall.withProcedureName("proc_delete_disabled_account");
+            SqlParameterSource in = new MapSqlParameterSource().addValue("report_id", id);
+            
+            jdbcCall.execute(in);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
 }

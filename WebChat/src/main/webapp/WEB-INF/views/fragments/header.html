@@ -17,6 +17,7 @@ and open the template in the editor.
     <ul id="dropdown1" class="dropdown-content">
       <li th:if="${session.user.isAdmin} == 1">
         <a href="/admin/reports" th:href="@{/admin/reports}">Reports</a>
+        <a href="/admin/disabledAccounts" th:href="@{/admin/disabledAccounts}">Banned</a>
       </li>
       <li><a href="/main/settings" th:href="@{/main/settings}">Settings</a></li>
       <li class="divider"></li>

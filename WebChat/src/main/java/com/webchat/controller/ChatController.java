@@ -195,7 +195,9 @@ public class ChatController {
         File fileDir = new File(absolutePath + File.separator + "Room-" + roomId);
         
         if (chatService.clearChatHistory(roomId)) {
-            FileUtils.cleanDirectory(fileDir);
+            if (fileDir.exists()) {
+                FileUtils.cleanDirectory(fileDir);
+            }
             sendCommandToRoom(roomId, "clear");
             sendMessageToRoom(roomId, "History was cleared by " + username);
         

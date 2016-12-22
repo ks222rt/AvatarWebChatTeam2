@@ -11,8 +11,6 @@ package com.webchat.model;
  */
 public class UserReportHelper {
 
-  
-
     private String senderName;
     private int senderId;
     private String reportedName;

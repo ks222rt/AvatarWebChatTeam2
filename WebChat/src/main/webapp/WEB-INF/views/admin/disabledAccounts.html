@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html layout:decorator="main/layout">
+  <head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="col s12 grey lighten-4">
+        <h2>Disabled accounts</h2>
+        
+        <!-- blockquote for error messages -->
+        <div th:if="${error_message}">
+            <blockquote class="card-panel chip red white-text">
+                Error: <span th:text="${error_message}"></span>
+                <i class="close material-icons">close</i>
+            </blockquote>
+        </div>
+        <div th:if="${success_message}">
+            <blockquote class="card-panel chip green white-text">
+                Success: <span th:text="${success_message}"></span>
+                <i class="close material-icons">close</i>
+            </blockquote>
+        </div>
+        
+        <!-- if list is empty do this -->
+        <div th:if="${#lists.isEmpty(disabledAccounts)}">
+          <h4>No disabled accounts, users have been good to each other!</h4>
+        </div>
+        
+        <!-- if list is not empty -->
+        <div th:if="${not #lists.isEmpty(disabledAccounts)}">
+          <table class="striped">
+            <thead>
+              <tr>
+                <th>User:</th>
+                <th>Time of ban:</th>
+                <th>Un-ban user:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="case : ${disabledAccounts}">
+                <td><a th:text="${case.username}" th:href="@{/main/user/{username}(username=${case.username})}"></a></td>
+                <td th:text="${case.timestamp}"></td>
+                <td>
+                  <a class="waves-effect waves-light btn green" 
+                     alt="Remove disabled account"
+                     th:href="@{/admin/removeDisabledAccount/{id}(id=${case.id})}">
+                    <i class="small material-icons left">thumb_up</i>Remove disabled account</a>
+                </td>
+              </tr>              
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
