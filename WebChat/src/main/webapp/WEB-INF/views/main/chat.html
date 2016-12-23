@@ -192,39 +192,6 @@
                     }
 
 
-                    stompClient.subscribe("/app/getOnlineFriends/[[${session.user.id}]]", function (JsonListOfOnlineFriends) {
-                        friends = JSON.parse(JsonListOfOnlineFriends.body);
-                        for (var friend in friends) {
-                            if (friends.hasOwnProperty(friend)) {
-                                var aTag = document.createElement('a');
-                                //aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
-                                aTag.setAttribute('href', "/main/chat/" + friends[friend].roomId);
-                                aTag.setAttribute('id', 'friendStyle');
-                                var textnode = document.createTextNode(friends[friend].username);
-                                aTag.appendChild(textnode);
-                                var mybr = document.createElement('br');
-                                document.getElementById("usersOnline").appendChild(aTag);
-                                document.getElementById("usersOnline").appendChild(mybr);
-                            }
-                        }
-                    });
-
-                    stompClient.subscribe("/app/getGroups/[[${session.user.id}]]", function (JsonListOfGroups) {
-                        groups = JSON.parse(JsonListOfGroups.body);
-
-                        for (var group in groups) {
-                            if (groups.hasOwnProperty(group)) {
-                                var aTag = document.createElement('a');
-                                //aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
-                                aTag.setAttribute('href', "/main/chat/" + groups[group].roomId);
-                                var textnode = document.createTextNode(groups[group].groupname);
-                                aTag.appendChild(textnode);
-                                var mybr = document.createElement('br');
-                                document.getElementById("groupList").appendChild(aTag);
-                                document.getElementById("groupList").appendChild(mybr);
-                            }
-                        }
-                    });
 
                 });//Connect Socket
             });//Doc on ready
@@ -356,6 +323,8 @@
                     document.getElementById('add-friends-chat').appendChild(li);
                 }
             }
+            
+          
 
             function createGroup(userToBeAdded) {
                 stompClient.send("/app/chat/[[${roomId}]]/" + userToBeAdded + "/createGroup");
@@ -423,8 +392,7 @@
             ;
 
         </script>
-        <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
-        <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
+  
     </th:block>
 </body>
 </html>

@@ -31,11 +31,70 @@ and open the template in the editor.
   <th:block layout:fragment="script">
     
   </th:block>
+  <script>
+   
+  </script>
+    
     <script>
       $( document ).ready(function(){
          $(".button-collapse").sideNav();
-    })
+        var ws;
+        var stompClient;
+        var currentUserId = "[[${session.user.id}]]";
+        var friends;
+        var groups; 
+        ws = new SockJS("/rooms");
+    //ws = new SockJS(wsLinkForHeroku + '/chat');
+    //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
+    stompClient = Stomp.over(ws);
+    stompClient.connect({}, function (frame) {
+             stompClient.subscribe("/app/getOnlineFriends/"+currentUserId, function (JsonListOfOnlineFriends) {
+            friends = JSON.parse(JsonListOfOnlineFriends.body);
+            for (var friend in friends) {
+                if (friends.hasOwnProperty(friend)) {
+                    var aTag = document.createElement('a');
+                    //aTag.setAttribute('href', wsLinkForHeroku + "/main/chat/"+friends[friend].roomId);
+                    aTag.setAttribute('href', "/main/chat/" + friends[friend].roomId);
+                    aTag.setAttribute('id', 'friendStyle');
+                    var textnode = document.createTextNode(friends[friend].username);
+                    aTag.appendChild(textnode);
+                    var mybr = document.createElement('br');
+                    document.getElementById("usersOnline").appendChild(aTag);
+                    document.getElementById("usersOnline").appendChild(mybr);
+                }
+            }  
+        });
+      
+
+        stompClient.subscribe("/app/getGroups/"+currentUserId, function (JsonListOfGroups) {
+            groups = JSON.parse(JsonListOfGroups.body);
+
+            for (var group in groups) {
+                if (groups.hasOwnProperty(group)) {
+                    var aTag = document.createElement('a');
+                    //aTag.setAttribute('href',wsLinkForHeroku + "/main/chat/"+groups[group].roomId);
+                    aTag.setAttribute('href', "/main/chat/" + groups[group].roomId);
+                    var textnode = document.createTextNode(groups[group].groupname);
+                    aTag.appendChild(textnode);
+                    var mybr = document.createElement('br');
+                    document.getElementById("groupList").appendChild(aTag);
+                    document.getElementById("groupList").appendChild(mybr);
+                }
+            }
+        });  
+    updateGroups();
+    function updateGroups() {
+    stompClient.send("/app/chat/[[${session.user.id}]]/update");
+    }
+  
+   
+    });//Socket Connect
+         
+         
+    });//On ready
     </script>
+    <script src="../../scripts/sockjs-0.3.4.js" th:src="@{/scripts/sockjs-0.3.4.js}"></script>
+      <script src="../../scripts/stomp.js" th:src="@{/scripts/stomp.js}"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 

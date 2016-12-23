@@ -72,14 +72,8 @@ public class ChatController {
     private SimpMessagingTemplate template;
     
     User currentUser;
-    ArrayDeque<ChatRoom> chatRoomAndFriendIds;
-    @RequestMapping("/main/**") 
-     public String updateRooms(HttpServletRequest request, ModelMap model){
-        System.out.println("UPDATEROOMS");
-      
-        return "main/chat";
-    }
-           
+   
+        
     @RequestMapping(value = "/main/chat/none", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         currentUser = (User) request.getSession().getAttribute("user");
@@ -89,8 +83,8 @@ public class ChatController {
     
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
     public String roomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
-               
-        if(hasAccessToRoom(roomId)){
+         currentUser = (User) request.getSession().getAttribute("user");       
+        if(hasAccessToRoom(roomId, currentUser.getId())){
             model.addAttribute("roomId", roomId);
             return "main/chat";
         }
@@ -224,7 +218,8 @@ public class ChatController {
                             @DestinationVariable int newUser){
         if(chatService.isGroupRoom(roomId)){
             if(chatService.addUserToExistingGroup(newUser, roomId)){
-                sendMessageToRoom(roomId,"A new user was added to the room!");  
+                sendMessageToRoom(roomId,"A new user was added to the room!"); 
+                
             }else{
                 sendMessageToRoom(roomId,"Whoops! We could not add the user to the room!"); 
             }
@@ -244,22 +239,15 @@ public class ChatController {
     
     @SubscribeMapping("/getOnlineFriends/{userId}")
     public List<ChatUserHelper> listFriends (@DestinationVariable int userId){
-        updateChatRooms(userId);
-        return getListOfOnlineFriends();
+        return getListOfOnlineFriends(userId);
     } 
     
     @SubscribeMapping("/getGroups/{userId}")
     public List<ChatRoom> listGroups (@DestinationVariable int userId){
-        updateChatRooms(userId);
-        return getListOfGroups();
+        return getListOfGroups(userId);
     } 
     
-    private void updateChatRooms(int userId){
-        if(chatRoomAndFriendIds == null){
-            System.out.println("Chatrooms were null,");
-            chatRoomAndFriendIds = chatService.getRoomsForUser(userId);
-        }
-    }
+ 
     
     @SubscribeMapping("/{roomId}/getRoomUsers")
     public List<ChatUserHelper> listUsersInRoom (@DestinationVariable int roomId){
@@ -271,10 +259,10 @@ public class ChatController {
         return chatService.getMessagesByRoomId(roomId);
     }
     
-    private List<ChatUserHelper> getListOfOnlineFriends(){
+    private List<ChatUserHelper> getListOfOnlineFriends(int userId){
         HashSet<String> onlineUsernames = getOnlineUsernames();
         List<ChatUserHelper> friendsOnline = new ArrayList<>();    
-        for(ChatRoom room : chatRoomAndFriendIds){
+        for(ChatRoom room : sessionUtil.getChatRoomsByUserId(userId)){
             List<ChatUserHelper> listOfUsersInRoom = room.getMembers();
             if(room.getIsGroupRoom() == 0){
                for(ChatUserHelper user : listOfUsersInRoom){
@@ -287,10 +275,10 @@ public class ChatController {
         return friendsOnline;
     }
     
-    private List<ChatRoom> getListOfGroups(){
+    private List<ChatRoom> getListOfGroups(int userId){
       
         List<ChatRoom> groups = new ArrayList<>();    
-        for(ChatRoom room : chatRoomAndFriendIds){
+        for(ChatRoom room : sessionUtil.getChatRoomsByUserId(userId)){
             if(room.getIsGroupRoom() == 1){
                groups.add(room);
             }
@@ -307,8 +295,8 @@ public class ChatController {
         return onlineUsernames;
     }
     
-    private boolean hasAccessToRoom(int roomId){
-        for(ChatRoom room : chatRoomAndFriendIds){
+    private boolean hasAccessToRoom(int roomId, int userId){
+        for(ChatRoom room : sessionUtil.getChatRoomsByUserId(userId)){
 
             if(room.getRoomId() == roomId){
                 return true;
@@ -321,6 +309,11 @@ public class ChatController {
         Message message = new Message("SERVER", text, "00:00:00", 0);
         chatService.addMessageToRoom(message, roomId);
         this.template.convertAndSend("/topic/"+roomId+"/messages", message);
+    }
+    
+    @MessageMapping("/chat/{userId}/update")
+    private void updateRoom(@DestinationVariable int userId){
+        sessionUtil.updateChatRoomsByUserId(userId);
     }
     
     private void sendFileToRoom(int roomId, String username, String path, int userId){

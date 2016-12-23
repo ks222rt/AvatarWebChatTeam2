@@ -6,6 +6,7 @@
  */
 package com.webchat.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Adam
  */
-public class ChatRoom {
+public class ChatRoom implements Serializable{
 
   
     private int isGroupRoom;

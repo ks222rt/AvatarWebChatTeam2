@@ -27,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user","chatRooms"})
 @RequestMapping("/login")
 public class LoginController {
     
@@ -68,7 +68,7 @@ public class LoginController {
                 redirectAttributes.addFlashAttribute("error_message", "Your account is disabled");
                 return "redirect:/login";
             }
-            
+            sessionUtil.updateChatRoomsByUserId(user.getId());
             sessionUtil.registerNewSession(user);
             model.addAttribute("user", user);
             return "redirect:/main/welcome";
