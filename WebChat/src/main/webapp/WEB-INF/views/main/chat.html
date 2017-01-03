@@ -130,7 +130,10 @@
             var friends;
             var groups;
             var wsLinkForHeroku = 'https://' + window.location.host;
-
+            
+            if (window.location.hostname === 'localhost') {
+                wsLinkForHeroku = 'http://' + window.location.host;
+            }
 
             $(document).ready(function () {
                 $('.collapsible').collapsible();
@@ -138,8 +141,8 @@
                 if ($("#sendMessage").length) {
                     document.querySelector('#sendMessage').addEventListener('click', send);
                 }
-                ws = new SockJS("/chat");
-                //ws = new SockJS(wsLinkForHeroku + '/chat');
+                //ws = new SockJS("/chat");
+                ws = new SockJS(wsLinkForHeroku + '/chat');
                 //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
                 stompClient = Stomp.over(ws);
                 stompClient.connect({}, function (frame) {
@@ -260,8 +263,8 @@
                 } else {
                     chipAtag.appendChild(document.createTextNode(message.from));
                 }
-               //chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
-                chipAtag.setAttribute('href', "/main/user/" + message.from);
+                chipAtag.setAttribute('href', wsLinkForHeroku + "/main/user/" + message.from);
+                //chipAtag.setAttribute('href', "/main/user/" + message.from);
                 chipDiv.appendChild(chipAtag);
                     
                 if(message.isFile === 1){
@@ -343,24 +346,36 @@
 
             function leaveGroup() {
                 var herokuClearHistory = 'https://' + window.location.host + '/main/chat/leaveGroup';
-                var localCleanHistory = "/main/chat/leaveGroup";
 
-                $.post(localCleanHistory, {
+                if (window.location.hostname === 'localhost') {
+                    herokuClearHistory = 'http://' + window.location.host + "/main/chat/leaveGroup";
+                }
+                
+                $.post(herokuClearHistory, {
                     roomId: "[[${roomId}]]",
                     userId: "[[${session.user.id}]]",
                     username: "[[${session.user.username}]]"
                 }, function (data) {
-                    //var herokuResponse = 'https://' + window.location.host + data;
-                    var response = 'http://' + window.location.host + data;
-                    window.location.replace(response);
+                    var herokuResponse = 'https://' + window.location.host + data;
+                    
+                    if (window.location.hostname === 'localhost') {
+                        herokuResponse = 'http://' + window.location.host + data;
+                    }
+                    
+                    //var response = 'http://' + window.location.host + data;
+                    window.location.replace(herokuResponse);
                 });
             }
 
             function clearHistory() {
                 var herokuClearHistory = 'https://' + window.location.host + '/main/chat/clearHistory';
                 var localCleanHistory = "/main/chat/clearHistory";
-
-                $.post(localCleanHistory, {
+                
+                if (window.location.hostname === 'localhost') {
+                    herokuClearHistory = 'http://' + window.location.host + "/main/chat/clearHistory";
+                }
+                
+                $.post(herokuClearHistory, {
                     roomId: "[[${roomId}]]",
                     username: "[[${session.user.username}]]"
                 });
@@ -370,21 +385,29 @@
                 var herokuCreateGroup = 'https://' + window.location.host + '/main/chat/createNewGroup';
                 var localCreateGroup = "/main/chat/createNewGroup";
                 var groupname = prompt('Enter the groupname!', 'groupname');
-                if(groupname == null){
+                
+                if (window.location.hostname === 'localhost') {
+                    herokuCreateGroup = 'http://' + window.location.host + "/main/chat/createNewGroup";
+                }
+                
+                if(groupname === null){
                     return;
                 }
-                console.log(groupname)
-                  $.post(localCreateGroup, {
+                console.log(groupname);
+                
+                $.post(herokuCreateGroup, {
                     groupname: groupname,
                     username: "[[${session.user.username}]]",
                     userId: "[[${session.user.id}]]"
                 }, function (data) {
-                    //var herokuResponse = 'https://' + window.location.host + data;
+                    var herokuResponse = 'https://' + window.location.host + data;
+                    //var response = 'http://' + window.location.host + data;
                     
-                        var response = 'http://' + window.location.host + data;
-                        window.location.replace(response); 
+                    if (window.location.hostname === 'localhost') {
+                        herokuResponse = 'http://' + window.location.host + data;
+                    }
                     
-                   
+                    window.location.replace(herokuResponse); 
                 });
             }
             

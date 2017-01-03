@@ -1,6 +1,7 @@
 G:\avatarWebChat\WebChat\src\main\java\com\webchat\config\AppInitializer.java
 G:\avatarWebChat\WebChat\src\main\java\com\webchat\config\ServletConfig.java
 G:\avatarWebChat\WebChat\src\main\java\com\webchat\controller\AdminController.java
+G:\avatarWebChat\WebChat\src\main\java\com\webchat\model\DisabledUserAccountHelper.java
 G:\avatarWebChat\WebChat\src\main\java\com\webchat\controller\LoginController.java
 G:\avatarWebChat\WebChat\src\main\java\com\webchat\model\ChatUserHelper.java
 G:\avatarWebChat\WebChat\src\main\java\com\webchat\model\User.java

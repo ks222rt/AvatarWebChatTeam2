@@ -62,12 +62,17 @@ and open the template in the editor.
       <script>
           function reportUserFunction(){
             var herokuReportUser = 'https://'+ window.location.host + '/main/reportUser';
-            var localReportUser = "/WebChat/main/reportUser";
+            
+            
+            if (window.location.hostname === 'localhost') {
+                herokuReportUser = 'http://' + window.location.host + '/main/reportUser';
+            }
+            
             var answer = prompt('Why do you want to report this user?', 'Enter reason here...');
             console.log(answer);
             
             if (answer !== null) {
-              $.post(localReportUser, {
+              $.post(herokuReportUser, {
                 userId: "[[${user.id}]]",
                 username: "[[${user.username}]]",
                 answer: answer
