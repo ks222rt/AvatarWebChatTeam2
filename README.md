@@ -8,7 +8,8 @@ The system is built in following languages
 #### Backend
    * Java (Maven)
    * Spring MVC
-   * MySQL (Database)
+   * MySQL (Database)  
+
 #### Frontend
    * WebSocket
    * HTML5
