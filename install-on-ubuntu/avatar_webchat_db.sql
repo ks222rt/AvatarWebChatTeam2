@@ -13,7 +13,8 @@
 
 
 -- Dumping database structure for testdb
-CREATE DATABASE IF NOT EXISTS `testdb` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE IF NOT EXISTS `testdb` /*!40100 DEFAULT CHARACTER SET latin1 */
+GRANT ALL ON `testdb.*` to `avatar_admin` identified by `avatarTeam!2`;
 USE `testdb`;
 
 -- Dumping structure for tabell testdb.chat_blacklist

@@ -7,9 +7,12 @@ sudo apt-get upgrade
 sudo apt-get install maven
 sudo apt-get install mysql-server
 sudo mysql_secure_installation
+sudo mysqld --initialize
+
 
 # log in to mysql db
-mysql -u root -p 
+service mysqld restart
+mysql -u root -p < avatar_webchat_db.sql
 
 # create database avatar_webchat;
 # grant all on avatar_webchat.* to 'avatar_admin' identified by 'avatarTeam!2';
