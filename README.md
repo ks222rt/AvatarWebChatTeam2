@@ -14,4 +14,4 @@ The system i build in following languages
 * Materialize (Framework in CSS)
    
 
-[Installation Instructions](https://github.com/ks222rt/AvatarWebChatTeam2/wiki/Installation-Instructions)
+[Installation Instructions](https://github.com/ks222rt/AvatarWebChatTeam2/wiki/Installation-Instructions) 
