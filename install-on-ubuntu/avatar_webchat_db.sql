@@ -13,9 +13,9 @@
 
 
 -- Dumping database structure for testdb
-CREATE DATABASE IF NOT EXISTS `testdb` /*!40100 DEFAULT CHARACTER SET latin1 */
-GRANT ALL ON `testdb.*` to `avatar_admin` identified by `avatarTeam!2`;
-USE `testdb`;
+CREATE DATABASE IF NOT EXISTS avatar_webchat /*!40100 DEFAULT CHARACTER SET latin1 */;
+GRANT ALL ON avatar_webchat.* to 'avatar_admin' identified by 'avatarTeam!2';
+USE avatar_webchat;
 
 -- Dumping structure for tabell testdb.chat_blacklist
 CREATE TABLE IF NOT EXISTS `chat_blacklist` (
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `chat_user` (
 -- Dumpar data för tabell testdb.chat_user: ~1 rows (approximately)
 /*!40000 ALTER TABLE `chat_user` DISABLE KEYS */;
 INSERT INTO `chat_user` (`id`, `username`, `password`, `salt`, `info_id`) VALUES
-	(75, 'superuseradmin ', 'UP4nrMbcvvc=', _binary 0x7F9DBF551D8DFE69495C56F67A2A01EA12C8DE5451F6216081971E9431880B91, 1);
+	(75, 'superuseradmin', 'UP4nrMbcvvc=', _binary 0x7F9DBF551D8DFE69495C56F67A2A01EA12C8DE5451F6216081971E9431880B91, 1);
 /*!40000 ALTER TABLE `chat_user` ENABLE KEYS */;
 
 -- Dumping structure for tabell testdb.chat_user_info
