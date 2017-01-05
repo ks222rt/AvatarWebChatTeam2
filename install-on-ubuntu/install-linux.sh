@@ -11,7 +11,7 @@ if [ $? = 0 ]; then
 	clear
 	sleep 2
 	printf "Installing dialog program..."
-	sudo dnf install dialog > /dev/null 2> /dev/null
+	sudo apt-get -y install dialog > /dev/null 2> /dev/null
 	printf "Done.\n"
 	sleep 1
 else
@@ -45,11 +45,11 @@ fi
 which apt-get > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
 	dialog --title "Installing Packages" --infobox "\nPlease wait." 5 25
-	sudo apt-get install maven > /dev/null 2> /dev/null
-	sudo apt-get install mysql-server > /dev/null 2> /dev/null
+	sudo apt-get -y install maven > /dev/null 2> /dev/null
+	sudo apt-get -y install mysql-server mysql-client > /dev/null 2> /dev/null
 	
 	# start mysql server
-	service mysqld restart
+	sudo service mysqld restart
 	
 	dialog --title "Confirmation Required" --yesno "Do you want to run mysql_secure_installation now?" 12 40
 	if [ $? = 0 ]; then
@@ -78,5 +78,5 @@ mysql -u root -p < avatar_webchat_db.sql
 dialog --title "Building Package" --infobox "\nPlease wait." 5 25
 cd ../WebChat
 mvn package > /dev/null 2> ../build_errors.log
-dialog --title "Installation Complete" --infobox "See build_error.log in the root directory for any errors that might have occured." 8 35
-
+dialog --title "Installation Complete" --msgbox "See build_error.log in the root directory for any errors that might have occured." 8 35
+clear
