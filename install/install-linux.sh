@@ -91,6 +91,8 @@ echo "jdbc.driverClassName=com.mysql.jdbc.Driver" > ../WebChat/src/main/webapp/W
 echo "jdbc.url=jdbc:mysql://localhost:3306" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
 echo "jdbc.username=$AVATAR_NDBUSR" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
 echo "jdbc.password=$AVATAR_NDBPWD" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+unset AVATAR_NDBUSR 
+unset AVATAR_NDBPWD
 
 printf "Creating database tables. Enter your mysql server root password below.\n"
 mysql -u root -p < avatar_webchat_db.sql
