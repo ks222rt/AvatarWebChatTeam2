@@ -78,7 +78,7 @@ fi
 
 # log in to mysql db
 clear
-dialog --title "Username" --inputbox "Enter a user name for Avatar WebChat databse" 9 45 2>._ans.txt
+dialog --title "Username" --inputbox "Enter a user name for Avatar WebChat database" 9 45 2>._ans.txt
 AVATAR_NDBUSR=$(cat ._ans.txt)
 rm -f ._ans.txt
 dialog --title "Password" --inputbox "Enter a password for the database" 9 45 2>._ans.txt

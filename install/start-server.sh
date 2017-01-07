@@ -40,15 +40,21 @@ if [ "$AVATAR_ACTION" = "1" ]; then
 	clear
 fi
 if [ "$AVATAR_ACTION" = "2" ]; then
+	dialog --title "Port Number" --inputbox "Enter port number for server" 9 45 2>._ans.txt
+	AVATAR_PORT=$(cat ._ans.txt)
+	rm -f ._ans.txt
 	clear
-	printf "Starting WebChat application...\n"
+	printf "Starting WebChat application on port ${AVATAR_PORT}\n"
 	sudo mvn package
-	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port 8080 WebChat/target/*.war
+	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port ${AVATAR_PORT} WebChat/target/*.war
 fi
 if [ "$AVATAR_ACTION" = "3" ]; then
+	dialog --title "Port Number" --inputbox "Enter port number for server" 9 45 2>._ans.txt
+	AVATAR_PORT=$(cat ._ans.txt)
+	rm -f ._ans.txt
 	clear
-	printf "Starting WebChat application...\n"
+	printf "Starting WebChat application on port ${AVATAR_PORT}\n"
 	sudo mvn package
-	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port 8080 WebChat/target/*.war &
+	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port ${AVATAR_PORT} WebChat/target/*.war &
 fi
 
