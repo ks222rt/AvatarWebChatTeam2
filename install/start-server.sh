@@ -1,7 +1,8 @@
 #!/bin/sh
 
-dialog --title "Select" --menu "Select action" 15 40 4 1 "Configure jdbc properties" 2 "Start Avatar WebChat" 2>._ans.txt
+dialog --title "Select" --menu "Select action" 15 55 4 1 "Configure jdbc properties" 2 "Start Avatar WebChat" 3 "Start Avatar WebChat, run in the background" 2>._ans.txt
 AVATAR_ACTION=$(cat ._ans.txt)
+rm -f ._ans.txt
 
 if [ "$AVATAR_ACTION" = "1" ]; then
 	dialog --title "Warning" --yesno "This will erase your current configuration.\n\nContinue?" 10 35
@@ -37,8 +38,17 @@ if [ "$AVATAR_ACTION" = "1" ]; then
 	dialog --title "Finished" --msgbox "Your jdbc.properties has been updated." 9 35
 	dialog --clear
 	clear
-else
+fi
+if [ "$AVATAR_ACTION" = "2" ]; then
 	clear
 	printf "Starting WebChat application...\n"
+	sudo mvn package
 	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port 8080 WebChat/target/*.war
 fi
+if [ "$AVATAR_ACTION" = "3" ]; then
+	clear
+	printf "Starting WebChat application...\n"
+	sudo mvn package
+	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port 8080 WebChat/target/*.war &
+fi
+
