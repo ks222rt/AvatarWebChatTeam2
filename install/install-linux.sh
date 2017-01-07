@@ -78,7 +78,21 @@ fi
 
 # log in to mysql db
 clear
-printf "Creating database tables. Logging in to mysql server as root\n"
+dialog --title "Username" --inputbox "Enter a user name for Avatar WebChat databse" 9 45 2>._ans.txt
+AVATAR_NDBUSR=$(cat ._ans.txt)
+rm -f ._ans.txt
+dialog --title "Password" --inputbox "Enter a password for the database" 9 45 2>._ans.txt
+AVATAR_NDBPWD=$(cat ._ans.txt)
+rm -f ._ans.txt
+clear
+
+sed -i "s^GRANT ALL ON avatar_webchat\.\* to 'avatar_admin' identified by 'avatarTeam!2';^/GRANT ALL ON avatar_webchat.* to '${AVATAR_NDBUSR}' identified by '${AVATAR_NDBPWD}';^" avatar_webchat_db.sql
+echo "jdbc.driverClassName=com.mysql.jdbc.Driver" > ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+echo "jdbc.url=jdbc:mysql://localhost:3306" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+echo "jdbc.username=$AVATAR_NDBUSR" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+echo "jdbc.password=$AVATAR_NDBPWD" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+
+printf "Creating database tables. Enter your mysql server root password below.\n"
 mysql -u root -p < avatar_webchat_db.sql
 
 dialog --title "Building Package" --infobox "\nPlease wait." 5 25
