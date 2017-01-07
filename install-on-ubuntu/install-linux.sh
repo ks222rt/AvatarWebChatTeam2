@@ -84,5 +84,6 @@ mysql -u root -p < avatar_webchat_db.sql
 dialog --title "Building Package" --infobox "\nPlease wait." 5 25
 cd ../WebChat
 mvn package > /dev/null 2> ../build_errors.log
-dialog --title "Installation Complete" --msgbox "See build_error.log in the root directory for any errors that might have occured." 8 35
+
+dialog --title "Installation Complete" --msgbox "Installation complete.\nSee build_error.log in the root directory for any errors that might have occured." 8 35
 clear
