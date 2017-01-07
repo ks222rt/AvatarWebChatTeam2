@@ -11,13 +11,13 @@ if [ "$AVATAR_ACTION" = "1" ]; then
 		exit 0
 	fi
 	
-	dialog --title "URL" --inputbox "Enter database URL" 9 35 2>._ans.txt
+	dialog --title "URL" --inputbox "Enter database URL" 9 45 2>._ans.txt
 	AVATAR_DBURL=$(cat ._ans.txt)
 	rm -f ._ans.txt
-	dialog --title "Username" --inputbox "Enter database username" 9 35 2>._ans.txt
+	dialog --title "Username" --inputbox "Enter database username.\n\"mysql://\" is added automatically at the beginning. Do not add this yourself." 12 45 2>._ans.txt
 	AVATAR_DBUSR=$(cat ._ans.txt)
 	rm -f ._ans.txt
-	dialog --title "Password" --inputbox "Enter database password" 9 35 2>._ans.txt
+	dialog --title "Password" --inputbox "Enter database password" 9 45 2>._ans.txt
 	AVATAR_DBPWD=$(cat ._ans.txt)
 	rm -f ._ans.txt
 	
