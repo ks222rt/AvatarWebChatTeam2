@@ -17,8 +17,8 @@ if [ $? = 0 ]; then
 else
 	which dnf > /dev/null 2> /dev/null
 	if [ $? = 0 ]; then
-		sudo dnf check-update
-		sudo dnf update
+		sudo dnf -y check-update
+		sudo dnf -y update
 		clear
 		sleep 2
 		printf "Installing dialog program..."
@@ -45,8 +45,11 @@ fi
 which apt-get > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
 	dialog --title "Installing Packages" --infobox "\nPlease wait." 5 25
-	sudo apt-get -y install maven > /dev/null 2> /dev/null
-	sudo apt-get -y install mysql-server mysql-client > /dev/null 2> /dev/null
+	sleep 1
+	dialog --clear
+	clear
+	sudo apt-get -y install maven 
+	sudo apt-get -y install mysql-server mysql-client 
 	
 	# start mysql server
 	sudo service mysqld restart
@@ -58,8 +61,11 @@ if [ $? = 0 ]; then
 	fi
 else
 	dialog --title "Installing Packages" --infobox "\nPlease wait." 5 25
-	sudo dnf -y install mariadb mariadb-server > /dev/null 2> /dev/null
-	sudo dnf -y install maven > /dev/null 2> /dev/null
+	sleep 1
+	dialog --clear
+	clear
+	sudo dnf -y install mariadb mariadb-server 
+	sudo dnf -y install maven 
 	
 	# start mariadb server
 	sudo systemctl start mariadb
