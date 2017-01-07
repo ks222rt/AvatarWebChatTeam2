@@ -6,8 +6,8 @@ printf "Avatar WebChat Installation Script v 1.0\n\n"
 printf "Performing system update.\n"
 which apt-get > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
-	sudo apt-get update
-	sudo apt-get upgrade
+	sudo apt-get -y update
+	sudo apt-get -y upgrade
 	clear
 	sleep 2
 	printf "Installing dialog program..."
