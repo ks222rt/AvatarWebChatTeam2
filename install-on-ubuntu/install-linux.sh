@@ -22,7 +22,7 @@ else
 		clear
 		sleep 2
 		printf "Installing dialog program..."
-		sudo dnf install dialog > /dev/null 2> /dev/null
+		sudo dnf -y install dialog > /dev/null 2> /dev/null
 		printf "Done.\n"
 		sleep 1
 	else
