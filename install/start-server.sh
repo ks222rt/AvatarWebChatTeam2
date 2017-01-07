@@ -1,6 +1,6 @@
 #!/bin/sh
 
-dialog --title "Select" --menu "Select action" 15 55 4 1 "Configure jdbc properties" 2 "Start Avatar WebChat" 3 "Start Avatar WebChat, run in the background" 2>._ans.txt
+dialog --title "Select" --menu "Select action. Your jdbc.properties should have been set during the installation, but you can change your settings here if you wish to do so." 15 55 4 1 "Configure jdbc properties" 2 "Start Avatar WebChat" 3 "Start Avatar WebChat, run in the background" 2>._ans.txt
 AVATAR_ACTION=$(cat ._ans.txt)
 rm -f ._ans.txt
 
@@ -45,6 +45,7 @@ if [ "$AVATAR_ACTION" = "2" ]; then
 	rm -f ._ans.txt
 	clear
 	printf "Starting WebChat application on port ${AVATAR_PORT}\n"
+	cd ..
 	sudo mvn package
 	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port ${AVATAR_PORT} WebChat/target/*.war
 fi
@@ -54,6 +55,7 @@ if [ "$AVATAR_ACTION" = "3" ]; then
 	rm -f ._ans.txt
 	clear
 	printf "Starting WebChat application on port ${AVATAR_PORT}\n"
+	cd ..
 	sudo mvn package
 	sudo java -jar WebChat/target/endorsed/webapp-runner.jar --port ${AVATAR_PORT} WebChat/target/*.war &
 fi
