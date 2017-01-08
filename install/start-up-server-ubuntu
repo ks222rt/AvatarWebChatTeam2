@@ -1,7 +1,0 @@
-#! /bin/sh
-# create war file and execute it
-cd ..
-cd WebChat/
-sudo nano src/main/webapp/WEB-INF/jdbc.properties
-sudo mvn package
-sudo java -jar ../WebChat/target/endorsed/webapp-runner.jar --port 8080 ../WebChat/target/*.war
