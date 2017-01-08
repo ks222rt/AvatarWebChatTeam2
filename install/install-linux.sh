@@ -78,18 +78,15 @@ fi
 
 # log in to mysql db
 clear
-dialog --title "Username" --inputbox "Enter a user name for Avatar WebChat database" 9 45 2>._ans.txt
-AVATAR_NDBUSR=$(cat ._ans.txt)
-rm -f ._ans.txt
-dialog --title "Password" --inputbox "Enter a password for the database" 9 45 2>._ans.txt
+dialog --title "Password" --inputbox "Enter a password for the Avatar database admin account (avatar_admin)" 9 45 2>._ans.txt
 AVATAR_NDBPWD=$(cat ._ans.txt)
 rm -f ._ans.txt
 clear
 
-sed -i "s^GRANT ALL ON avatar_webchat\.\* to 'avatar_admin' identified by 'avatarTeam!2';^/GRANT ALL ON avatar_webchat.* to '${AVATAR_NDBUSR}' identified by '${AVATAR_NDBPWD}';^" avatar_webchat_db.sql
+sed -i "s^GRANT ALL ON avatar_webchat\.\* to 'avatar_admin' identified by 'avatarTeam!2';^GRANT ALL ON avatar_webchat.* to 'avatar_admin' identified by '${AVATAR_NDBPWD}';^" avatar_webchat_db.sql
 echo "jdbc.driverClassName=com.mysql.jdbc.Driver" > ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
-echo "jdbc.url=jdbc:mysql://localhost:3306" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
-echo "jdbc.username=$AVATAR_NDBUSR" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+echo "jdbc.url=jdbc:mysql://127.0.0.1:3306" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
+echo "jdbc.username=avatar_admin" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
 echo "jdbc.password=$AVATAR_NDBPWD" >> ../WebChat/src/main/webapp/WEB-INF/jdbc.properties
 unset AVATAR_NDBUSR 
 unset AVATAR_NDBPWD
