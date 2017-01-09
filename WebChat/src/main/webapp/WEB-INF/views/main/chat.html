@@ -125,7 +125,7 @@
             var ws;
             var stompClient;
             var roomId = "[[${roomId}]]";
-
+            var currentUserId = "[[${session.user.id}]]";
             var usersInCurrentRoom;
             var friends;
             var groups;
@@ -170,6 +170,12 @@
                                 renderMessage(content[i]);
                             }
                         });
+                        
+                        stompClient.subscribe("/app/getOnlineFriends/"+currentUserId, function (JsonListOfOnlineFriends) {
+                            friends = JSON.parse(JsonListOfOnlineFriends.body);
+                        });
+                        
+                        
                         //SubscribeMap for -> fetching all room members and invitable friends.
                         stompClient.subscribe("/app/" + "[[${roomId}]]" + "/getRoomUsers", function (JsonArrayOfUsersInRoom) {
                             document.getElementById("chat-room-header").innerHTML = "Chat room with: ";
@@ -307,6 +313,7 @@
 
             function fillDropDownList(possibleAddFriends) {
                 $('#add-friends-chat').empty();
+                console.log(possibleAddFriends);
                 if (possibleAddFriends.length > 0) {
                     for (var user in possibleAddFriends) {
                         if (possibleAddFriends.hasOwnProperty(user)) {
