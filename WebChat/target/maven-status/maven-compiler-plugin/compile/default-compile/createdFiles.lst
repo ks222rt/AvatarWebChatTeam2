@@ -28,7 +28,6 @@ com\webchat\validator\UserValidator.class
 com\webchat\service\AdminService.class
 com\webchat\dao\UserDAO$5.class
 com\webchat\dao\ChatDAO$1.class
-com\webchat\dao\UserDAO$14.class
 com\webchat\dao\UserDAO$4.class
 com\webchat\config\AppContext.class
 com\webchat\controller\MainController.class
