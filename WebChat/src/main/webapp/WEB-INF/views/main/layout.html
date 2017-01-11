@@ -53,7 +53,15 @@ and open the template in the editor.
         ws = new SockJS(wsLinkForHeroku + '/rooms');
         //ws = new SockJS('https://avatar-web-chat.herokuapp.com/chat');
         stompClient = Stomp.over(ws);
+        
+       
+       
+        
         stompClient.connect({}, function (frame) {
+             updateGroups();
+              function updateGroups() {
+                stompClient.send("/app/chat/[[${session.user.id}]]/update");
+                }
                 stompClient.subscribe("/app/getOnlineFriends/"+currentUserId, function (JsonListOfOnlineFriends) {
                 friends = JSON.parse(JsonListOfOnlineFriends.body);
                 for (var friend in friends) {

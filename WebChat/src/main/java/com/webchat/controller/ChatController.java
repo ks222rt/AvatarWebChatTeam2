@@ -77,6 +77,7 @@ public class ChatController {
     @RequestMapping(value = "/main/chat/none", method = RequestMethod.GET)
     public String main(HttpServletRequest request, ModelMap model){
         currentUser = (User) request.getSession().getAttribute("user");
+        sessionUtil.updateChatRoomsByUserId(currentUser.getId());
         model.addAttribute("username", currentUser.getUsername());
         return "main/chat";
     }
@@ -84,6 +85,7 @@ public class ChatController {
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
     public String roomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
         currentUser = (User) request.getSession().getAttribute("user");       
+        sessionUtil.updateChatRoomsByUserId(currentUser.getId());
         if(hasAccessToRoom(roomId, currentUser.getId())){
             model.addAttribute("roomId", roomId);
             return "main/chat";
@@ -310,8 +312,9 @@ public class ChatController {
     }
     
     @MessageMapping("/chat/{userId}/update")
-    private void updateRoom(@DestinationVariable int userId){
+    public void updateRoom(@DestinationVariable int userId){
         sessionUtil.updateChatRoomsByUserId(userId);
+        System.out.println("Updated rooms!");
     }
     
     private void sendFileToRoom(int roomId, String username, String path, int userId){

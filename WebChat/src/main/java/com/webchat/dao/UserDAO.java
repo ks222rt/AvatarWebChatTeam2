@@ -412,27 +412,20 @@ public class UserDAO {
     Removes all instances of friend requests between senderID and recieverID and vice versa (due to double linking in DB)
     */
     public boolean removeFriend(final int senderID, final int recieverID){
-        final String sqlRemoveFriend = "DELETE FROM avatar_webchat.friend\n"+
-                                       "WHERE (avatar_webchat.friend.id1 = ? AND avatar_webchat.friend.id2 = ?)\n"+
-                                       "OR (avatar_webchat.friend.id1 = ? AND avatar_webchat.friend.id2 = ?)";
-      
-            try {
-                jdbcTemplate.update(new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sqlRemoveFriend);
-                        ps.setInt(1, senderID);
-                        ps.setInt(2, recieverID);
-                        ps.setInt(3, recieverID);
-                        ps.setInt(4, senderID);
-                        return ps;
-                    }
-                });
-                return true;
-            
-             } catch (Exception e) {
-                return false;
-            }
+        
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        try {
+           jdbcCall.withProcedureName("proc_remove_friend_and_room");
+           SqlParameterSource in = new MapSqlParameterSource()
+                                   .addValue("userId1",senderID)
+                                   .addValue("userId2",recieverID);
+           jdbcCall.execute(in);
+        } catch (Exception e) {
+           System.out.println(e.getMessage());
+           return false;
+        }
+        return true;
+     
     }
     /*
     isFriendRequestValid(int senderID, int recieverID).
