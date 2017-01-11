@@ -39,13 +39,17 @@ and open the template in the editor.
                 
                 <div class="card-action">
                   <div th:if="${#bools.isTrue(isFriend)}" class="profile-page-float-me">
-                    <a class="waves-effect waves-light btn red" 
-                       th:href="@{/main/removeFriend/{id}(id=${user.id})}"
-                       onclick="return confirm('Are you sure you want to remove this friend?')">Remove me</a>
+                      <form th:action="@{/main/removeFriend/{id}(id=${user.id})}" 
+                            onsubmit="return confirm('Are you sure you want to remove this friend?')"
+                            method="post">
+                          <button class="waves-effect waves-light btn red">Remove me</button>
+                      </form>
                   </div>
                   <div th:if="${#bools.isFalse(isFriend)}" class="profile-page-float-me">
-                    <a class="waves-effect waves-light btn green"
-                       th:href="@{/main/friendRequest/{id}(id=${user.id})}">Add me</a>
+                      <form th:action="@{/main/friendRequest/{id}(id=${user.id})}"
+                            method="post">
+                          <button class="waves-effect waves-light btn green">Add me</button>
+                      </form>
                   </div>
                   <div>
                     <a id="reportThatUser"

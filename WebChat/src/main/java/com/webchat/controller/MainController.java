@@ -85,13 +85,15 @@ public class MainController {
         return "main/friends";
     }
     
-    @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.GET)
-    public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model){
+    @RequestMapping(value="/friendRequest/{id}", method = RequestMethod.POST)
+    public String sendFriendRequest(HttpServletRequest request, @PathVariable int id, ModelMap model, RedirectAttributes redirectAttributes){
         User user = (User) request.getSession().getAttribute("user");
         if(userService.addFriendRequest(user.getId(), id)){
-            return "main/welcome";
+            redirectAttributes.addFlashAttribute("success_message", "Friend request sent");
+            return "redirect:/main/welcome";
         }
-        return "main/welcome";
+        redirectAttributes.addFlashAttribute("error_message", "Something happened with the request");
+        return "redirect:/main/welcome";
     }
     
     @RequestMapping(value = "/reportUser", method = RequestMethod.POST)
@@ -121,45 +123,46 @@ public class MainController {
     }
     
     @RequestMapping(value="/user/{username}", method = RequestMethod.GET)
-    public String getUserPage(HttpServletRequest request,@PathVariable String username, ModelMap model){
+    public String getUserPage(HttpServletRequest request,@PathVariable String username, ModelMap model, RedirectAttributes redirectAttributes){
         // Get the user we want to show
         User user = userService.getUserByUsername(username);
-        
-        // Get the user whos logged in
-        User loggedInUser = (User) request.getSession().getAttribute("user");
-        
-        // Check if the user is in the friendlist
-        boolean isFriend = userService.areWeFriends(loggedInUser.getId(), user.getId());
-        
-        model.addAttribute("isFriend", isFriend);
-        model.addAttribute("user", user);
-        return "main/userpage";
+        if (user != null) {
+            // Get the user whos logged in
+            User loggedInUser = (User) request.getSession().getAttribute("user");
+
+            // Check if the user is in the friendlist
+            boolean isFriend = userService.areWeFriends(loggedInUser.getId(), user.getId());
+
+            model.addAttribute("isFriend", isFriend);
+            model.addAttribute("user", user);
+            return "main/userpage";
+        }
+        redirectAttributes.addFlashAttribute("error_message", "That user did not exists");
+        return "redirect:/main/welcome";
     }
     
-    @RequestMapping(value="/removeFriend/{id}", method = RequestMethod.GET)
-    public String removeFriend(HttpServletRequest request,@PathVariable int id, ModelMap model){
+    @RequestMapping(value="/removeFriend/{id}", method = RequestMethod.POST)
+    public String removeFriend(HttpServletRequest request,@PathVariable int id, ModelMap model, RedirectAttributes redirectAttributes){
         User user = (User) request.getSession().getAttribute("user");
         userService.removeFriend(user.getId(), id);
-        return "main/welcome";
+        redirectAttributes.addFlashAttribute("success_message", "Friend was removed");
+        return "redirect:/main/welcome";
     }
     
     @RequestMapping(value="/friendRequests", method = RequestMethod.GET)
     public String friendRequests(HttpServletRequest request, ModelMap model){
-         User user = (User) request.getSession().getAttribute("user");
-         System.out.println(user.getId());
-         List<User> friends = userService.getUserFriendRequests(user.getId());
+        User user = (User) request.getSession().getAttribute("user");
+        System.out.println(user.getId());
+        List<User> friends = userService.getUserFriendRequests(user.getId());
          
-             for(User friend : friends){
-                 System.out.println(friend.getUsername());
-             }
-         if(friends != null){
-             
-         
-             
+        for(User friend : friends){
+            System.out.println(friend.getUsername());
+        }
+        if(friends != null){ 
             model.addAttribute("friendRequests", friends);
             return "main/friendRequest";
         }
-          return "redirect:/main/welcome";
+        return "redirect:/main/welcome";
     }
     
     @RequestMapping(value="/settings", method = RequestMethod.GET)

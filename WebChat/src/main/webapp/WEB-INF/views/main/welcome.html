@@ -22,6 +22,14 @@ and open the template in the editor.
             </blockquote>
         </div>
         
+        <div th:if="${success_message}">
+            <blockquote class="card-panel chip green white-text">
+                Success: <span th:text="${success_message}"></span>
+                <i class="close material-icons">close</i>
+            </blockquote>
+        </div>
+        
+        
         <h1 class="h1-header-welcome-page">Welcome to</h1>
         <h3 class="h3-header-welcome-page">Avatar WebChat</h3>
       </div>

@@ -83,7 +83,7 @@ public class ChatController {
     
     @RequestMapping(value = "/main/chat/{roomId}", method = RequestMethod.GET)
     public String roomController(HttpServletRequest request, ModelMap model, @PathVariable int roomId){
-         currentUser = (User) request.getSession().getAttribute("user");       
+        currentUser = (User) request.getSession().getAttribute("user");       
         if(hasAccessToRoom(roomId, currentUser.getId())){
             model.addAttribute("roomId", roomId);
             return "main/chat";
@@ -124,9 +124,7 @@ public class ChatController {
             return "/main/chat/"+newChatRoomId;
         }
             
-         return "/main/chat/none";
-            //redirectAttributes.addFlashAttribute("error_message", "Something went wrong when leaving group..");
-        
+        return "/main/chat/none";
     }
     
     @RequestMapping(value = "/main/chat/{roomId}/{userId}/{username}/uploadFile", method = RequestMethod.POST)
